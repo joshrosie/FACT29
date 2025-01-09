@@ -44,7 +44,10 @@ class Agent():
         '''
         construct the prompt and call model
         '''        
+        print(f"=== Round {round_idx} for {self.agent_name} ===")
+        print("=== Building Slot Prompt ===")
         slot_prompt = self.round_prompt_cls.build_slot_prompt(answer_history,round_idx) 
+        print("=== Prompting ===")
         agent_response = self.prompt("user", slot_prompt)    
         return slot_prompt, agent_response
 
@@ -85,5 +88,5 @@ class Agent():
         elif self.hf_model:
             chat = [{"role": "user", "content": self.initial_prompt+msg}]
             model_input = self.hf_tokenizer.apply_chat_template(chat, tokenize=False, add_generation_prompt=True, return_tensors="pt")
-            output_text = self.hf_pipeline_gen(model_input, do_sample=True, temperature = self.temperature)[0]['generated_text']
+            output_text = self.hf_pipeline_gen(model_input, do_sample=False, temperature = self.temperature)[0]['generated_text']
             return output_text

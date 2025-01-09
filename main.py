@@ -16,6 +16,10 @@ from rounds import RoundPrompts
 from utils import load_setup, set_constants, randomize_agents_order, setup_hf_model
 from save_utils import create_outfiles,save_conversation 
 
+from huggingface_hub import login
+
+login(token = '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')
+
 parser = argparse.ArgumentParser(description='big negotiation!!')
 
 
@@ -52,6 +56,8 @@ parser.add_argument('--azure_openai_endpoint', default='', help='azure endpoint'
 #for GPTs and OpenAI APIs, set key 
 parser.add_argument('--api_key',type=str, default='', help='OpenAI key, set if using OpenAI APIs')
 
+parser.add_argument('--quantization',action='store_true')
+
 
 args = parser.parse_args()
 
@@ -80,8 +86,8 @@ hf_models = {}
 # Instaniate agents (initial prompt, round prompt, agent class)
 for name in agents.keys(): 
     if 'hf' in agents[name]['model'] and not agents[name]['model'] in hf_models:
-        hf_models[agents[name]['model']] = setup_hf_model(agents[name]['model'].split('hf_')[-1], cache_dir=args.hf_home)
-        
+        hf_models[agents[name]['model']] = setup_hf_model(agents[name]['model'].split('hf_')[-1], cache_dir=args.hf_home, quantization=args.quantization)
+
     inital_prompt_agent = InitialPrompt(args.game_dir, name, agents[name]['file_name'],\
                                         role_to_agent_names['p1'], role_to_agent_names['p2'], \
                                         num_issues=args.issues_num, num_agents= args.agents_num, incentive=agents[name]['incentive'])
@@ -95,17 +101,19 @@ for name in agents.keys():
     agent_instance = Agent(inital_prompt_agent,round_prompt_agent,name,args.temp,model=agents[name]['model'],azure=args.azure,hf_models=hf_models)
     agents[name]['instance'] = agent_instance
 
-
+print('====== Initialized agents ============')
 
 # If not restart, agent_round_assignment is empty, then randomize order 
 if not args.restart: 
     agent_round_assignment = randomize_agents_order(agents, role_to_agent_names['p1'], args.rounds_num)
 
 for round_idx in range(start_round_idx,args.rounds_num): 
+    print(" ==== Round {} ==== ".format(round_idx))
     if round_idx == 0:
         #For first round, initialize with p1 suggesting the first deal from 'initial_deal.txt' file 
         current_agent = role_to_agent_names['p1']
         slot_prompt, agent_response = agents[current_agent]['instance'].execute_round(history['content'], round_idx)
+        print('===== About to start negotiation =====')
         history = save_conversation(history, current_agent,agent_response, slot_prompt,round_assign=agent_round_assignment,initial=True)
         print('=====')
         print(f'{current_agent} response: {agent_response}')
@@ -113,6 +121,7 @@ for round_idx in range(start_round_idx,args.rounds_num):
     #Continue with rounds 
     current_agent = agent_round_assignment[round_idx]
     slot_prompt, agent_response = agents[current_agent]['instance'].execute_round(history['content'], round_idx)
+    print('===== About to start negotiation =====')
     history = save_conversation(history, current_agent,agent_response, slot_prompt)
     print('=====')
     print(f'{current_agent} response: {agent_response}')
