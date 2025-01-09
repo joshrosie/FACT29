@@ -11,6 +11,10 @@ utils.py / tokenizer is loaded from model_name+'-Instruct' due to the following 
     ValueError: Cannot use chat template functions because tokenizer.chat_template is not set and no template argument was passed
 main.py / hugging_face login added in order to download lamma
 
-installed:
+In order to quantize models, installed:
 pip install -U bitsandbytes
 and added quantization when loading hf_models
+
+in order to use Qwen/Qwen2.5-32B-Instruct-GPTQ-Int4, installed:
+pip install optimum 
+pip install git+https://github.com/PanQiWei/AutoGPTQ.git
