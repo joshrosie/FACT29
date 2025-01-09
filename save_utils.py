@@ -17,7 +17,7 @@ def save_conversation(history, agent_name,full_answer, prompt,round_assign=[],in
         history['content']["finished_rounds"]= 0   
     else:
         history['content']["finished_rounds"] += 1
-    
+   
     public_answer, plan  = process_answer(full_answer)
 
     history['content']["rounds"].append({'agent':agent_name, 'prompt': prompt, 'full_answer': full_answer, 'public_answer': public_answer})
@@ -27,7 +27,7 @@ def save_conversation(history, agent_name,full_answer, prompt,round_assign=[],in
             history['content']['plan'][agent_name].append(plan)
         else:
             history['content']['plan'][agent_name] = [plan]
-    
+    # print('history!!!\n',history,"\n============")
     write_file(history['content'],history['file'])
     return history      
     
@@ -52,14 +52,14 @@ def extract_plan(answer):
 
 
 def write_file(log_dict, file_path):
-    def custom_serializer(obj):
-        if hasattr(obj, '__dict__'):
-            return obj.__dict__  # Converts the object into a dictionary
-        else:
-            return str(obj)  # Fallback to string representation
-
+    # def custom_serializer(obj):
+    #     if hasattr(obj, '__dict__'):
+    #         return obj.__dict__  # Converts the object into a dictionary
+    #     else:
+    #         return str(obj)  # Fallback to string representation
+    # print(log_dict)
     with open(file_path, 'w') as outfile:
-        json.dump(log_dict, outfile, default=custom_serializer)
+        json.dump(log_dict, outfile)
 
 def create_outfiles(args,OUTPUT_DIR):
     '''

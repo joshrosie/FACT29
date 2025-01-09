@@ -62,7 +62,7 @@ def calculator(scores,deal,num_issues=5):
 
 
 def extract_deal(answer,num_issues=5): 
-    answer = answer["content"].replace('\n','')
+    answer = answer.replace('\n','')
     issue_names = string.ascii_uppercase[:26] 
     deal = []
     issues_suggested=0
