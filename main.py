@@ -56,7 +56,7 @@ parser.add_argument('--azure_openai_endpoint', default='', help='azure endpoint'
 #for GPTs and OpenAI APIs, set key 
 parser.add_argument('--api_key',type=str, default='', help='OpenAI key, set if using OpenAI APIs')
 
-parser.add_argument('--quantization',action='store_true')
+parser.add_argument('--quantization',type=str, default='', help='Quantize huggingface models')
 
 
 args = parser.parse_args()

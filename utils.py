@@ -11,11 +11,12 @@ def setup_hf_model(model_name,cache_dir='/disk1/', max_new_tokens=7000, quantiza
     Sets up a Hugging Face model and tokenizer, caching it for future use.
     """
     config = AutoConfig.from_pretrained(model_name, trust_remote_code=True, use_cache=True, cache_dir=os.path.join(cache_dir,model_name),device_map='auto')
-    if quantization:
-        # quantization_config = BitsAndBytesConfig(load_in_4bit=True)
-        # model = AutoModelForCausalLM.from_pretrained(model_name, config=config, cache_dir=os.path.join(cache_dir,model_name),device_map='auto', torch_dtype=torch.bfloat16, quantization_config=quantization_config)
+    if quantization == 'int8':
         quantization_config = BitsAndBytesConfig(load_in_8bit=True)
         model = AutoModelForCausalLM.from_pretrained(model_name, config=config, cache_dir=os.path.join(cache_dir,model_name),device_map='auto', torch_dtype=torch.float16, quantization_config=quantization_config)
+    elif quantization == 'int4':
+        quantization_config = BitsAndBytesConfig(load_in_4bit=True)
+        model = AutoModelForCausalLM.from_pretrained(model_name, config=config, cache_dir=os.path.join(cache_dir,model_name),device_map='auto', torch_dtype=torch.bfloat16, quantization_config=quantization_config)
     else:
         model = AutoModelForCausalLM.from_pretrained(model_name, trust_remote_code=True, config=config, cache_dir=os.path.join(cache_dir,model_name),device_map='auto')
     model.eval()
