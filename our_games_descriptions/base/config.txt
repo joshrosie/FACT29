@@ -1,6 +1,6 @@
-Mayor,mayor,player,cooperative,hf_Qwen/Qwen2.5-32B-Instruct-GPTQ-Int4
-Other cities,other_cities,player,cooperative,hf_Qwen/Qwen2.5-32B-Instruct-GPTQ-Int4
-Local Labour Union,union,player,cooperative,hf_Qwen/Qwen2.5-32B-Instruct-GPTQ-Int4
-SportCo,SportCo,p1,greedy,hf_Qwen/Qwen2.5-32B-Instruct-GPTQ-Int4
-Department of Tourism,DoT,p2,greedy,hf_Qwen/Qwen2.5-32B-Instruct-GPTQ-Int4
-Environmental League,enviroment,player,greedy,hf_Qwen/Qwen2.5-32B-Instruct-GPTQ-Int4
+Mayor,mayor,player,cooperative,hf_microsoft/Phi-3-small-128k-instruct
+Other cities,other_cities,player,cooperative,hf_microsoft/Phi-3-small-128k-instruct
+Local Labour Union,union,player,cooperative,hf_microsoft/Phi-3-small-128k-instruct
+SportCo,SportCo,p1,cooperative,hf_microsoft/Phi-3-small-128k-instruct
+Department of Tourism,DoT,p2,cooperative,hf_microsoft/Phi-3-small-128k-instruct
+Environmental League,enviroment,player,cooperative,hf_microsoft/Phi-3-small-128k-instruct
