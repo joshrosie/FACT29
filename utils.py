@@ -95,6 +95,38 @@ def randomize_agents_order(agents, p1, rounds):
         round_assign += shuffled 
         last_agent = shuffled[-1]
     return round_assign 
+
+def set_config_file(config_path, args):
+    with open(config_path, 'r') as f:
+        agents_config_file = f.readlines()
+    
+    split_lines = [line.split(',') for line in agents_config_file]
+
+    if args.model is not None:
+        if len(args.model) == 1:
+            for line in split_lines:
+                line[-1] = args.model[0]
+        elif len(args.model) != len(split_lines):
+            raise ValueError('Number of models does not match number of agents')
+        else:
+            for i, line in enumerate(split_lines):
+                line[-1] = args.model[i]
+    if args.incentive is not None:
+        if len(args.incentive) == 1:
+            for line in split_lines:
+                line[-2] = args.incentive[0]
+        elif len(args.incentive) != len(split_lines):
+            raise ValueError('Number of incentives does not match number of agents')
+        else:
+            for i, line in enumerate(split_lines):
+                line[-2] = args.incentive[i]
+    
+    # rewrite the config file with the new models
+    with open(config_path, 'w') as f:
+        for line in split_lines:
+            f.write(','.join(line).strip()+'\n')
+        
+
         
 
     

@@ -13,7 +13,7 @@ from initial_prompts import InitialPrompt
 from rounds import RoundPrompts 
 
 
-from utils import load_setup, set_constants, randomize_agents_order, setup_hf_model
+from utils import load_setup, set_constants, randomize_agents_order, setup_hf_model, set_config_file
 from save_utils import create_outfiles,save_conversation 
 
 from huggingface_hub import login
@@ -57,9 +57,11 @@ parser.add_argument('--azure_openai_endpoint', default='', help='azure endpoint'
 parser.add_argument('--api_key',type=str, default='', help='OpenAI key, set if using OpenAI APIs')
 
 parser.add_argument('--quantization',type=str, default='', help='Quantize huggingface models')
-
+parser.add_argument('--model', nargs='*', help='Model(s) to use for the agents')      
+parser.add_argument('--incentive', nargs='*', help='Incentive(s) of the agents')
 
 args = parser.parse_args()
+
 
 OUTPUT_DIR = os.path.join(args.game_dir,args.output_dir,args.exp_name)
 
@@ -74,6 +76,9 @@ agent_round_assignment, start_round_idx, history  = create_outfiles(args,OUTPUT_
 # Dump config file and scores in OUTPUT_DIR 
 shutil.copyfile(os.path.join(args.game_dir,'config.txt'), os.path.join(OUTPUT_DIR,'config.txt'))
 shutil.copytree(os.path.join(args.game_dir,'scores_files'), os.path.join(OUTPUT_DIR,'scores_files'),dirs_exist_ok=True)
+
+set_config_file(os.path.join(OUTPUT_DIR,'config.txt'), args)
+
 
 # Load setups of agents from config file. File should contain names, file names, roles, incentives, and models 
 # Also load initial deal file and return a dict of role to agent names 
