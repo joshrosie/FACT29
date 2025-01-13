@@ -82,7 +82,7 @@ set_config_file(os.path.join(OUTPUT_DIR,'config.txt'), args)
 
 # Load setups of agents from config file. File should contain names, file names, roles, incentives, and models 
 # Also load initial deal file and return a dict of role to agent names 
-agents,initial_deal,role_to_agent_names = load_setup(args.game_dir, args.agents_num)
+agents,initial_deal,role_to_agent_names = load_setup(args.game_dir, args.agents_num, OUTPUT_DIR)
 
 # Load HF models 
 hf_models = {}

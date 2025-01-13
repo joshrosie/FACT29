@@ -27,7 +27,7 @@ def setup_hf_model(model_name,cache_dir='/disk1/', max_new_tokens=7000, quantiza
     return model, tokenizer, pipeline_gen 
 
 
-def load_setup(game_dir, agents_num):
+def load_setup(game_dir, agents_num, output_dir):
     '''
     load config files of the experiments (<game_dir>/config.txt)
     The config file is organized as: one line per agent. 
@@ -47,7 +47,7 @@ def load_setup(game_dir, agents_num):
         intial deal: deal to kick off, add as input in initial_deal_file 
         role_to_agents: dict of roles (veto) to agent names 
     '''
-    with open(os.path.join(game_dir,'config.txt'), 'r') as f:
+    with open(os.path.join(output_dir,'config.txt'), 'r') as f:
         agents_config_file = f.readlines()
         
 
