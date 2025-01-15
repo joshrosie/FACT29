@@ -40,7 +40,7 @@ COMMAND="python main.py --exp_name our_code_v2/Mixtral-8x7B-Instruct-v0.1 \
 --hf_home hf_models/ \
 --model hf_mistralai/Mixtral-8x7B-Instruct-v0.1 \
 --incentive cooperative \
---restrict_leakage
+--restrict_leakage \
 --quantization int4"
 
 # Loop to run the command 20 times

@@ -40,13 +40,15 @@ def save_conversation(history, agent_name,full_answer, prompt,round_assign=[],in
 def extract_answer(answer, restrict_leakage):
     if restrict_leakage:
         #extract final answer by removing scratchpad 
-        if "<ANSWER>" in answer and "</ANSWER>" in answer: 
+        if "<ANSWER>" in answer and "</ANSWER>" in answer:
             return answer.split('<ANSWER>')[-1].split("</ANSWER>")[0]
         elif "<ANSWER>" in answer:
             public_answer = answer.split('<ANSWER>')[-1]
             _plan = extract_plan(public_answer)
             public_answer = public_answer.replace(_plan,'')
             return public_answer
+        elif "<DEAL>" in answer and "</DEAL>" in answer:
+            return "<DEAL>"+answer.split('<DEAL>')[-1].split("</DEAL>")[0]+"</DEAL>"
         return ''
     else: # initial paper implementation
         #extract final answer by removing scratchpad 
