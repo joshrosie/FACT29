@@ -1,0 +1,6 @@
+international development bank,bank,p2,cooperative,hf_meta-llama/Meta-Llama-3-8B-Instruct
+environmental NGO,enviroment,player,cooperative,hf_meta-llama/Meta-Llama-3-8B-Instruct
+government,proposing,p1,cooperative,hf_meta-llama/Meta-Llama-3-8B-Instruct
+construction company,construction,player,cooperative,hf_meta-llama/Meta-Llama-3-8B-Instruct
+indigenous community,community,player,cooperative,hf_meta-llama/Meta-Llama-3-8B-Instruct
+local tourism association,tourism,player,cooperative,hf_meta-llama/Meta-Llama-3-8B-Instruct
