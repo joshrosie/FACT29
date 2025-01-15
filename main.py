@@ -61,6 +61,9 @@ parser.add_argument('--model', nargs='*', help='Model(s) to use for the agents')
 parser.add_argument('--incentive', nargs='*', help='Incentive(s) of the agents')
 parser.add_argument('--restrict_leakage', action='store_true')
 
+# Do not run actual api call, just get prompt:
+parser.add_argument("--dry_run", type=bool, help="If on, turns off actual calls to an LLM", default=False)
+
 # arguments for ablation
 # Possible ablation keywords:
 # "previous", "others", "candidates", "plan"
@@ -113,11 +116,18 @@ for name in agents.keys():
                                     target_agent=role_to_agent_names.get('target',''),\
                                     rounds_num=args.rounds_num, agents_num=args.agents_num)      
 
-        
-    agent_instance = Agent(inital_prompt_agent,round_prompt_agent,name,args.temp,model=agents[name]['model'],azure=args.azure,hf_models=hf_models)
-    agents[name]['instance'] = agent_instance
 
-print('====== Initialized agents ============')
+    agent_instance = Agent(
+        inital_prompt_agent,
+        round_prompt_agent,
+        name,
+        args.temp,
+        model=agents[name]["model"],
+        azure=args.azure,
+        hf_models=hf_models,
+        dry_run=args.dry_run
+    )
+    agents[name]["instance"] = agent_instance
 
 # If not restart, agent_round_assignment is empty, then randomize order 
 if not args.restart: 
