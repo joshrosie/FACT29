@@ -1,0 +1,6 @@
+international development bank,bank,p2,cooperative,meta-llama/Llama-2-13b-chat-hf
+environmental NGO,enviroment,player,cooperative,meta-llama/Llama-2-13b-chat-hf
+government,proposing,p1,cooperative,meta-llama/Llama-2-13b-chat-hf
+construction company,construction,player,cooperative,meta-llama/Llama-2-13b-chat-hf
+indigenous community,community,player,cooperative,meta-llama/Llama-2-13b-chat-hf
+local tourism association,tourism,player,cooperative,meta-llama/Llama-2-13b-chat-hf

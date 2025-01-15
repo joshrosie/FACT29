@@ -1,0 +1,6 @@
+Foreign aid agency,foreign_agency,p2,cooperative,meta-llama/Llama-2-13b-chat-hf
+Project manager,project_manager,p1,cooperative,meta-llama/Llama-2-13b-chat-hf
+Local government,government,player,cooperative,meta-llama/Llama-2-13b-chat-hf
+Landowners,landowners,player,cooperative,meta-llama/Llama-2-13b-chat-hf
+Local NGO,NGO,player,cooperative,meta-llama/Llama-2-13b-chat-hf
+Local Activists,activists,player,cooperative,meta-llama/Llama-2-13b-chat-hf

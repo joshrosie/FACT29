@@ -19,6 +19,8 @@ def save_conversation(history, agent_name,full_answer, prompt,round_assign=[],in
         history['content']["finished_rounds"] += 1
     
     public_answer, plan  = process_answer(full_answer)
+    if initial and public_answer == '':
+        public_answer = full_answer
 
     history['content']["rounds"].append({'agent':agent_name, 'prompt': prompt, 'full_answer': full_answer, 'public_answer': public_answer})
 
@@ -29,15 +31,24 @@ def save_conversation(history, agent_name,full_answer, prompt,round_assign=[],in
             history['content']['plan'][agent_name] = [plan]
     
     write_file(history['content'],history['file'])
+    if public_answer == '':
+        print(full_answer)
+        raise ValueError('Public answer is empty')
     return history      
     
 
 def extract_answer(answer):
     #extract final answer by removing scratchpad 
+    found_answer = False
     if "<ANSWER>" and "</ANSWER>" in answer: 
         answer = answer.split('<ANSWER>')[-1].split("</ANSWER>")[0]
+        found_answer = True
     if "<ANSWER>" in answer:
         answer = answer.split('<ANSWER>')[-1]
+        #TODO: PLAN may be in the answer
+        found_answer = True
+    if not found_answer:
+        answer = ''
     return answer
     
 def extract_plan(answer):

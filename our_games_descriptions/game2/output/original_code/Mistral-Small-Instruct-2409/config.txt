@@ -1,0 +1,6 @@
+Foreign aid agency,foreign_agency,p2,cooperative,hf_mistralai/Mistral-Small-Instruct-2409
+Project manager,project_manager,p1,cooperative,hf_mistralai/Mistral-Small-Instruct-2409
+Local government,government,player,cooperative,hf_mistralai/Mistral-Small-Instruct-2409
+Landowners,landowners,player,cooperative,hf_mistralai/Mistral-Small-Instruct-2409
+Local NGO,NGO,player,cooperative,hf_mistralai/Mistral-Small-Instruct-2409
+Local Activists,activists,player,cooperative,hf_mistralai/Mistral-Small-Instruct-2409

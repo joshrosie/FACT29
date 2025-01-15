@@ -1,0 +1,6 @@
+international development bank,bank,p2,cooperative,hf_Qwen/Qwen2.5-7B-Instruct
+environmental NGO,enviroment,player,cooperative,hf_Qwen/Qwen2.5-7B-Instruct
+government,proposing,p1,cooperative,hf_Qwen/Qwen2.5-7B-Instruct
+construction company,construction,player,cooperative,hf_Qwen/Qwen2.5-7B-Instruct
+indigenous community,community,player,cooperative,hf_Qwen/Qwen2.5-7B-Instruct
+local tourism association,tourism,player,cooperative,hf_Qwen/Qwen2.5-7B-Instruct

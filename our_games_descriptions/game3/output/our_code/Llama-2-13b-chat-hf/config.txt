@@ -1,0 +1,6 @@
+Federal government of Germany,federal,p2,cooperative,meta-llama/Llama-2-13b-chat-hf
+Private investors,private_investors,p1,cooperative,meta-llama/Llama-2-13b-chat-hf
+State government of Saarland,state,player,cooperative,meta-llama/Llama-2-13b-chat-hf
+Environmental activists,activists,player,cooperative,meta-llama/Llama-2-13b-chat-hf
+France,france,player,cooperative,meta-llama/Llama-2-13b-chat-hf
+Local community of Neunkirchen,community,player,cooperative,meta-llama/Llama-2-13b-chat-hf

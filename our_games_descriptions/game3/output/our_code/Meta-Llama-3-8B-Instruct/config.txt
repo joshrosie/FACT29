@@ -1,0 +1,6 @@
+Federal government of Germany,federal,p2,cooperative,hf_meta-llama/Meta-Llama-3-8B-Instruct
+Private investors,private_investors,p1,cooperative,hf_meta-llama/Meta-Llama-3-8B-Instruct
+State government of Saarland,state,player,cooperative,hf_meta-llama/Meta-Llama-3-8B-Instruct
+Environmental activists,activists,player,cooperative,hf_meta-llama/Meta-Llama-3-8B-Instruct
+France,france,player,cooperative,hf_meta-llama/Meta-Llama-3-8B-Instruct
+Local community of Neunkirchen,community,player,cooperative,hf_meta-llama/Meta-Llama-3-8B-Instruct
