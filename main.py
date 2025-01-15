@@ -59,7 +59,7 @@ parser.add_argument('--api_key',type=str, default='', help='OpenAI key, set if u
 parser.add_argument('--quantization',type=str, default='', help='Quantize huggingface models')
 parser.add_argument('--model', nargs='*', help='Model(s) to use for the agents')      
 parser.add_argument('--incentive', nargs='*', help='Incentive(s) of the agents')
-
+parser.add_argument('--restrict_leakage', action='store_true')
 args = parser.parse_args()
 
 
@@ -121,7 +121,7 @@ for round_idx in range(start_round_idx,args.rounds_num):
         if hasattr(agent_response, "content"):
             agent_response = agent_response.content
         print('===== About to start negotiation =====')
-        history = save_conversation(history, current_agent,agent_response, slot_prompt,round_assign=agent_round_assignment,initial=True)
+        history = save_conversation(history, current_agent,agent_response, slot_prompt,round_assign=agent_round_assignment,initial=True, restrict_leakage=args.restrict_leakage)
         print('=====')
         print(f'{current_agent} response: {agent_response}')
     
@@ -131,7 +131,7 @@ for round_idx in range(start_round_idx,args.rounds_num):
     if hasattr(agent_response, "content"):
         agent_response = agent_response.content
     print('===== About to start negotiation =====')
-    history = save_conversation(history, current_agent,agent_response, slot_prompt)
+    history = save_conversation(history, current_agent,agent_response, slot_prompt, restrict_leakage=args.restrict_leakage)
     print('=====')
     print(f'{current_agent} response: {agent_response}')
 
