@@ -4,7 +4,7 @@ import time
 
 
 def process_answer(full_answer, restrict_leakage):
-    public_answer = extract_answer(full_answer)
+    public_answer = extract_answer(full_answer, restrict_leakage)
     plan = extract_plan(full_answer)
     return public_answer, plan 
 
