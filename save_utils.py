@@ -3,13 +3,13 @@ import os
 import time 
 
 
-def process_answer(full_answer):
+def process_answer(full_answer, restrict_leakage):
     public_answer = extract_answer(full_answer)
     plan = extract_plan(full_answer)
     return public_answer, plan 
 
 
-def save_conversation(history, agent_name,full_answer, prompt,round_assign=[],initial=False):
+def save_conversation(history, agent_name,full_answer, prompt,round_assign=[],initial=False, restrict_leakage=False):
     if initial: 
         history['content']['slot_assignment'] = round_assign
         history['content']["rounds"] = []
@@ -18,7 +18,7 @@ def save_conversation(history, agent_name,full_answer, prompt,round_assign=[],in
     else:
         history['content']["finished_rounds"] += 1
     
-    public_answer, plan  = process_answer(full_answer)
+    public_answer, plan  = process_answer(full_answer, restrict_leakage)
     if initial and public_answer == '':
         public_answer = full_answer
 
@@ -37,23 +37,28 @@ def save_conversation(history, agent_name,full_answer, prompt,round_assign=[],in
     return history      
     
 
-def extract_answer(answer):
-    #extract final answer by removing scratchpad 
-    found_answer = False
-    if "<ANSWER>" and "</ANSWER>" in answer: 
-        answer = answer.split('<ANSWER>')[-1].split("</ANSWER>")[0]
-        found_answer = True
-    if "<ANSWER>" in answer:
-        answer = answer.split('<ANSWER>')[-1]
-        #TODO: PLAN may be in the answer
-        found_answer = True
-    if not found_answer:
-        answer = ''
-    return answer
+def extract_answer(answer, restrict_leakage):
+    if restrict_leakage:
+        #extract final answer by removing scratchpad 
+        if "<ANSWER>" in answer and "</ANSWER>" in answer: 
+            return answer.split('<ANSWER>')[-1].split("</ANSWER>")[0]
+        elif "<ANSWER>" in answer:
+            public_answer = answer.split('<ANSWER>')[-1]
+            _plan = extract_plan(public_answer)
+            public_answer = public_answer.replace(_plan,'')
+            return public_answer
+        return ''
+    else: # initial paper implementation
+        #extract final answer by removing scratchpad 
+        if "<ANSWER>" and "</ANSWER>" in answer: 
+            answer = answer.split('<ANSWER>')[-1].split("</ANSWER>")[0]
+        if "<ANSWER>" in answer:
+            answer = answer.split('<ANSWER>')[-1]
+        return answer
     
 def extract_plan(answer):
     #extract plan 
-    if "<PLAN>" and "</PLAN>" in answer: 
+    if "<PLAN>" in answer and "</PLAN>" in answer: 
         plan = answer.split('<PLAN>')[-1].split("</PLAN>")[0]
         return plan
     elif "<PLAN>" in answer: 
