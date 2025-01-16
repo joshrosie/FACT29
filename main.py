@@ -55,6 +55,16 @@ parser.add_argument(
     "--api_key", type=str, default="", help="OpenAI key, set if using OpenAI APIs"
 )
 
+# arguments for ablation
+# Possible ablation keywords:
+# "previous", "others", "candidates", "plan"
+parser.add_argument(
+    "--ablations",
+    nargs="*",
+    help="List of ablation studies to perform",
+    default=["previous", "candidates"],
+)
+
 
 args = parser.parse_args()
 
@@ -112,6 +122,7 @@ for name in agents.keys():
         target_agent=role_to_agent_names.get("target", ""),
         rounds_num=args.rounds_num,
         agents_num=args.agents_num,
+        ablations=args.ablations,
     )
 
     agent_instance = Agent(
