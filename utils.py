@@ -21,6 +21,7 @@ def setup_hf_model(model_name,cache_dir='/disk1/', max_new_tokens=7000, quantiza
         model = AutoModelForCausalLM.from_pretrained(model_name, trust_remote_code=True, config=config, cache_dir=os.path.join(cache_dir,model_name),device_map='auto')
     model.eval()
     tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True, use_cache=True, cache_dir=os.path.join(cache_dir,model_name),device_map='auto')
+
     tokenizer.pad_token = tokenizer.eos_token
     pipeline_gen = pipeline("text-generation", model=model, tokenizer=tokenizer, max_new_tokens=max_new_tokens,
                                  return_full_text=False)
@@ -47,6 +48,7 @@ def load_setup(game_dir, agents_num, output_dir):
         intial deal: deal to kick off, add as input in initial_deal_file 
         role_to_agents: dict of roles (veto) to agent names 
     '''
+
     with open(os.path.join(output_dir,'config.txt'), 'r') as f:
         agents_config_file = f.readlines()
         
@@ -125,9 +127,7 @@ def set_config_file(config_path, args):
     with open(config_path, 'w') as f:
         for line in split_lines:
             f.write(','.join(line).strip()+'\n')
-        
-
-        
+ 
 
     
 

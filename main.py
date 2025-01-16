@@ -60,6 +60,17 @@ parser.add_argument('--quantization',type=str, default='', help='Quantize huggin
 parser.add_argument('--model', nargs='*', help='Model(s) to use for the agents')      
 parser.add_argument('--incentive', nargs='*', help='Incentive(s) of the agents')
 parser.add_argument('--restrict_leakage', action='store_true')
+
+# arguments for ablation
+# Possible ablation keywords:
+# "previous", "others", "candidates", "plan"
+parser.add_argument(
+    "--ablations",
+    nargs="*",
+    help="List of ablation studies to perform",
+    default=["previous", "candidates"],
+)
+
 args = parser.parse_args()
 
 
@@ -145,4 +156,3 @@ if hasattr(agent_response, "content"):
 history = save_conversation(history, current_agent,agent_response, slot_prompt)
 print('=====')
 print(f'{current_agent} response: {agent_response}')  
-    

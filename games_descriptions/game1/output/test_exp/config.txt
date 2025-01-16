@@ -1,0 +1,6 @@
+international development bank,bank,p2,cooperative,gpt-4o-mini
+environmental NGO,enviroment,player,cooperative,gpt-4o-mini
+government,proposing,p1,cooperative,gpt-4o-mini
+construction company,construction,player,cooperative,gpt-4o-mini
+indigenous community,community,player,cooperative,gpt-4o-mini
+local tourism association,tourism,player,cooperative,gpt-4o-mini

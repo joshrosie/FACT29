@@ -3,10 +3,12 @@ import os
 import time 
 
 
+
 def process_answer(full_answer, restrict_leakage):
     public_answer = extract_answer(full_answer)
     plan = extract_plan(full_answer)
     return public_answer, plan 
+
 
 
 def save_conversation(history, agent_name,full_answer, prompt,round_assign=[],initial=False, restrict_leakage=False):
