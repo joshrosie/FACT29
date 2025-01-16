@@ -44,8 +44,12 @@ def extract_answer(answer, restrict_leakage):
             return answer.split('<ANSWER>')[-1].split("</ANSWER>")[0]
         elif "<ANSWER>" in answer:
             public_answer = answer.split('<ANSWER>')[-1]
-            _plan = extract_plan(public_answer)
-            public_answer = public_answer.replace(_plan,'')
+            while True:
+                _plan = extract_plan(public_answer)
+                public_answer = public_answer.replace('<PLAN>'+_plan+'</PLAN>','')
+                public_answer = public_answer.replace('<PLAN>'+_plan,'')
+                if _plan == '':
+                    break
             return public_answer
         elif "<DEAL>" in answer and "</DEAL>" in answer:
             return "<DEAL>"+answer.split('<DEAL>')[-1].split("</DEAL>")[0]+"</DEAL>"
