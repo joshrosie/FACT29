@@ -15,6 +15,7 @@ class RoundPrompts:
         agents_num=6,
         ablations=["previous", "candidates"],
     ):
+
         self.agent_name = agent_name
         self.p1_name = p1_name
         self.incentive = incentive
@@ -129,6 +130,7 @@ class RoundPrompts:
 
     def get_unified_instructions(self):
         prompt = """ 
+
         Enclose the scratchpad between <SCRATCHPAD> and </SCRATCHPAD>. The scratchpad is secret and not seen by other parties. 
         Your final answer is public and must never contain scores. Enclose your final answer after the scratchpad between <ANSWER> and </ANSWER>. 
         Make your final answer very short and brief in 2-3 sentences and containing only your main proposals. 

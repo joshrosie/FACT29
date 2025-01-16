@@ -1,25 +1,34 @@
-from transformers import AutoTokenizer, pipeline, AutoModelForCausalLM, AutoConfig
+from transformers import AutoTokenizer, pipeline, AutoModelForCausalLM, AutoConfig, BitsAndBytesConfig
+import torch 
 import os 
 import openai 
 import numpy as np 
-# import vertexai
+import vertexai
 import random 
 
-def setup_hf_model(model_name,cache_dir='/disk1/', max_new_tokens=7000):
+def setup_hf_model(model_name,cache_dir='/disk1/', max_new_tokens=7000, quantization=False):
     """
     Sets up a Hugging Face model and tokenizer, caching it for future use.
     """
-    config = AutoConfig.from_pretrained(model_name, use_cache=True, cache_dir=os.path.join(cache_dir,model_name),device_map='auto')
-    model = AutoModelForCausalLM.from_pretrained(model_name, config=config, cache_dir=os.path.join(cache_dir,model_name),device_map='auto')
+    config = AutoConfig.from_pretrained(model_name, trust_remote_code=True, use_cache=True, cache_dir=os.path.join(cache_dir,model_name),device_map='auto')
+    if quantization == 'int8':
+        quantization_config = BitsAndBytesConfig(load_in_8bit=True)
+        model = AutoModelForCausalLM.from_pretrained(model_name, config=config, cache_dir=os.path.join(cache_dir,model_name),device_map='auto', torch_dtype=torch.float16, quantization_config=quantization_config)
+    elif quantization == 'int4':
+        quantization_config = BitsAndBytesConfig(load_in_4bit=True)
+        model = AutoModelForCausalLM.from_pretrained(model_name, config=config, cache_dir=os.path.join(cache_dir,model_name),device_map='auto', torch_dtype=torch.bfloat16, quantization_config=quantization_config)
+    else:
+        model = AutoModelForCausalLM.from_pretrained(model_name, trust_remote_code=True, config=config, cache_dir=os.path.join(cache_dir,model_name),device_map='auto')
     model.eval()
-    tokenizer = AutoTokenizer.from_pretrained(model_name, use_cache=True)
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True, use_cache=True, cache_dir=os.path.join(cache_dir,model_name),device_map='auto')
+
     tokenizer.pad_token = tokenizer.eos_token
     pipeline_gen = pipeline("text-generation", model=model, tokenizer=tokenizer, max_new_tokens=max_new_tokens,
                                  return_full_text=False)
     return model, tokenizer, pipeline_gen 
 
 
-def load_setup(game_dir, agents_num):
+def load_setup(game_dir, agents_num, output_dir):
     '''
     load config files of the experiments (<game_dir>/config.txt)
     The config file is organized as: one line per agent. 
@@ -39,7 +48,8 @@ def load_setup(game_dir, agents_num):
         intial deal: deal to kick off, add as input in initial_deal_file 
         role_to_agents: dict of roles (veto) to agent names 
     '''
-    with open(os.path.join(game_dir,'config.txt'), 'r') as f:
+
+    with open(os.path.join(output_dir,'config.txt'), 'r') as f:
         agents_config_file = f.readlines()
         
 
@@ -67,7 +77,7 @@ def load_setup(game_dir, agents_num):
 
 def set_constants(args):
     if args.gemini:
-        ai.init(project=args.gemini_project_name, location=args.gemini_loc)
+        vertexai.init(project=args.gemini_project_name, location=args.gemini_loc)
         
     openai.api_key = args.api_key
 
@@ -87,7 +97,37 @@ def randomize_agents_order(agents, p1, rounds):
         round_assign += shuffled 
         last_agent = shuffled[-1]
     return round_assign 
-        
+
+def set_config_file(config_path, args):
+    with open(config_path, 'r') as f:
+        agents_config_file = f.readlines()
+    
+    split_lines = [line.split(',') for line in agents_config_file]
+
+    if args.model is not None:
+        if len(args.model) == 1:
+            for line in split_lines:
+                line[-1] = args.model[0]
+        elif len(args.model) != len(split_lines):
+            raise ValueError('Number of models does not match number of agents')
+        else:
+            for i, line in enumerate(split_lines):
+                line[-1] = args.model[i]
+    if args.incentive is not None:
+        if len(args.incentive) == 1:
+            for line in split_lines:
+                line[-2] = args.incentive[0]
+        elif len(args.incentive) != len(split_lines):
+            raise ValueError('Number of incentives does not match number of agents')
+        else:
+            for i, line in enumerate(split_lines):
+                line[-2] = args.incentive[i]
+    
+    # rewrite the config file with the new models
+    with open(config_path, 'w') as f:
+        for line in split_lines:
+            f.write(','.join(line).strip()+'\n')
+ 
 
     
 

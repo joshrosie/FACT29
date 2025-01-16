@@ -129,5 +129,6 @@ class InitialPrompt:
         # Additional bonus rule for p1
         if self.agent_game_name == self.p1:
             final_initial_prompt += f'\n\t- To protect yourself from potential future lawsuits, you want to achieve unanimity; if you and all other {self.num_agents-1} parties agree, you will get a bonus of 10 points. '
-        return final_initial_prompt   
+
+        return final_initial_prompt
         

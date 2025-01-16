@@ -1,0 +1,6 @@
+Ministry of Culture and Sport,department,p2,cooperative,hf_Qwen/Qwen2.5-7B-Instruct
+Green Alliance,enviroment,player,cooperative,hf_Qwen/Qwen2.5-7B-Instruct
+governor,mayor,player,cooperative,hf_Qwen/Qwen2.5-7B-Instruct
+neighbouring cities,other_cities,player,cooperative,hf_Qwen/Qwen2.5-7B-Instruct
+Eventix,company,p1,cooperative,hf_Qwen/Qwen2.5-7B-Instruct
+The Local Workers' Union,union,player,cooperative,hf_Qwen/Qwen2.5-7B-Instruct

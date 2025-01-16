@@ -1,0 +1,20 @@
+agent.py / do_sample=False (due to error for positive temperature when do_sample=True)
+
+ValueError: `temperature` (=0.0) has to be a strictly positive float, otherwise your next token scores will be invalid. If you're looking for greedy decoding strategies, set `do_sample=False`.
+
+After changing do_sample to False, the following warnings occurred:
+UserWarning: `do_sample` is set to `False`. However, `temperature` is set to `0.0` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `temperature`.
+UserWarning: `do_sample` is set to `False`. However, `top_p` is set to `0.9` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `top_p`.
+
+
+utils.py / tokenizer is loaded from model_name+'-Instruct' due to the following error:
+    ValueError: Cannot use chat template functions because tokenizer.chat_template is not set and no template argument was passed
+main.py / hugging_face login added in order to download lamma
+
+In order to quantize models, installed:
+pip install -U bitsandbytes
+and added quantization when loading hf_models
+
+in order to use Qwen/Qwen2.5-32B-Instruct-GPTQ-Int4, installed:
+pip install optimum 
+pip install git+https://github.com/PanQiWei/AutoGPTQ.git

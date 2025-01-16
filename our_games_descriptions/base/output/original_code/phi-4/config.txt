@@ -1,0 +1,6 @@
+Mayor,mayor,player,cooperative,hf_microsoft/phi-4
+Other cities,other_cities,player,cooperative,hf_microsoft/phi-4
+Local Labour Union,union,player,cooperative,hf_microsoft/phi-4
+SportCo,SportCo,p1,cooperative,hf_microsoft/phi-4
+Department of Tourism,DoT,p2,cooperative,hf_microsoft/phi-4
+Environmental League,enviroment,player,cooperative,hf_microsoft/phi-4

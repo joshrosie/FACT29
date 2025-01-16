@@ -1,0 +1,6 @@
+Foreign aid agency,foreign_agency,p2,cooperative,hf_meta-llama/Meta-Llama-3-8B-Instruct
+Project manager,project_manager,p1,cooperative,hf_meta-llama/Meta-Llama-3-8B-Instruct
+Local government,government,player,cooperative,hf_meta-llama/Meta-Llama-3-8B-Instruct
+Landowners,landowners,player,cooperative,hf_meta-llama/Meta-Llama-3-8B-Instruct
+Local NGO,NGO,player,cooperative,hf_meta-llama/Meta-Llama-3-8B-Instruct
+Local Activists,activists,player,cooperative,hf_meta-llama/Meta-Llama-3-8B-Instruct

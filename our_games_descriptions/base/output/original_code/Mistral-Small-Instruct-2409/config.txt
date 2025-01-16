@@ -1,0 +1,6 @@
+Mayor,mayor,player,cooperative,hf_mistralai/Mistral-Small-Instruct-2409
+Other cities,other_cities,player,cooperative,hf_mistralai/Mistral-Small-Instruct-2409
+Local Labour Union,union,player,cooperative,hf_mistralai/Mistral-Small-Instruct-2409
+SportCo,SportCo,p1,cooperative,hf_mistralai/Mistral-Small-Instruct-2409
+Department of Tourism,DoT,p2,cooperative,hf_mistralai/Mistral-Small-Instruct-2409
+Environmental League,enviroment,player,cooperative,hf_mistralai/Mistral-Small-Instruct-2409
