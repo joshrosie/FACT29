@@ -12,6 +12,8 @@ from agent import Agent
 from initial_prompts import InitialPrompt
 from rounds import RoundPrompts 
 
+from codecarbon import EmissionsTracker
+
 
 from utils import load_setup, set_constants, randomize_agents_order, setup_hf_model, set_config_file
 from save_utils import create_outfiles,save_conversation 
@@ -19,6 +21,12 @@ from save_utils import create_outfiles,save_conversation
 from huggingface_hub import login
 
 login(token = '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')
+
+if not os.path.exists('carbon_output'):
+    os.makedirs('carbon_output')
+
+tracker = EmissionsTracker(output_dir='carbon_output/')
+tracker.start()
 
 parser = argparse.ArgumentParser(description='big negotiation!!')
 
@@ -156,7 +164,6 @@ for round_idx in range(start_round_idx,args.rounds_num):
     print('=====')
     print(f'{current_agent} response: {agent_response}')
 
-
 #Final deal by P1 
 print(" ==== Deal Suggestions ==== ")
 current_agent = role_to_agent_names['p1']
@@ -166,3 +173,5 @@ if hasattr(agent_response, "content"):
 history = save_conversation(history, current_agent,agent_response, slot_prompt)
 print('=====')
 print(f'{current_agent} response: {agent_response}')  
+
+tracker.stop()
