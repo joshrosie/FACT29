@@ -1,7 +1,7 @@
 import subprocess
 import time
 
-MODEL = "hf_meta-llama/Llama-2-13b-chat-hf"
+MODEL = "hf_Qwen/Qwen2.5-72B-Instruct"
 log_file = "ablation_opensource.log"
 f = open(log_file, "w")
 
@@ -60,7 +60,8 @@ for _ablation in ablation_list:
         "--model", MODEL,
         "--incentive", "cooperative",
         "--restrict_leakage",
-        "--quantization", "int8",
+        "--quantization", "int4",
+        "--emission_project", "ablation_Qwen2.5-70B",
     ]
 
     # Add ablations parameter if any ablations are enabled
