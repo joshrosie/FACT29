@@ -265,6 +265,35 @@ def compute_nash(deal, agents, num_issues=5, epsilon=0.001):
     return nbv
 
 
+def utility_player_usw(deal, agents, player, num_issues=5):
+    """
+    Utilitarian Social Welfare = sum of all agent utilities for 'deal'.
+    """
+    return calculator(agents[player]["scores"], deal, num_issues)
+
+
+def utility_player_esw(deal, agents, player, num_issues=5):
+    """
+    Egalitarian Social Welfare = min of all agent utilities for 'deal'.
+    """
+    # Get the utility of each agent for the deal
+    agent_utilities = [
+        calculator(agent_data["scores"], deal, num_issues)
+        for agent_data in agents.values()
+    ]
+    # Get the utility the minimum utility
+    return min(agent_utilities)
+
+
+def utility_player_nash(deal, agents, player, num_issues=5, epsilon=0.001):
+    """
+    "Nash Bargain Value" = product( max(0, utility_i - threshold_i) ) or similar.
+    But your code uses: product( max(utility - threshold, epsilon) ).
+    """
+    utility = calculator(agents[player]["scores"], deal, num_issues, return_array=True)
+    return np.prod([max(utility[i], epsilon) for i in range(num_issues)])
+
+
 #####################
 # 6) OPTIMAL DEALS UNDER DIFFERENT METRICS
 #####################
@@ -454,6 +483,26 @@ def compute_distance(deal1, deal2, agents, metric="usw", norm="l1", num_issues=5
 # # Pick two sample deals
 # dealA = all_deals[0]
 # dealB = all_deals[10]
+
+# # Get names of p1 and p2
+# p1_name = role_to_agents["p1"]
+# p2_name = role_to_agents["p2"]
+
+# # Get utilities for player1 and player2
+# player1_usw = utility_player_usw(dealA, agents, p1_name, num_issues=ISSUES_NUM)
+# player2_usw = utility_player_usw(dealA, agents, p2_name, num_issues=ISSUES_NUM)
+# player1_esw = utility_player_esw(dealA, agents, p1_name, num_issues=ISSUES_NUM)
+# player2_esw = utility_player_esw(dealA, agents, p2_name, num_issues=ISSUES_NUM)
+# player1_nash = utility_player_nash(dealA, agents, p1_name, num_issues=ISSUES_NUM)
+# player2_nash = utility_player_nash(dealA, agents, p2_name, num_issues=ISSUES_NUM)
+
+# print(f"Player 1 USW: {player1_usw}")
+# print(f"Player 2 USW: {player2_usw}")
+# print(f"Player 1 ESW: {player1_esw}")
+# print(f"Player 2 ESW: {player2_esw}")
+# print(f"Player 1 Nash: {player1_nash}")
+# print(f"Player 2 Nash: {player2_nash}")
+
 
 # print(f"Deal A: {(dealA)}")
 # print(compute_esw(dealA, agents, num_issues=ISSUES_NUM))
