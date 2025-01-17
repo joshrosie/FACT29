@@ -5,9 +5,18 @@ import re
 from itertools import product
 
 
-def load_setup(output_dir, agents_num, num_issues):
+import numpy as np
+import os
+import string
+import re
+from itertools import product
 
-    with open(os.path.join(output_dir, 'config.txt'), 'r') as f:
+
+#####################
+# 1) LOADING SETUP
+#####################
+def load_setup(output_dir, agents_num, num_issues):
+    with open(os.path.join(output_dir, "config.txt"), "r") as f:
         agents_config_file = f.readlines()
 
     issue_names = string.ascii_uppercase[:26]
@@ -19,30 +28,37 @@ def load_setup(output_dir, agents_num, num_issues):
     assert len(agents_config_file) == agents_num
 
     for line in agents_config_file:
-        agent_game_name, file_name, role, incentive, model = line.split(',')
+        agent_game_name, file_name, role, incentive, model = line.split(",")
         model = model.strip()
         agents[agent_game_name] = {
-            'file_name': file_name, 'role': role, 'incentive': incentive}
-        if not role in role_to_agents:
+            "file_name": file_name,
+            "role": role,
+            "incentive": incentive,
+        }
+        if role not in role_to_agents:
             role_to_agents[role] = []
-        if not incentive in incentive_to_agents:
+        if incentive not in incentive_to_agents:
             incentive_to_agents[incentive] = []
         role_to_agents[role].append(agent_game_name)
         incentive_to_agents[incentive].append(agent_game_name)
 
     for agent in agents:
         scores = {}
-        with open(os.path.join(output_dir, 'scores_files', agents[agent]['file_name'])+'.txt', 'r') as f:
-            Lines = f.readlines()
-            assert len(Lines) == num_issues + 1
-            for i, line in enumerate(Lines):
-                if i == len(Lines) - 1:  # min thresholds
-                    scores['min'] = int(line.strip())
+        with open(
+            os.path.join(output_dir, "scores_files", agents[agent]["file_name"])
+            + ".txt",
+            "r",
+        ) as f:
+            lines = f.readlines()
+            assert len(lines) == num_issues + 1
+            for i, line in enumerate(lines):
+                if i == len(lines) - 1:  # min thresholds
+                    scores["min"] = int(line.strip())
                     break
-                scores[issue_names[i]] = [int(num.strip())
-                                          for num in line.split(',')]
-        agents[agent]['scores'] = scores
+                scores[issue_names[i]] = [int(num.strip()) for num in line.split(",")]
+        agents[agent]["scores"] = scores
 
+    # If there's only one agent in a given role/incentive, store the string rather than a list
     for role in role_to_agents:
         if len(role_to_agents[role]) == 1:
             role_to_agents[role] = role_to_agents[role][0]
@@ -54,349 +70,414 @@ def load_setup(output_dir, agents_num, num_issues):
     return agents, role_to_agents, incentive_to_agents
 
 
+#####################
+# 2) CALCULATOR -> Score calculating function
+#####################
 def calculator(scores, deal, num_issues=5, return_array=False):
+    """
+    Summation of the agent's score for each issue in the deal.
+    deal: list of (issue_letter, level) e.g. ('A', 1)
+    scores: dict of the form { 'A': [...], 'B': [...], ..., 'min': 55 }
+    """
     if len(deal) != num_issues:
         return 0
     deal_sum = 0
     deal_array = []
-    for issue in deal:
-        if issue == '' or len(issue) != 2:
+    for issue_letter, level in deal:
+        if issue_letter not in scores:
+            print(f"Error: Issue {issue_letter} not in scores.")
             return 0
-        issue, number = issue[0], int(issue[1])
-        if issue not in scores:
-            return 0
-        deal_sum += scores[issue][number-1]
-        deal_array.append(scores[issue][number-1])
+        # level is 1-based index, so adjust to 0-based for the array
+        issue_score = scores[issue_letter][level - 1]
+        deal_sum += issue_score
+        deal_array.append(issue_score)
     if return_array:
         return deal_array
     return deal_sum
 
 
+def calculator_old(scores, deal, num_issues=5):
+    if len(deal) != num_issues:
+        return 0
+    deal_sum = 0
+    for issue in deal:
+        if issue == "" or len(issue) != 2:
+            return 0
+        issue, number = issue[0], int(issue[1])
+        if issue not in scores:
+            return 0
+        deal_sum += scores[issue][number - 1]
+    return deal_sum
+
+
+#####################
+# 3) GET ALL DEALS
+#####################
+def get_all_deals(agents):
+    """
+    Generate all possible deals (Cartesian product of sub-issues).
+    Returns a list of deals, each a tuple of (issue_letter, chosen_level).
+    """
+    first_agent_scores = next(iter(agents.values()))["scores"]
+    # Exclude "min"
+    issues = [issue for issue in first_agent_scores.keys() if issue != "min"]
+    num_options_per_issue = {issue: len(first_agent_scores[issue]) for issue in issues}
+
+    all_deals_iter = product(
+        *[
+            [(issue, i + 1) for i in range(num_options_per_issue[issue])]
+            for issue in issues
+        ]
+    )
+    # product(...) yields an iterator of tuples-of-tuples
+    return list(all_deals_iter)
+
+
 def extract_deal(answer, num_issues=5):
-    answer = answer.replace('\n', '')
+    """
+    Extract the deal from the agent's answer.
+
+    Parameters:
+    - answer: The agent's answer containing the deal.
+    - num_issues: The number of issues in the negotiation.
+
+    Returns:
+    - deal: A list of sub-issues representing the deal.
+    - issues_suggested: The number of issues suggested in the deal.
+    """
+    answer = answer.replace("\n", "")
     issue_names = string.ascii_uppercase[:26]
     deal = []
     issues_suggested = 0
     for i in range(0, num_issues):
-        option = re.findall(f'{issue_names[i]}[1-9]', answer, re.DOTALL)
-        deal.append(option[0]) if option else deal.append('')
+        option = re.findall(f"{issue_names[i]}[1-9]", answer, re.DOTALL)
+        deal.append(option[0]) if option else deal.append("")
         if option:
             issues_suggested += 1
 
     return deal, issues_suggested
 
 
-def get_all_deals(agents):
-    first_agent_scores = next(iter(agents.values()))['scores']
-    issues = [issue for issue in first_agent_scores.keys() if issue != 'min']
-    num_options_per_issue = {issue: len(
-        first_agent_scores[issue]) for issue in issues}
-
-    # Generate all possible deals (Cartesian product of sub-issues)
-    all_deals = product(
-        *[[(issue, i + 1) for i in range(num_options_per_issue[issue])] for issue in issues])
-    return list(all_deals)
-
-
-def is_valid(role_to_agents, deal, agents):
+def format_deal(deal, num_issues=5):
     """
-    Check if a deal is valid.
-    A deal is valid if:
-    - It is acceptable for all players (over their thresholds).
-    - Both Player 1 (p1) and Player 2 (p2) must also accept the deal.
+    Input: List (e.g. ['A1', 'B2', 'C3', 'D4', 'E5'])
+    Output: Tuple (e.g. (('A', 1), ('B', 2), ('C', 3), ('D', 4), ('E', 5)))
     """
-    # Check for all agents if the deal meets their thresholds
-    for agent_name, agent_data in agents.items():
-        scores = agent_data['scores']
-        threshold = scores['min']  # The threshold for this agent
-        deal_score = calculator(scores, deal)
 
-        if deal_score < threshold:
-            return False  # Deal not acceptable for this agent
+    if len(deal) != num_issues:
+        return None
 
-    for role in ['p1', 'p2']:
-        agent_name = role_to_agents[role]
-        scores = agents[agent_name]['scores']
-        threshold = scores['min']
-        deal_score = calculator(scores, deal)
-
-        if deal_score < threshold:
-            return False  # Deal not acceptable for Player 1 or Player 2
-
-    return True
+    issue_names = string.ascii_uppercase[:26]
+    formatted_deal = []
+    for i in range(num_issues):
+        issue, level = deal[i][0], int(deal[i][1])
+        formatted_deal.append((issue, level))
+    return tuple(formatted_deal)
 
 
-# construct feasibility set
+#####################
+# 4) COMPUTING FEASIBILITY
+#####################
 def compute_feasibility_set(agents, all_deals):
-    feasibility_set = []
-
-    # Iterate over each deal
-    for deal in all_deals:
-        acceptable_count = 0
-        key_players_accepted = set()
-
-        for _, agent_data in agents.items():
-            scores = agent_data['scores']
-            # Compute the total score for this agent based on the deal
-            agent_score = sum(
-                # level - 1 to adjust for 0-based indexing
-                scores[issue][level - 1]
-                for issue, level in deal
-            )
-
-            # Check if the agent accepts the deal (score >= min threshold)
-            if agent_score >= scores['min']:
-                acceptable_count += 1
-                # Check if key player (p1 or p2)
-                if agent_data['role'] in {'p1', 'p2'}:
-                    key_players_accepted.add(agent_data['role'])
-
-        # Add the deal to the feasibility set if at least 5 agents accept, including p1 and p2
-        if acceptable_count >= 5 and {'p1', 'p2'}.issubset(key_players_accepted):
-            feasibility_set.append(deal)
-
-    return feasibility_set
-# construct pareto frontier
-
-
-def get_pareto_frontier(agent_info, deals):
-    def get_total_scores(deal):
-        """
-        Calculate the total scores for all agents for a given deal.
-        """
-        scores = {}
-        for agent, details in agent_info.items():
-            role_scores = details['scores']
-            total_score = 0
-            for option, choice in deal:
-                total_score += role_scores[option][choice - 1]
-            scores[agent] = total_score
-        return scores
-
-    def is_dominated(deal1_scores, deal2_scores):
-        """
-        Check if deal1 is dominated by deal2.
-        """
-        dominates = False
-        for agent in deal1_scores:
-            if deal2_scores[agent] > deal1_scores[agent]:
-                dominates = True
-            elif deal2_scores[agent] < deal1_scores[agent]:
-                return False
-        return dominates
-
-    pareto_set = []
-
-    for deal in deals:
-        deal_scores = get_total_scores(deal)
-        dominated = False
-
-        for other_deal in deals:
-            if deal == other_deal:
-                continue
-
-            other_deal_scores = get_total_scores(other_deal)
-            if is_dominated(deal_scores, other_deal_scores):
-                dominated = True
-                break
-
-        if not dominated:
-            pareto_set.append(deal)
-
-    return pareto_set
-
-
-def compute_usw(deal, agents, num_issues):
-
-    # FIRST IMPLEMENTATION:
-    # This checks whether the deal is valid and returns the sum of the scores of all agents
-    # Which does not provide intuitive results since many deals are not valid and we want to see a progression
-    # For the sake of visulization I will obtain usw as the sum of the scores of all agents no matter the validity of the deal
-
-    # Compute the utilitarian social welfare for a deal
-    # if is_valid(deal, agents):
-    #     print(f"Deal {deal} is valid")
-    #     return sum([get_score(agent_name, deal) for agent_name in agents])
-    # else:
-    #     # Sum of thresholds
-    #     return sum([agents[agent_name]['scores']['min'] for agent_name in agents])
-
-    # SECOND IMPLEMENTATION:
-    # This implementation returns the sum of the scores of all agents for a valid deal
-    return sum([calculator(agents[agent_name]['scores'], deal, num_issues) for agent_name in agents])
-
-
-def compute_optimal_usw(agents, all_deals, num_issues):
-    # Initialize variables to track the optimal deal and its USW
-    optimal_deal = None
-    highest_usw = float('-inf')
-
-    # Loop through all possible deals
-    for deal in all_deals:
-        # Compute the utilitarian social welfare for the current deal
-        usw = compute_usw(deal, agents, num_issues)
-
-        # Update the optimal deal if this deal has a higher USW
-        if usw > highest_usw:
-            highest_usw = usw
-            optimal_deal = deal
-
-    # Return the deal with the highest USW
-    return optimal_deal, highest_usw
-
-
-def compute_esw(deal, agents, num_issues):
     """
-    Compute the egalitarian social welfare (ESW) for a given deal.
-    ESW is the minimum utility achieved by any agent for the deal.
-
-    Parameters:
-    - deal: The deal being evaluated (list of tuples representing sub-issues).
-    - agents: A dictionary of agents with their scores and thresholds.
-
-    Returns:
-    - Egalitarian social welfare (minimum utility among all agents).
+    Feasibility rule in your code:
+    - A deal is feasible if >=5 agents accept (score >= min)
+    - p1 and p2 are definitely among those who accept
     """
-    # Initialize ESW to a large positive value
-    esw = float('inf')
+    # feasibility_set = []
 
-    # Compute utility for each agent and update ESW
-    for agent_name, _ in agents.items():
-        agent_utility = calculator(
-            agents[agent_name]['scores'], deal, num_issues)
-        esw = min(esw, agent_utility)  # Update ESW with the minimum utility
+    # for deal in all_deals:
+    #     acceptable_count = 0
+    #     key_players_accepted = set()
 
+    #     for agent_name, agent_data in agents.items():
+    #         scores = agent_data["scores"]
+    #         agent_score = calculator(scores, deal, num_issues=len(deal))
+    #         if agent_score >= scores["min"]:
+    #             acceptable_count += 1
+    #             if agent_data["role"] in {"p1", "p2"}:
+    #                 key_players_accepted.add(agent_data["role"])
+
+    #     # If at least 5 accept, and p1 + p2 accept, it's feasible
+    #     if acceptable_count >= 5 and {"p1", "p2"}.issubset(key_players_accepted):
+    #         feasibility_set.append(deal)
+
+    # return feasibility_set
+
+    return [deal for deal in all_deals if is_feasible(agents, deal)]
+
+
+def is_feasible(agents, deal):
+    """
+    Feasibility rule in your code:
+    - A deal is feasible if >=5 agents accept (score >= min)
+    - p1 and p2 are definitely among those who accept
+    """
+    acceptable_count = 0
+    key_players_accepted = set()
+
+    for agent_name, agent_data in agents.items():
+        scores = agent_data["scores"]
+        agent_score = calculator(scores, deal, num_issues=len(deal))
+        if agent_score >= scores["min"]:
+            acceptable_count += 1
+            if agent_data["role"] in {"p1", "p2"}:
+                key_players_accepted.add(agent_data["role"])
+
+    # If at least 5 accept, and p1 + p2 accept, it's feasible
+    return acceptable_count >= 5 and {"p1", "p2"}.issubset(key_players_accepted)
+
+
+#####################
+# 5) SOCIAL WELFARE
+#####################
+def compute_usw(deal, agents, num_issues=5):
+    """
+    Utilitarian Social Welfare = sum of all agent utilities for 'deal'.
+    """
+    return sum(
+        calculator(agent_data["scores"], deal, num_issues)
+        for agent_data in agents.values()
+    )
+
+
+def compute_esw(deal, agents, num_issues=5):
+    """
+    Egalitarian Social Welfare = min of all agent utilities for 'deal'.
+    """
+    esw = float("inf")
+    for agent_data in agents.values():
+        agent_utility = calculator(agent_data["scores"], deal, num_issues)
+        esw = min(esw, agent_utility)
     return esw
 
 
-def compute_optimal_esw(agents, all_deals, num_issues):
+def compute_nash(deal, agents, num_issues=5, epsilon=0.001):
     """
-    Compute the optimal egalitarian social welfare (ESW) and the corresponding deal.
-
-    Parameters:
-    - agents: A dictionary of agents with their scores and thresholds.
-
-    Returns:
-    - optimal_deal: The deal with the highest egalitarian social welfare.
-    - highest_esw: The value of the highest ESW.
+    "Nash Bargain Value" = product( max(0, utility_i - threshold_i) ) or similar.
+    But your code uses: product( max(utility - threshold, epsilon) ).
     """
+    nbv = 1.0
+    for agent_data in agents.values():
+        scores = agent_data["scores"]
+        utility = calculator(scores, deal, num_issues)
+        nbv *= max(utility, epsilon)
+    return nbv
 
-    # Initialize variables to track the optimal deal and its ESW
-    optimal_deal = None
-    highest_esw = float('-inf')
 
-    # Loop through all possible deals
+#####################
+# 6) OPTIMAL DEALS UNDER DIFFERENT METRICS
+#####################
+def compute_optimal_usw(agents, all_deals, num_issues=5):
+    highest_usw = float("-inf")
+    best_deals = []
     for deal in all_deals:
-        # Compute the egalitarian social welfare for the current deal
-        esw = compute_esw(deal, agents, num_issues)
+        usw = compute_usw(deal, agents, num_issues)
+        if usw > highest_usw:
+            highest_usw = usw
+            best_deals = [deal]
+        elif usw == highest_usw:
+            best_deals.append(deal)
+    return best_deals, highest_usw
 
-        # Update the optimal deal if this deal has a higher ESW
+
+def compute_optimal_esw(agents, all_deals, num_issues=5):
+    highest_esw = float("-inf")
+    best_deals = []
+    for deal in all_deals:
+        esw = compute_esw(deal, agents, num_issues)
         if esw > highest_esw:
             highest_esw = esw
-            optimal_deal = deal
-
-    # Return the deal with the highest ESW
-    return optimal_deal, highest_esw
-
-
-def compute_nash(deal, agents, num_issues, epsilon=0.001):
-    """
-    Compute the Nash Bargain Value (NBV) for a given deal.
-
-    Parameters:
-    - deal: The deal being evaluated (list of tuples representing sub-issues).
-    - agents: A dictionary of agents with their scores and thresholds.
-
-    Returns:
-    - The Nash Bargain Value for the given deal. Returns 0 if any agent's utility is below their threshold.
-
-    We compute the Weighted Nash Bargain Value (WNBV) for a deal.
-    Adds a small penalty (epsilon) for utilities below thresholds.
-    """
-
-    wnbv = 1  # Initialize WNBV as 1 (product accumulator)
-
-    for agent_name, agent_data in agents.items():
-        scores = agent_data['scores']
-        threshold = scores['min']
-        utility = calculator(scores, deal, num_issues)
-
-        # Add epsilon for utilities below thresholds
-        wnbv *= max(utility - threshold, epsilon)
-
-    return wnbv
+            best_deals = [deal]
+        elif esw == highest_esw:
+            best_deals.append(deal)
+    return best_deals, highest_esw
 
 
-def compute_max_nash(agents, all_deals, num_issues):
-    """
-    Compute the deal with the maximum Nash Bargain Value (NBV).
-
-    Parameters:
-    - agents: A dictionary of agents with their scores and thresholds.
-
-    Returns:
-    - optimal_deal: The deal with the highest Nash Bargain Value.
-    - max_nbv: The maximum Nash Bargain Value.
-    """
-
-    # Initialize variables to track the optimal deal and its NBV
-    optimal_deal = None
-    max_nbv = float('-inf')
-
-    # Loop through all possible deals
+def compute_optimal_nash(agents, all_deals, num_issues=5):
+    max_nbv = float("-inf")
+    best_deals = []
     for deal in all_deals:
-        # Compute the Nash Bargain Value for the current deal
         nbv = compute_nash(deal, agents, num_issues)
-
-        # Update the optimal deal if this deal has a higher NBV
         if nbv > max_nbv:
             max_nbv = nbv
-            optimal_deal = deal
+            best_deals = [deal]
+        elif nbv == max_nbv:
+            best_deals.append(deal)
+    return best_deals, max_nbv
 
-    # Return the deal with the highest NBV
-    return optimal_deal, max_nbv
+
+#####################
+# 7) VECTOR VARIATION OF THE SCORE FUNCTIONS
+#####################
+def compute_usw_vector(deal, agents, num_issues=5):
+    """
+    Return a vector (array of length 'num_issues') for the deal,
+    where each element is the sum of all agents' partial-utility
+    for that specific issue.
+    """
+    # Initialize a vector of zeros, one per issue
+    # (assuming the 'deal' is something like [('A', 1), ('B', 2), ...])
+    vector_score = [0] * num_issues
+
+    for issue_letter, level_idx in deal:
+        # 'issue_index' depends on how you map 'A','B','C' -> 0,1,2, etc.
+        # But let's assume each position in 'deal' matches an index in [0..num_issues-1].
+        pass
+
+    # We'll need to find the position of each (issue_letter, level_idx).
+
+    for i, (issue_letter, level_idx) in enumerate(deal):
+        # Summation over all agents
+        sum_over_agents = 0
+        for agent_data in agents.values():
+            # agent_data["scores"][issue_letter] is a list
+            # level_idx is 1-based, so subtract 1
+            partial_utility = agent_data["scores"][issue_letter][level_idx - 1]
+            sum_over_agents += partial_utility
+
+        vector_score[i] = sum_over_agents
+
+    return vector_score
 
 
-def compute_distance(deal1, deal2, method='usw', norm='l1'):
-    # Compute the distance between two deals
-    if method == 'usw':
-        usw1 = compute_usw(deal1, agents)
-        usw2 = compute_usw(deal2, agents)
-        if norm == 'l1':
-            return np.abs(usw1 - usw2)
-        elif norm == 'l2':
-            return np.linalg.norm(usw1 - usw2)
-    elif method == 'nash':
-        # TODO: Implement Nash distance
-        return Exception("Nash distance not implemented yet")
-    elif method == 'esw':
-        if norm == 'l1':
-            # d(deal_i, deal_j) = |min_p S_p(deal_i) - min_p S_p(deal_j)|
-            return np.abs(compute_esw(deal1, agents) - compute_esw(deal2, agents))
-        elif norm == 'l2':
-            return np.linalg.norm(compute_esw(deal1, agents) - compute_esw(deal2, agents))
-    elif method == 'hamming':
+def compute_esw_vector(deal, agents, num_issues=5):
+    """
+    Vector of length 'num_issues' where each entry is the *minimum* of
+    that issue's partial-utility across all agents.
+    """
+    vector_score = [0] * num_issues
+    for i, (issue_letter, level_idx) in enumerate(deal):
+        # Initialize min_value to a large number
+        min_val = float("inf")
+        for agent_data in agents.values():
+            val = agent_data["scores"][issue_letter][level_idx - 1]
+            if val < min_val:
+                min_val = val
+        vector_score[i] = min_val
+    return vector_score
+
+
+def compute_nash_vector(deal, agents, num_issues=5):
+    """
+    Vector of length 'num_issues' where each entry is the product of that
+    issue's partial-utility across all agents.
+    """
+    vector_score = [1] * num_issues
+    for i, (issue_letter, level_idx) in enumerate(deal):
+        prod_val = 1
+        for agent_data in agents.values():
+            val = agent_data["scores"][issue_letter][level_idx - 1]
+            prod_val *= val
+        vector_score[i] = prod_val
+    return vector_score
+
+
+#####################
+# 8) DISTANCE BETWEEN TWO DEALS
+#####################
+def compute_distance(deal1, deal2, agents, metric="usw", norm="l1", num_issues=5):
+    """
+    Computes the distance between two deals (deal1, deal2) under different frameworks:
+
+      1. Score-space distance (usw, esw, or nash):
+         - Both are scalar utilities across the entire deal
+         - The 'norm' for a scalar difference is effectively absolute difference in 'l1' or 'l2'
+      2. Hamming (deal-space) distance:
+         - Summation of |level_i - level_j| for each issue.
+
+    Args:
+        deal1, deal2: Each is a list or tuple of (issue_letter, choice).
+        agents: dict of agent data (with "scores" etc.).
+        metric: "usw", "esw", "nash", or "hamming"
+        norm: "l1" (absolute difference), "l2" is same for scalars,
+              not used for "hamming" except if we wanted to define something else.
+        num_issues: number of issues.
+
+    Returns:
+        A float (or int) indicating the distance.
+    """
+    # 1. Hamming distance in the deal space
+    if metric.lower() == "hamming":
         if len(deal1) != len(deal2):
-            raise ValueError("Deals must have the same number of elements.")
-        differences = sum([abs(tup1[1] - tup2[1]) for tup1, tup2 in zip(deal1, deal2)])
-        return differences
+            raise ValueError("Deals must have the same number of issues.")
+        # sum of differences in levels
+        dist = 0
+        for (issue1, lvl1), (issue2, lvl2) in zip(deal1, deal2):
+            if issue1 != issue2:
+                # If the issue letters differ, either reorder or assume the same ordering in both deals
+                raise ValueError(f"Issue mismatch: {issue1} != {issue2}")
+            dist += abs(lvl1 - lvl2)
+        return dist
+
+    # 2. Score-space distance (usw, esw, nash -> each yields a single scalar)
+    if metric.lower() == "usw":
+        score1 = compute_usw_vector(deal1, agents, num_issues)
+        score2 = compute_usw_vector(deal2, agents, num_issues)
+    elif metric.lower() == "esw":
+        score1 = compute_esw_vector(deal1, agents, num_issues)
+        score2 = compute_esw_vector(deal2, agents, num_issues)
+    elif metric.lower() == "nash":
+        score1 = compute_nash_vector(deal1, agents, num_issues)
+        score2 = compute_nash_vector(deal2, agents, num_issues)
     else:
-        return Exception("Invalid method")
+        raise ValueError(f"Unknown metric: {metric}")
+
+    # Return the l-norm
+    diff = np.array(score1) - np.array(score2)
+    if norm.lower() == "l1":
+        return np.sum(np.abs(diff))
+    elif norm.lower() == "l2":
+        return np.sqrt(np.sum(diff**2))
+    elif norm == "linf":
+        return np.max(np.abs(diff))
+    else:
+        raise ValueError(f"Unknown norm: {norm}")
 
 
-# Change accordingly
-OUTPUT_DIR = f'/Users/joshuarosenthal/Masters/FACT/FACT29/our_games_descriptions/base/output/our_outputs/base_Qwen2.5-72B-Instruct-GPTQ-Int4'
-AGENTS_NUM = 6
-ISSUES_NUM = 5
+# # EXAMPLE USAGE
+# # Change accordingly
+# OUTPUT_DIR = f"/Users/administrador/Desktop/amsterdam/1.1/FACT/FACT29/our_games_descriptions/base/output/our_outputs/base_Qwen2.5-72B-Instruct-GPTQ-Int4"
+# AGENTS_NUM = 6
+# ISSUES_NUM = 5
 
-agents, role_to_agents, incentive_to_agents = load_setup(
-    OUTPUT_DIR, AGENTS_NUM, ISSUES_NUM)
-all_deals = get_all_deals(agents)
-print(len(all_deals))
-feasibility_set = compute_feasibility_set(agents, all_deals)
+# agents, role_to_agents, incentive_to_agents = load_setup(
+#     OUTPUT_DIR, AGENTS_NUM, ISSUES_NUM
+# )
+# all_deals = get_all_deals(agents)
+# feasibility_set = compute_feasibility_set(agents, all_deals)
 
-pareto_frontier = get_pareto_frontier(agents, feasibility_set)
-# Compute metrics for all deals
-print(feasibility_set[0])
-print(compute_max_nash(agents,all_deals,5)[0])
-print(compute_distance(feasibility_set[0],compute_max_nash(agents,all_deals,5)[0],'hamming'))
+
+# print(f"Number of all deals: {len(all_deals)}")
+# print(f"Number of feasible deals: {len(feasibility_set)}")
+
+# # Pick two sample deals
+# dealA = all_deals[0]
+# dealB = all_deals[10]
+
+# print(f"Deal A: {(dealA)}")
+# print(compute_esw(dealA, agents, num_issues=ISSUES_NUM))
+
+# dist_usw_l1 = compute_distance(
+#     dealA, dealB, agents, metric="usw", norm="l1", num_issues=ISSUES_NUM
+# )
+# dist_esw_l1 = compute_distance(
+#     dealA, dealB, agents, metric="esw", norm="l1", num_issues=ISSUES_NUM
+# )
+# dist_usw_l2 = compute_distance(
+#     dealA, dealB, agents, metric="usw", norm="l2", num_issues=ISSUES_NUM
+# )
+# dist_esw_l2 = compute_distance(
+#     dealA, dealB, agents, metric="esw", norm="l2", num_issues=ISSUES_NUM
+# )
+# dist_hamming = compute_distance(
+#     dealA, dealB, agents, metric="hamming", num_issues=ISSUES_NUM
+# )
+
+# print(f"Deal A: {dealA}")
+# print(f"Deal B: {dealB}")
+# print(f"Distance USW (L1): {dist_usw_l1}")
+# print(f"Distance ESW (L1): {dist_esw_l1}")
+# print(f"Distance USW (L2): {dist_usw_l2}")
+# print(f"Distance ESW (L2): {dist_esw_l2}")
+# print(f"Distance Hamming: {dist_hamming}")
