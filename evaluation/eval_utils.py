@@ -219,7 +219,7 @@ def is_feasible(agents, deal):
     for agent_name, agent_data in agents.items():
         scores = agent_data["scores"]
         agent_score = calculator(scores, deal, num_issues=len(deal))
-        if agent_score >= scores["min"]:
+        if agent_score > scores["min"]:
             acceptable_count += 1
             if agent_data["role"] in {"p1", "p2"}:
                 key_players_accepted.add(agent_data["role"])
