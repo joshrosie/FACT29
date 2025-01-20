@@ -114,7 +114,7 @@ agents,initial_deal,role_to_agent_names = load_setup(args.game_dir, args.agents_
 
 # Load HF models 
 hf_models = {}
-
+start = time.time()
 
 # Instaniate agents (initial prompt, round prompt, agent class)
 for name in agents.keys(): 
@@ -156,7 +156,7 @@ for round_idx in range(start_round_idx,args.rounds_num):
         if hasattr(agent_response, "content"):
             agent_response = agent_response.content
         print('===== About to start negotiation =====')
-        history = save_conversation(history, current_agent,agent_response, slot_prompt,round_assign=agent_round_assignment,initial=True, restrict_leakage=args.restrict_leakage)
+        history = save_conversation(history, current_agent,agent_response, slot_prompt,round_assign=agent_round_assignment,initial=True, restrict_leakage=args.restrict_leakage, exec_time=time.time()-start)
         print('=====')
         print(f'{current_agent} response: {agent_response}')
     
@@ -166,7 +166,7 @@ for round_idx in range(start_round_idx,args.rounds_num):
     if hasattr(agent_response, "content"):
         agent_response = agent_response.content
     print('===== About to start negotiation =====')
-    history = save_conversation(history, current_agent,agent_response, slot_prompt, restrict_leakage=args.restrict_leakage)
+    history = save_conversation(history, current_agent,agent_response, slot_prompt, restrict_leakage=args.restrict_leakage, exec_time=time.time()-start)
     print('=====')
     print(f'{current_agent} response: {agent_response}')
 
@@ -176,7 +176,7 @@ current_agent = role_to_agent_names['p1']
 slot_prompt, agent_response = agents[current_agent]['instance'].execute_round(history['content'], args.rounds_num)
 if hasattr(agent_response, "content"):
     agent_response = agent_response.content
-history = save_conversation(history, current_agent,agent_response, slot_prompt)
+history = save_conversation(history, current_agent,agent_response, slot_prompt, exec_time=time.time()-start)
 print('=====')
 print(f'{current_agent} response: {agent_response}')  
 
