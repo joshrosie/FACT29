@@ -11,7 +11,7 @@ def process_answer(full_answer, restrict_leakage):
 
 
 
-def save_conversation(history, agent_name,full_answer, prompt,round_assign=[],initial=False, restrict_leakage=False):
+def save_conversation(history, agent_name,full_answer, prompt,round_assign=[],initial=False, restrict_leakage=False, exec_time=None):
     if initial: 
         history['content']['slot_assignment'] = round_assign
         history['content']["rounds"] = []
@@ -19,6 +19,8 @@ def save_conversation(history, agent_name,full_answer, prompt,round_assign=[],in
         history['content']["finished_rounds"]= 0   
     else:
         history['content']["finished_rounds"] += 1
+    if exec_time:
+        history['content']["execution_time"] = exec_time
     
     public_answer, plan  = process_answer(full_answer, restrict_leakage)
     if initial and public_answer == '':
