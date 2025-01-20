@@ -1,6 +1,0 @@
-Mayor,mayor,player,cooperative,hf_microsoft/Phi-3.5-mini-instruct
-Other cities,other_cities,player,cooperative,hf_microsoft/Phi-3.5-mini-instruct
-Local Labour Union,union,player,cooperative,hf_microsoft/Phi-3.5-mini-instruct
-SportCo,SportCo,p1,cooperative,hf_microsoft/Phi-3.5-mini-instruct
-Department of Tourism,DoT,p2,cooperative,hf_microsoft/Phi-3.5-mini-instruct
-Environmental League,enviroment,player,cooperative,hf_microsoft/Phi-3.5-mini-instruct

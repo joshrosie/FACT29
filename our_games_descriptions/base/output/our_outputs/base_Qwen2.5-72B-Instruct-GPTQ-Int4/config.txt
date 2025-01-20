@@ -1,6 +1,0 @@
-Mayor,mayor,player,cooperative,hf_Qwen/Qwen2.5-72B-Instruct-GPTQ-Int4
-Other cities,other_cities,player,cooperative,hf_Qwen/Qwen2.5-72B-Instruct-GPTQ-Int4
-Local Labour Union,union,player,cooperative,hf_Qwen/Qwen2.5-72B-Instruct-GPTQ-Int4
-SportCo,SportCo,p1,cooperative,hf_Qwen/Qwen2.5-72B-Instruct-GPTQ-Int4
-Department of Tourism,DoT,p2,cooperative,hf_Qwen/Qwen2.5-72B-Instruct-GPTQ-Int4
-Environmental League,enviroment,player,cooperative,hf_Qwen/Qwen2.5-72B-Instruct-GPTQ-Int4

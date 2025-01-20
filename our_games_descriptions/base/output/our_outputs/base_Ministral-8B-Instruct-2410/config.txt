@@ -1,6 +1,0 @@
-Mayor,mayor,player,cooperative,hf_mistralai/Ministral-8B-Instruct-2410
-Other cities,other_cities,player,cooperative,hf_mistralai/Ministral-8B-Instruct-2410
-Local Labour Union,union,player,cooperative,hf_mistralai/Ministral-8B-Instruct-2410
-SportCo,SportCo,p1,cooperative,hf_mistralai/Ministral-8B-Instruct-2410
-Department of Tourism,DoT,p2,cooperative,hf_mistralai/Ministral-8B-Instruct-2410
-Environmental League,enviroment,player,cooperative,hf_mistralai/Ministral-8B-Instruct-2410
