@@ -1,0 +1,6 @@
+Federal government of Germany,federal,p2,cooperative,hf_mistralai/Mistral-Small-Instruct-2409
+Private investors,private_investors,p1,cooperative,hf_mistralai/Mistral-Small-Instruct-2409
+State government of Saarland,state,player,cooperative,hf_mistralai/Mistral-Small-Instruct-2409
+Environmental activists,activists,player,cooperative,hf_mistralai/Mistral-Small-Instruct-2409
+France,france,player,cooperative,hf_mistralai/Mistral-Small-Instruct-2409
+Local community of Neunkirchen,community,player,cooperative,hf_mistralai/Mistral-Small-Instruct-2409

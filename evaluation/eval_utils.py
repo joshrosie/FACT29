@@ -5,13 +5,6 @@ import re
 from itertools import product
 
 
-import numpy as np
-import os
-import string
-import re
-from itertools import product
-
-
 #####################
 # 1) LOADING SETUP
 #####################
@@ -35,6 +28,7 @@ def load_setup(output_dir, agents_num, num_issues):
             "role": role,
             "incentive": incentive,
         }
+
         if role not in role_to_agents:
             role_to_agents[role] = []
         if incentive not in incentive_to_agents:
@@ -49,10 +43,10 @@ def load_setup(output_dir, agents_num, num_issues):
             + ".txt",
             "r",
         ) as f:
-            lines = f.readlines()
-            assert len(lines) == num_issues + 1
-            for i, line in enumerate(lines):
-                if i == len(lines) - 1:  # min thresholds
+            Lines = f.readlines()
+            assert len(Lines) == num_issues + 1
+            for i, line in enumerate(Lines):
+                if i == len(Lines) - 1:  # min thresholds
                     scores["min"] = int(line.strip())
                     break
                 scores[issue_names[i]] = [int(num.strip()) for num in line.split(",")]
@@ -68,7 +62,6 @@ def load_setup(output_dir, agents_num, num_issues):
             incentive_to_agents[incentive] = incentive_to_agents[incentive][0]
 
     return agents, role_to_agents, incentive_to_agents
-
 
 #####################
 # 2) CALCULATOR -> Score calculating function
@@ -94,6 +87,7 @@ def calculator(scores, deal, num_issues=5, return_array=False):
     if return_array:
         return deal_array
     return deal_sum
+
 
 
 def calculator_old(scores, deal, num_issues=5):

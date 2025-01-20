@@ -12,6 +12,8 @@ from agent import Agent
 from initial_prompts import InitialPrompt
 from rounds import RoundPrompts 
 
+from codecarbon import EmissionsTracker
+
 
 from utils import load_setup, set_constants, randomize_agents_order, setup_hf_model, set_config_file
 from save_utils import create_outfiles,save_conversation 
@@ -19,6 +21,8 @@ from save_utils import create_outfiles,save_conversation
 from huggingface_hub import login
 
 login(token = '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')
+
+
 
 parser = argparse.ArgumentParser(description='big negotiation!!')
 
@@ -59,8 +63,32 @@ parser.add_argument('--api_key',type=str, default='', help='OpenAI key, set if u
 parser.add_argument('--quantization',type=str, default='', help='Quantize huggingface models')
 parser.add_argument('--model', nargs='*', help='Model(s) to use for the agents')      
 parser.add_argument('--incentive', nargs='*', help='Incentive(s) of the agents')
+parser.add_argument('--restrict_leakage', action='store_true')
+
+# Do not run actual api call, just get prompt:
+parser.add_argument("--dry_run", type=bool, help="If on, turns off actual calls to an LLM", default=False)
+parser.add_argument("--emission_project", type=str, help="Project name for carbon emission", default='')
+
+# arguments for ablation
+# Possible ablation keywords:
+# "previous", "others", "candidates", "plan"
+parser.add_argument(
+    "--ablations",
+    nargs="*",
+    help="List of ablation studies to perform",
+    default=["previous", "candidates"],
+)
 
 args = parser.parse_args()
+
+if not os.path.exists('carbon_output'):
+    os.makedirs('carbon_output')
+
+if args.emission_project:
+    tracker = EmissionsTracker(output_dir='carbon_output/', project_name=args.emission_project)
+else:
+    tracker = EmissionsTracker(output_dir='carbon_output/')
+tracker.start()
 
 
 OUTPUT_DIR = os.path.join(args.game_dir,args.output_dir,args.exp_name)
@@ -102,11 +130,18 @@ for name in agents.keys():
                                     target_agent=role_to_agent_names.get('target',''),\
                                     rounds_num=args.rounds_num, agents_num=args.agents_num)      
 
-        
-    agent_instance = Agent(inital_prompt_agent,round_prompt_agent,name,args.temp,model=agents[name]['model'],azure=args.azure,hf_models=hf_models)
-    agents[name]['instance'] = agent_instance
 
-print('====== Initialized agents ============')
+    agent_instance = Agent(
+        inital_prompt_agent,
+        round_prompt_agent,
+        name,
+        args.temp,
+        model=agents[name]["model"],
+        azure=args.azure,
+        hf_models=hf_models,
+        dry_run=args.dry_run
+    )
+    agents[name]["instance"] = agent_instance
 
 # If not restart, agent_round_assignment is empty, then randomize order 
 if not args.restart: 
@@ -121,7 +156,7 @@ for round_idx in range(start_round_idx,args.rounds_num):
         if hasattr(agent_response, "content"):
             agent_response = agent_response.content
         print('===== About to start negotiation =====')
-        history = save_conversation(history, current_agent,agent_response, slot_prompt,round_assign=agent_round_assignment,initial=True)
+        history = save_conversation(history, current_agent,agent_response, slot_prompt,round_assign=agent_round_assignment,initial=True, restrict_leakage=args.restrict_leakage)
         print('=====')
         print(f'{current_agent} response: {agent_response}')
     
@@ -131,10 +166,9 @@ for round_idx in range(start_round_idx,args.rounds_num):
     if hasattr(agent_response, "content"):
         agent_response = agent_response.content
     print('===== About to start negotiation =====')
-    history = save_conversation(history, current_agent,agent_response, slot_prompt)
+    history = save_conversation(history, current_agent,agent_response, slot_prompt, restrict_leakage=args.restrict_leakage)
     print('=====')
     print(f'{current_agent} response: {agent_response}')
-
 
 #Final deal by P1 
 print(" ==== Deal Suggestions ==== ")
@@ -145,4 +179,5 @@ if hasattr(agent_response, "content"):
 history = save_conversation(history, current_agent,agent_response, slot_prompt)
 print('=====')
 print(f'{current_agent} response: {agent_response}')  
-    
+
+tracker.stop()

@@ -4,3 +4,4 @@ __pycache__
 *.pyc
 hf_models/
 .DS_Store
+carbon_output/

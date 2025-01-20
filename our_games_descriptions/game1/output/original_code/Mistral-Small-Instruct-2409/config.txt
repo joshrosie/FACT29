@@ -1,0 +1,6 @@
+international development bank,bank,p2,cooperative,hf_mistralai/Mistral-Small-Instruct-2409
+environmental NGO,enviroment,player,cooperative,hf_mistralai/Mistral-Small-Instruct-2409
+government,proposing,p1,cooperative,hf_mistralai/Mistral-Small-Instruct-2409
+construction company,construction,player,cooperative,hf_mistralai/Mistral-Small-Instruct-2409
+indigenous community,community,player,cooperative,hf_mistralai/Mistral-Small-Instruct-2409
+local tourism association,tourism,player,cooperative,hf_mistralai/Mistral-Small-Instruct-2409
