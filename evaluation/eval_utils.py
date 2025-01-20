@@ -464,6 +464,60 @@ def compute_distance(deal1, deal2, agents, metric="usw", norm="l1", num_issues=5
         raise ValueError(f"Unknown norm: {norm}")
 
 
+#####################
+# 9) PRE-HOC ANALYSIS
+#####################
+def get_sparsity(agents):
+    """
+    Get the sparsity (%) of the agents' scores.
+    That is, perecentage of values in the scores that are zero.
+    """
+    total_values = 0
+    zero_values = 0
+    for agent_data in agents.values():
+        for issue_scores in agent_data["scores"].values():
+            # Exclude the "min" key
+            if isinstance(issue_scores, int):
+                continue
+            total_values += len(issue_scores)
+            zero_values += len([val for val in issue_scores if val == 0])
+    return zero_values / total_values
+
+
+def iou(scores1, scores2):
+    """
+    Intersection over Union (IoU) of two lists of scores.
+    That is, intersection for issue 1 sub-issues and issue 2 sub-issues.
+    """
+    intersection = sum(min(s1, s2) for s1, s2 in zip(scores1, scores2))
+    union = sum(max(s1, s2) for s1, s2 in zip(scores1, scores2))
+    if union == 0:
+        return 0.0
+    return intersection / union
+
+
+def get_iou(agents):
+    """
+    Get the Intersection over Union (IoU) of the agents' scores.
+    We return the average pair-wise IoU of the agents' scores
+    """
+    iou_sum = 0
+    num_pairs = 0
+    for agent_data1 in agents.values():
+        for agent_data2 in agents.values():
+            if agent_data1 == agent_data2:
+                continue
+            for issue_scores1, issue_scores2 in zip(
+                agent_data1["scores"].values(), agent_data2["scores"].values()
+            ):
+                # Exclude the "min" key
+                if isinstance(issue_scores1, int):
+                    continue
+                iou_sum += iou(issue_scores1, issue_scores2)
+                num_pairs += 1
+    return iou_sum / num_pairs
+
+
 # # EXAMPLE USAGE
 # # Change accordingly
 # OUTPUT_DIR = f"/Users/administrador/Desktop/amsterdam/1.1/FACT/FACT29/our_games_descriptions/base/output/our_outputs/base_Qwen2.5-72B-Instruct-GPTQ-Int4"
