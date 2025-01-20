@@ -22,11 +22,7 @@ from huggingface_hub import login
 
 login(token = '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')
 
-if not os.path.exists('carbon_output'):
-    os.makedirs('carbon_output')
 
-tracker = EmissionsTracker(output_dir='carbon_output/')
-tracker.start()
 
 parser = argparse.ArgumentParser(description='big negotiation!!')
 
@@ -71,6 +67,7 @@ parser.add_argument('--restrict_leakage', action='store_true')
 
 # Do not run actual api call, just get prompt:
 parser.add_argument("--dry_run", type=bool, help="If on, turns off actual calls to an LLM", default=False)
+parser.add_argument("--emission_project", type=str, help="Project name for carbon emission", default='')
 
 # arguments for ablation
 # Possible ablation keywords:
@@ -83,6 +80,15 @@ parser.add_argument(
 )
 
 args = parser.parse_args()
+
+if not os.path.exists('carbon_output'):
+    os.makedirs('carbon_output')
+
+if args.emission_project:
+    tracker = EmissionsTracker(output_dir='carbon_output/', project_name=args.emission_project)
+else:
+    tracker = EmissionsTracker(output_dir='carbon_output/')
+tracker.start()
 
 
 OUTPUT_DIR = os.path.join(args.game_dir,args.output_dir,args.exp_name)
