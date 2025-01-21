@@ -490,7 +490,7 @@ def iou(scores1, scores2):
     return intersection / union
 
 
-def get_iou(agents):
+def get_iou(agents, use_numpy=False):
     """
     Get the Intersection over Union (IoU) of the agents' scores.
     We return the average pair-wise IoU of the agents' scores
@@ -499,8 +499,15 @@ def get_iou(agents):
     num_pairs = 0
     for agent_data1 in agents.values():
         for agent_data2 in agents.values():
-            if agent_data1 == agent_data2:
-                continue
+            # Skip self-comparisons
+        
+            # if [value for key, value in agent_data1["scores"].items()[:-1]] == []
+            if use_numpy:
+                if all(np.array_equal(a, b) for a, b in zip(agent_data1["scores"].values(), agent_data2["scores"].values())):
+                    continue
+            else:
+                if agent_data1 == agent_data2:
+                    continue
             for issue_scores1, issue_scores2 in zip(
                 agent_data1["scores"].values(), agent_data2["scores"].values()
             ):
