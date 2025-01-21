@@ -2,34 +2,10 @@ import subprocess
 import time
 
 # Number of iterations
-N = 2
-
-# Base game folder prefix
-BASE_GAME = "ablations_base_"
-
-# Ablation settings (set to True or False)
-ABLATION_PREVIOUS = True
-ABLATION_OTHERS = True
-ABLATION_CANDIDATES = False
-ABLATION_PLAN = False
+N = 20
 
 # Construct the game folder name based on the ablations
-game_folder_suffix = f"{int(ABLATION_PREVIOUS)}{int(ABLATION_OTHERS)}{int(ABLATION_CANDIDATES)}{int(ABLATION_PLAN)}"
-GAME = f"{BASE_GAME}{game_folder_suffix}"
-
-# Construct the ablations parameter based on selected ablations
-ablations = []
-if ABLATION_PREVIOUS:
-    ablations.append("previous")
-if ABLATION_OTHERS:
-    ablations.append("others")
-if ABLATION_CANDIDATES:
-    ablations.append("candidates")
-if ABLATION_PLAN:
-    ablations.append("plan")
-
-# Convert ablations list into a string argument for the command
-ablations_param = ",".join(ablations)
+GAME = f"base_higher_threshold_3"
 
 # Command to run
 command = [
@@ -39,16 +15,13 @@ command = [
     f"./games_descriptions/{GAME}",
 ]
 
-# Add ablations parameter if any ablations are enabled
-if ablations_param:
-    command += ["--ablations", ablations_param]
 
 # Print experiment settings
-print(f"Running {N} iterations with ablations: {ablations_param}")
+print(f"Running {N} iterations ")
 print(f"Saving in folder: {GAME}")
 
 for i in range(1, N + 1):
-    print(f"Running iteration {i}/{N} with ablations: {ablations_param}...")
+    print(f"Running iteration {i}/{N}...")
 
     # Start time for tracking each iteration
     start_time = time.time()
