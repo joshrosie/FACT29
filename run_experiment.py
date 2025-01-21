@@ -5,7 +5,7 @@ import time
 N = 20
 
 # Construct the game folder name based on the ablations
-GAME = f"base_higher_threshold_3"
+GAME = f"adversarial_untargeted"
 
 # Command to run
 command = [
