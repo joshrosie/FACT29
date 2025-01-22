@@ -1,0 +1,6 @@
+Mayor,mayor,player,cooperative,hf_deepseek-ai/DeepSeek-R1-Distill-Qwen-32B
+Other cities,other_cities,player,cooperative,hf_deepseek-ai/DeepSeek-R1-Distill-Qwen-32B
+Local Labour Union,union,player,cooperative,hf_deepseek-ai/DeepSeek-R1-Distill-Qwen-32B
+SportCo,SportCo,p1,cooperative,hf_deepseek-ai/DeepSeek-R1-Distill-Qwen-32B
+Department of Tourism,DoT,p2,cooperative,hf_deepseek-ai/DeepSeek-R1-Distill-Qwen-32B
+Environmental League,enviroment,player,cooperative,hf_deepseek-ai/DeepSeek-R1-Distill-Qwen-32B
