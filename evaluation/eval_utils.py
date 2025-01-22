@@ -63,6 +63,7 @@ def load_setup(output_dir, agents_num, num_issues):
 
     return agents, role_to_agents, incentive_to_agents
 
+
 #####################
 # 2) CALCULATOR -> Score calculating function
 #####################
@@ -77,6 +78,9 @@ def calculator(scores, deal, num_issues=5, return_array=False):
     deal_sum = 0
     deal_array = []
     for issue_letter, level in deal:
+        if issue_letter == "" or len(issue_letter) != 1:
+            deal_array.append(0)
+            continue
         if issue_letter not in scores:
             print(f"Error: Issue {issue_letter} not in scores.")
             return 0
@@ -87,7 +91,6 @@ def calculator(scores, deal, num_issues=5, return_array=False):
     if return_array:
         return deal_array
     return deal_sum
-
 
 
 def calculator_old(scores, deal, num_issues=5):
@@ -164,6 +167,9 @@ def format_deal(deal, num_issues=5):
     issue_names = string.ascii_uppercase[:26]
     formatted_deal = []
     for i in range(num_issues):
+        if deal[i] == "":
+            formatted_deal.append(("", 0))
+            continue
         issue, level = deal[i][0], int(deal[i][1])
         formatted_deal.append((issue, level))
     return tuple(formatted_deal)
