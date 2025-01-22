@@ -63,6 +63,7 @@ def load_setup(output_dir, agents_num, num_issues):
 
     return agents, role_to_agents, incentive_to_agents
 
+
 #####################
 # 2) CALCULATOR -> Score calculating function
 #####################
@@ -77,6 +78,12 @@ def calculator(scores, deal, num_issues=5, return_array=False):
     deal_sum = 0
     deal_array = []
     for issue_letter, level in deal:
+        if (
+            issue_letter == "" or len(issue_letter) != 1
+        ):  # Sometimes models fail to suggest all issues, we will not consider this an error
+            print(f"Agent failed to suggest all issues: {deal}")
+            deal_array.append(0)
+            continue
         if issue_letter not in scores:
             print(f"Error: Issue {issue_letter} not in scores.")
             return 0
@@ -87,7 +94,6 @@ def calculator(scores, deal, num_issues=5, return_array=False):
     if return_array:
         return deal_array
     return deal_sum
-
 
 
 def calculator_old(scores, deal, num_issues=5):
@@ -159,11 +165,14 @@ def format_deal(deal, num_issues=5):
     """
 
     if len(deal) != num_issues:
-        return None
+        raise ValueError(f"Deal must have {num_issues} issues.")
 
     issue_names = string.ascii_uppercase[:26]
     formatted_deal = []
     for i in range(num_issues):
+        if deal[i] == "":  # Empty issue (Sometimes models fail to suggest all issues)
+            formatted_deal.append(("", 0))
+            continue
         issue, level = deal[i][0], int(deal[i][1])
         formatted_deal.append((issue, level))
     return tuple(formatted_deal)
@@ -178,26 +187,6 @@ def compute_feasibility_set(agents, all_deals):
     - A deal is feasible if >=5 agents accept (score >= min)
     - p1 and p2 are definitely among those who accept
     """
-    # feasibility_set = []
-
-    # for deal in all_deals:
-    #     acceptable_count = 0
-    #     key_players_accepted = set()
-
-    #     for agent_name, agent_data in agents.items():
-    #         scores = agent_data["scores"]
-    #         agent_score = calculator(scores, deal, num_issues=len(deal))
-    #         if agent_score >= scores["min"]:
-    #             acceptable_count += 1
-    #             if agent_data["role"] in {"p1", "p2"}:
-    #                 key_players_accepted.add(agent_data["role"])
-
-    #     # If at least 5 accept, and p1 + p2 accept, it's feasible
-    #     if acceptable_count >= 5 and {"p1", "p2"}.issubset(key_players_accepted):
-    #         feasibility_set.append(deal)
-
-    # return feasibility_set
-
     return [deal for deal in all_deals if is_feasible(agents, deal)]
 
 
@@ -213,13 +202,23 @@ def is_feasible(agents, deal):
     for agent_name, agent_data in agents.items():
         scores = agent_data["scores"]
         agent_score = calculator(scores, deal, num_issues=len(deal))
-        if agent_score > scores["min"]:
+        if agent_score >= scores["min"]:
             acceptable_count += 1
             if agent_data["role"] in {"p1", "p2"}:
                 key_players_accepted.add(agent_data["role"])
 
     # If at least 5 accept, and p1 + p2 accept, it's feasible
     return acceptable_count >= 5 and {"p1", "p2"}.issubset(key_players_accepted)
+
+
+def is_wrong(agents, deal, agent_name):
+    """
+    Returns True if the deal is valid for the agent
+    """
+    agent_data = agents[agent_name]
+    scores = agent_data["scores"]
+    agent_score = calculator(scores, deal, num_issues=len(deal))
+    return 0 if agent_score >= scores["min"] else 1
 
 
 #####################
@@ -490,6 +489,24 @@ def iou(scores1, scores2):
     return intersection / union
 
 
+def get_pairwise_iou(agent1, agent2):
+    """
+    Get the Intersection over Union (IoU) of the agents' scores.
+    We return the average pair-wise IoU of the agents' scores
+    """
+    iou_sum = 0
+    num_pairs = 0
+    for issue_scores1, issue_scores2 in zip(
+        agent1["scores"].values(), agent2["scores"].values()
+    ):
+        # Exclude the "min" key
+        if isinstance(issue_scores1, int):
+            continue
+        iou_sum += iou(issue_scores1, issue_scores2)
+        num_pairs += 1
+    return iou_sum / num_pairs
+
+
 def get_iou(agents):
     """
     Get the Intersection over Union (IoU) of the agents' scores.
@@ -501,15 +518,22 @@ def get_iou(agents):
         for agent_data2 in agents.values():
             if agent_data1 == agent_data2:
                 continue
-            for issue_scores1, issue_scores2 in zip(
-                agent_data1["scores"].values(), agent_data2["scores"].values()
-            ):
-                # Exclude the "min" key
-                if isinstance(issue_scores1, int):
-                    continue
-                iou_sum += iou(issue_scores1, issue_scores2)
-                num_pairs += 1
+            iou_sum += get_pairwise_iou(agent_data1, agent_data2)
+            num_pairs += 1
     return iou_sum / num_pairs
+
+
+def get_comparative_iou(agent_data, agents):
+    """
+    Get a list of the Intersection over Union (IoU) of the agents scores w.r.t all other agents.
+    """
+    iou_list = []
+    for agent_data2 in agents.values():
+        if agent_data == agent_data2:
+            continue
+        agent_name = agent_data2["file_name"]
+        iou_list.append((get_pairwise_iou(agent_data, agent_data2), agent_name))
+    return iou_list
 
 
 # # EXAMPLE USAGE

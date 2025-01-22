@@ -2,72 +2,87 @@ import json
 import argparse
 import time
 import re
-import random 
-import numpy as np 
+import random
+import numpy as np
 import os
-import openai 
-import vertexai 
+import openai
+import vertexai
 import shutil
-from agent import Agent 
+from agent import Agent
 from initial_prompts import InitialPrompt
-from rounds import RoundPrompts 
+from rounds import RoundPrompts
 
 from codecarbon import EmissionsTracker
 
 
-from utils import load_setup, set_constants, randomize_agents_order, setup_hf_model, set_config_file
-from save_utils import create_outfiles,save_conversation 
+from utils import (
+    load_setup,
+    set_constants,
+    randomize_agents_order,
+    setup_hf_model,
+    set_config_file,
+)
+from save_utils import create_outfiles, save_conversation
 
 from huggingface_hub import login
 
-login(token = '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')
+login(token="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")
+
+parser = argparse.ArgumentParser(description="big negotiation!!")
 
 
+parser.add_argument("--temp", type=float, default="0")
 
-parser = argparse.ArgumentParser(description='big negotiation!!')
-
-
-parser.add_argument('--temp',type=float, default='0')
-
-parser.add_argument('--agents_num',type=int, default=6)
-parser.add_argument('--issues_num',type=int, default=5)
-parser.add_argument('--rounds_num',type=int, default=24)
-parser.add_argument('--window_size',type=int, default=6)
+parser.add_argument("--agents_num", type=int, default=6)
+parser.add_argument("--issues_num", type=int, default=5)
+parser.add_argument("--rounds_num", type=int, default=24)
+parser.add_argument("--window_size", type=int, default=6)
 
 
-parser.add_argument('--output_dir',type=str, default='./output/')
-parser.add_argument('--game_dir',type=str, default='./games_descriptions/base')
-parser.add_argument('--exp_name',type=str, default='all_greedy')
+parser.add_argument("--output_dir", type=str, default="./output/")
+parser.add_argument("--game_dir", type=str, default="./games_descriptions/base")
+parser.add_argument("--exp_name", type=str, default="all_greedy")
 
-#if restart, specifiy output_file to continue on 
-parser.add_argument('--restart',action='store_true')
-parser.add_argument('--output_file',type=str, default='history.json')
+# if restart, specifiy output_file to continue on
+parser.add_argument("--restart", action="store_true")
+parser.add_argument("--output_file", type=str, default="history.json")
 
-#if any gemini model, set this true 
-parser.add_argument('--gemini',action='store_true')
-parser.add_argument('--gemini_project_name',type=str, default='')
-parser.add_argument('--gemini_loc',type=str, default='')
-parser.add_argument('--gemini_model',type=str, default='gemini-1.0-pro-001')
+# if any gemini model, set this true
+parser.add_argument("--gemini", action="store_true")
+parser.add_argument("--gemini_project_name", type=str, default="")
+parser.add_argument("--gemini_loc", type=str, default="")
+parser.add_argument("--gemini_model", type=str, default="gemini-1.0-pro-001")
 
-#if any open-source model, set this true 
-parser.add_argument('--hf_home',type=str, default='/disk1/')
+# if any open-source model, set this true
+parser.add_argument("--hf_home", type=str, default="/disk1/")
 
-#for GPTs and using Azure APIs, set this true 
-parser.add_argument('--azure',action='store_true')
-parser.add_argument('--azure_openai_api', default='', help='azure api') 
-parser.add_argument('--azure_openai_endpoint', default='', help='azure endpoint')   
+# for GPTs and using Azure APIs, set this true
+parser.add_argument("--azure", action="store_true")
+parser.add_argument("--azure_openai_api", default="", help="azure api")
+parser.add_argument("--azure_openai_endpoint", default="", help="azure endpoint")
 
-#for GPTs and OpenAI APIs, set key 
-parser.add_argument('--api_key',type=str, default='', help='OpenAI key, set if using OpenAI APIs')
+# for GPTs and OpenAI APIs, set key
+parser.add_argument(
+    "--api_key", type=str, default="", help="OpenAI key, set if using OpenAI APIs"
+)
 
-parser.add_argument('--quantization',type=str, default='', help='Quantize huggingface models')
-parser.add_argument('--model', nargs='*', help='Model(s) to use for the agents')      
-parser.add_argument('--incentive', nargs='*', help='Incentive(s) of the agents')
-parser.add_argument('--restrict_leakage', action='store_true')
+parser.add_argument(
+    "--quantization", type=str, default="", help="Quantize huggingface models"
+)
+parser.add_argument("--model", nargs="*", help="Model(s) to use for the agents")
+parser.add_argument("--incentive", nargs="*", help="Incentive(s) of the agents")
+parser.add_argument("--restrict_leakage", action="store_true")
 
 # Do not run actual api call, just get prompt:
-parser.add_argument("--dry_run", type=bool, help="If on, turns off actual calls to an LLM", default=False)
-parser.add_argument("--emission_project", type=str, help="Project name for carbon emission", default='')
+parser.add_argument(
+    "--dry_run",
+    type=bool,
+    help="If on, turns off actual calls to an LLM",
+    default=False,
+)
+parser.add_argument(
+    "--emission_project", type=str, help="Project name for carbon emission", default=""
+)
 
 # arguments for ablation
 # Possible ablation keywords:
@@ -81,55 +96,81 @@ parser.add_argument(
 
 args = parser.parse_args()
 
-if not os.path.exists('carbon_output'):
-    os.makedirs('carbon_output')
+if not os.path.exists("carbon_output"):
+    os.makedirs("carbon_output")
 
 if args.emission_project:
-    tracker = EmissionsTracker(output_dir='carbon_output/', project_name=args.emission_project)
+    tracker = EmissionsTracker(
+        output_dir="carbon_output/", project_name=args.emission_project
+    )
 else:
-    tracker = EmissionsTracker(output_dir='carbon_output/')
+    tracker = EmissionsTracker(output_dir="carbon_output/")
 tracker.start()
 
+print("Starting experiment")
 
-OUTPUT_DIR = os.path.join(args.game_dir,args.output_dir,args.exp_name)
-
-        
-
-# SET AZURE, OpenAI and GEMINI APIs env variables 
-set_constants(args) 
-
-# Create output file, or load files if restart is given to continue on last experiments 
-agent_round_assignment, start_round_idx, history  = create_outfiles(args,OUTPUT_DIR)
-
-# Dump config file and scores in OUTPUT_DIR 
-shutil.copyfile(os.path.join(args.game_dir,'config.txt'), os.path.join(OUTPUT_DIR,'config.txt'))
-shutil.copytree(os.path.join(args.game_dir,'scores_files'), os.path.join(OUTPUT_DIR,'scores_files'),dirs_exist_ok=True)
-
-set_config_file(os.path.join(OUTPUT_DIR,'config.txt'), args)
+OUTPUT_DIR = os.path.join(args.game_dir, args.output_dir, args.exp_name)
 
 
-# Load setups of agents from config file. File should contain names, file names, roles, incentives, and models 
-# Also load initial deal file and return a dict of role to agent names 
-agents,initial_deal,role_to_agent_names = load_setup(args.game_dir, args.agents_num, OUTPUT_DIR)
+# SET AZURE, OpenAI and GEMINI APIs env variables
+set_constants(args)
 
-# Load HF models 
+# Create output file, or load files if restart is given to continue on last experiments
+agent_round_assignment, start_round_idx, history = create_outfiles(args, OUTPUT_DIR)
+
+# Dump config file and scores in OUTPUT_DIR
+shutil.copyfile(
+    os.path.join(args.game_dir, "config.txt"), os.path.join(OUTPUT_DIR, "config.txt")
+)
+shutil.copytree(
+    os.path.join(args.game_dir, "scores_files"),
+    os.path.join(OUTPUT_DIR, "scores_files"),
+    dirs_exist_ok=True,
+)
+
+set_config_file(os.path.join(OUTPUT_DIR, "config.txt"), args)
+
+
+# Load setups of agents from config file. File should contain names, file names, roles, incentives, and models
+# Also load initial deal file and return a dict of role to agent names
+agents, initial_deal, role_to_agent_names = load_setup(
+    args.game_dir, args.agents_num, OUTPUT_DIR
+)
+
+# Load HF models
 hf_models = {}
 start = time.time()
 
 # Instaniate agents (initial prompt, round prompt, agent class)
-for name in agents.keys(): 
-    if 'hf' in agents[name]['model'] and not agents[name]['model'] in hf_models:
-        hf_models[agents[name]['model']] = setup_hf_model(agents[name]['model'].split('hf_')[-1], cache_dir=args.hf_home, quantization=args.quantization)
+for name in agents.keys():
+    if "hf" in agents[name]["model"] and not agents[name]["model"] in hf_models:
+        hf_models[agents[name]["model"]] = setup_hf_model(
+            agents[name]["model"].split("hf_")[-1],
+            cache_dir=args.hf_home,
+            quantization=args.quantization,
+        )
 
-    inital_prompt_agent = InitialPrompt(args.game_dir, name, agents[name]['file_name'],\
-                                        role_to_agent_names['p1'], role_to_agent_names['p2'], \
-                                        num_issues=args.issues_num, num_agents= args.agents_num, incentive=agents[name]['incentive'])
-    
-    round_prompt_agent = RoundPrompts(name, role_to_agent_names['p1'],initial_deal,\
-                                    incentive=agents[name]['incentive'], window_size=args.window_size,
-                                    target_agent=role_to_agent_names.get('target',''),\
-                                    rounds_num=args.rounds_num, agents_num=args.agents_num)      
+    inital_prompt_agent = InitialPrompt(
+        args.game_dir,
+        name,
+        agents[name]["file_name"],
+        role_to_agent_names["p1"],
+        role_to_agent_names["p2"],
+        num_issues=args.issues_num,
+        num_agents=args.agents_num,
+        incentive=agents[name]["incentive"],
+    )
 
+    round_prompt_agent = RoundPrompts(
+        name,
+        role_to_agent_names["p1"],
+        initial_deal,
+        incentive=agents[name]["incentive"],
+        window_size=args.window_size,
+        target_agent=role_to_agent_names.get("target", ""),
+        rounds_num=args.rounds_num,
+        agents_num=args.agents_num,
+    )
 
     agent_instance = Agent(
         inital_prompt_agent,
@@ -139,20 +180,24 @@ for name in agents.keys():
         model=agents[name]["model"],
         azure=args.azure,
         hf_models=hf_models,
-        dry_run=args.dry_run
+        dry_run=args.dry_run,
     )
     agents[name]["instance"] = agent_instance
 
-# If not restart, agent_round_assignment is empty, then randomize order 
-if not args.restart: 
-    agent_round_assignment = randomize_agents_order(agents, role_to_agent_names['p1'], args.rounds_num)
+# If not restart, agent_round_assignment is empty, then randomize order
+if not args.restart:
+    agent_round_assignment = randomize_agents_order(
+        agents, role_to_agent_names["p1"], args.rounds_num
+    )
 
-for round_idx in range(start_round_idx,args.rounds_num): 
+for round_idx in range(start_round_idx, args.rounds_num):
     print(" ==== Round {} ==== ".format(round_idx))
     if round_idx == 0:
-        #For first round, initialize with p1 suggesting the first deal from 'initial_deal.txt' file 
-        current_agent = role_to_agent_names['p1']
-        slot_prompt, agent_response = agents[current_agent]['instance'].execute_round(history['content'], round_idx)
+        # For first round, initialize with p1 suggesting the first deal from 'initial_deal.txt' file
+        current_agent = role_to_agent_names["p1"]
+        slot_prompt, agent_response = agents[current_agent]["instance"].execute_round(
+            history["content"], round_idx
+        )
         if hasattr(agent_response, "content"):
             agent_response = agent_response.content
         print('===== About to start negotiation =====')
@@ -162,7 +207,9 @@ for round_idx in range(start_round_idx,args.rounds_num):
     
     #Continue with rounds 
     current_agent = agent_round_assignment[round_idx]
-    slot_prompt, agent_response = agents[current_agent]['instance'].execute_round(history['content'], round_idx)
+    slot_prompt, agent_response = agents[current_agent]["instance"].execute_round(
+        history["content"], round_idx
+    )
     if hasattr(agent_response, "content"):
         agent_response = agent_response.content
     print('===== About to start negotiation =====')
@@ -170,10 +217,12 @@ for round_idx in range(start_round_idx,args.rounds_num):
     print('=====')
     print(f'{current_agent} response: {agent_response}')
 
-#Final deal by P1 
+# Final deal by P1
 print(" ==== Deal Suggestions ==== ")
-current_agent = role_to_agent_names['p1']
-slot_prompt, agent_response = agents[current_agent]['instance'].execute_round(history['content'], args.rounds_num)
+current_agent = role_to_agent_names["p1"]
+slot_prompt, agent_response = agents[current_agent]["instance"].execute_round(
+    history["content"], args.rounds_num
+)
 if hasattr(agent_response, "content"):
     agent_response = agent_response.content
 history = save_conversation(history, current_agent,agent_response, slot_prompt, exec_time=time.time()-start)
