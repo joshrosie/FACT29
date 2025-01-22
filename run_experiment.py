@@ -5,7 +5,7 @@ import time
 N = 20
 
 # Construct the game folder name based on the ablations
-GAME = f"adversarial_untargeted"
+GAME = f"adversarial_targeted"
 
 # Command to run
 command = [

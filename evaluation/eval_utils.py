@@ -78,6 +78,12 @@ def calculator(scores, deal, num_issues=5, return_array=False):
     deal_sum = 0
     deal_array = []
     for issue_letter, level in deal:
+        if (
+            issue_letter == "" or len(issue_letter) != 1
+        ):  # Sometimes models fail to suggest all issues, we will not consider this an error
+            print(f"Agent failed to suggest all issues: {deal}")
+            deal_array.append(0)
+            continue
         if issue_letter not in scores:
             print(f"Error: Issue {issue_letter} not in scores.")
             return 0
@@ -159,11 +165,14 @@ def format_deal(deal, num_issues=5):
     """
 
     if len(deal) != num_issues:
-        return None
+        raise ValueError(f"Deal must have {num_issues} issues.")
 
     issue_names = string.ascii_uppercase[:26]
     formatted_deal = []
     for i in range(num_issues):
+        if deal[i] == "":  # Empty issue (Sometimes models fail to suggest all issues)
+            formatted_deal.append(("", 0))
+            continue
         issue, level = deal[i][0], int(deal[i][1])
         formatted_deal.append((issue, level))
     return tuple(formatted_deal)
