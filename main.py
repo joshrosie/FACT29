@@ -139,7 +139,7 @@ agents, initial_deal, role_to_agent_names = load_setup(
 
 # Load HF models
 hf_models = {}
-
+start = time.time()
 
 # Instaniate agents (initial prompt, round prompt, agent class)
 for name in agents.keys():
@@ -200,36 +200,22 @@ for round_idx in range(start_round_idx, args.rounds_num):
         )
         if hasattr(agent_response, "content"):
             agent_response = agent_response.content
-        print("===== About to start negotiation =====")
-        history = save_conversation(
-            history,
-            current_agent,
-            agent_response,
-            slot_prompt,
-            round_assign=agent_round_assignment,
-            initial=True,
-            restrict_leakage=args.restrict_leakage,
-        )
-        print("=====")
-        print(f"{current_agent} response: {agent_response}")
-
-    # Continue with rounds
+        print('===== About to start negotiation =====')
+        history = save_conversation(history, current_agent,agent_response, slot_prompt,round_assign=agent_round_assignment,initial=True, restrict_leakage=args.restrict_leakage, exec_time=time.time()-start)
+        print('=====')
+        print(f'{current_agent} response: {agent_response}')
+    
+    #Continue with rounds 
     current_agent = agent_round_assignment[round_idx]
     slot_prompt, agent_response = agents[current_agent]["instance"].execute_round(
         history["content"], round_idx
     )
     if hasattr(agent_response, "content"):
         agent_response = agent_response.content
-    print("===== About to start negotiation =====")
-    history = save_conversation(
-        history,
-        current_agent,
-        agent_response,
-        slot_prompt,
-        restrict_leakage=args.restrict_leakage,
-    )
-    print("=====")
-    print(f"{current_agent} response: {agent_response}")
+    print('===== About to start negotiation =====')
+    history = save_conversation(history, current_agent,agent_response, slot_prompt, restrict_leakage=args.restrict_leakage, exec_time=time.time()-start)
+    print('=====')
+    print(f'{current_agent} response: {agent_response}')
 
 # Final deal by P1
 print(" ==== Deal Suggestions ==== ")
@@ -239,8 +225,8 @@ slot_prompt, agent_response = agents[current_agent]["instance"].execute_round(
 )
 if hasattr(agent_response, "content"):
     agent_response = agent_response.content
-history = save_conversation(history, current_agent, agent_response, slot_prompt)
-print("=====")
-print(f"{current_agent} response: {agent_response}")
+history = save_conversation(history, current_agent,agent_response, slot_prompt, exec_time=time.time()-start)
+print('=====')
+print(f'{current_agent} response: {agent_response}')  
 
 tracker.stop()
