@@ -101,10 +101,10 @@ if not os.path.exists("carbon_output"):
 
 if args.emission_project:
     tracker = EmissionsTracker(
-        output_dir="carbon_output/", project_name=args.emission_project
+        output_dir="carbon_output/", project_name=args.emission_project, log_level="critical"
     )
 else:
-    tracker = EmissionsTracker(output_dir="carbon_output/")
+    tracker = EmissionsTracker(output_dir="carbon_output/", log_level="critical")
 tracker.start()
 
 print("Starting experiment")
