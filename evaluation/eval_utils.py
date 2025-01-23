@@ -507,7 +507,25 @@ def get_pairwise_iou(agent1, agent2):
     return iou_sum / num_pairs
 
 
-def get_iou(agents):
+def get_pairwise_iou(agent1, agent2):
+    """
+    Get the Intersection over Union (IoU) of the agents' scores.
+    We return the average pair-wise IoU of the agents' scores
+    """
+    iou_sum = 0
+    num_pairs = 0
+    for issue_scores1, issue_scores2 in zip(
+        agent1["scores"].values(), agent2["scores"].values()
+    ):
+        # Exclude the "min" key
+        if isinstance(issue_scores1, int):
+            continue
+        iou_sum += iou(issue_scores1, issue_scores2)
+        num_pairs += 1
+    return iou_sum / num_pairs
+
+
+def get_iou(agents, use_numpy=False):
     """
     Get the Intersection over Union (IoU) of the agents' scores.
     We return the average pair-wise IoU of the agents' scores
@@ -516,6 +534,23 @@ def get_iou(agents):
     num_pairs = 0
     for agent_data1 in agents.values():
         for agent_data2 in agents.values():
+            # Skip self-comparisons
+        
+            # if [value for key, value in agent_data1["scores"].items()[:-1]] == []
+            if use_numpy:
+                if all(np.array_equal(a, b) for a, b in zip(agent_data1["scores"].values(), agent_data2["scores"].values())):
+                    continue
+            else:
+                if agent_data1 == agent_data2:
+                    continue
+            for issue_scores1, issue_scores2 in zip(
+                agent_data1["scores"].values(), agent_data2["scores"].values()
+            ):
+                # Exclude the "min" key
+                if isinstance(issue_scores1, int):
+                    continue
+                iou_sum += iou(issue_scores1, issue_scores2)
+                num_pairs += 1
             if agent_data1 == agent_data2:
                 continue
             iou_sum += get_pairwise_iou(agent_data1, agent_data2)
