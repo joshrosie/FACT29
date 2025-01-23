@@ -254,7 +254,7 @@ def generate_utility_functions(
     for (agent_name, issue_name, sidx, eidx) in index_map:
         agents[agent_name]["scores"][issue_name] = final_scores[sidx:eidx]
         
-  
+    
     return agents, iou_history
 
 def adjust_agent_scores(agents):
@@ -274,6 +274,7 @@ def adjust_agent_scores(agents):
     """
     adjusted_agents = {}
     for agent_name, agent_data in agents.items():
+       
         # Floor all scores
         # max_index = np.argmax([np.max(scores) for scores in agent_data["scores"].values()])
         floored_scores = {
@@ -303,11 +304,12 @@ def adjust_agent_scores(agents):
         adjusted_agents[agent_name] = {
             "scores": floored_scores,
             "threshold": np.floor(agent_data["threshold"]),  # Keep threshold unchanged
+            "file_name": agent_data["file_name"]
         }
 
     return adjusted_agents
 
-import shutil
+
 
 def write_game(agents, inherited_directory, new_directory):
     """
@@ -341,8 +343,8 @@ def write_game(agents, inherited_directory, new_directory):
     os.makedirs(scores_dir, exist_ok=True)
 
     # Write agent score files
-    for agent_name, agent_data in agents.items():
-        agent_file = os.path.join(scores_dir, f"{agent_name}.txt")
+    for _, agent_data in agents.items():
+        agent_file = os.path.join(scores_dir, f"{agent_data["file_name"]}.txt")
         with open(agent_file, 'w') as f:
             # Write scores for each issue
             for _, scores in agent_data["scores"].items():
