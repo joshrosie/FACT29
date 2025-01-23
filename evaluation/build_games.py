@@ -348,7 +348,7 @@ def write_game(agents, inherited_directory, new_directory):
         with open(agent_file, 'w') as f:
             # Write scores for each issue
             for _, scores in agent_data["scores"].items():
-                scores_str = ' '.join(map(str, map(int, scores)))  # Convert to integers
+                scores_str = ', '.join(map(str, map(int, scores)))  # Convert to integers
                 f.write(scores_str + '\n')
             # Write threshold (floor to integer)
             threshold = int(agent_data["threshold"])
