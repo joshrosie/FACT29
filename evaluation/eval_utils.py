@@ -80,15 +80,22 @@ def calculator(scores, deal, num_issues=5, return_array=False):
     for issue_letter, level in deal:
         if (
             issue_letter == "" or len(issue_letter) != 1
-        ):  # Sometimes models fail to suggest all issues, we will not consider this an error
+        ):  # Sometimes models fail to suggest all issues, we will consider this an error
             print(f"Agent failed to suggest all issues: {deal}")
-            deal_array.append(0)
+            return [0] * num_issues if return_array else 0
+            # deal_array.append(0)
             continue
         if issue_letter not in scores:
             print(f"Error: Issue {issue_letter} not in scores.")
-            return 0
-        # level is 1-based index, so adjust to 0-based for the array
-        issue_score = scores[issue_letter][level - 1]
+            return [0] * num_issues if return_array else 0
+            deal_array.append(0)
+            continue
+        if int(level) < 1 or int(level) > len(scores[issue_letter]):
+            print(f"Error: Level {level} for issue {issue_letter} is out of bounds.")
+            return [0] * num_issues if return_array else 0
+            # deal_array.append(0)
+            continue
+        issue_score = scores[issue_letter][int(level) - 1]
         deal_sum += issue_score
         deal_array.append(issue_score)
     if return_array:
@@ -284,6 +291,7 @@ def utility_player_nash(deal, agents, player, num_issues=5, epsilon=0.001):
     But your code uses: product( max(utility - threshold, epsilon) ).
     """
     utility = calculator(agents[player]["scores"], deal, num_issues, return_array=True)
+    print(f"Utility for deal {deal}: {utility}")
     return np.prod([max(utility[i], epsilon) for i in range(num_issues)])
 
 
