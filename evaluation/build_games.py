@@ -3,8 +3,9 @@ import argparse
 from scipy.optimize import minimize
 from eval_utils import get_iou, load_setup
 import matplotlib.pyplot as plt
-import os 
+import os
 import shutil
+
 
 def check_sum_of_utilities(agents, total_utility):
     """
@@ -14,13 +15,16 @@ def check_sum_of_utilities(agents, total_utility):
         total_x = 0
         for issue, scores in agent_data["scores"].items():
             total_x += np.max(scores)
-        total = np.sum([np.max(scores) for scores in agent_data["scores"].values()])
+        total = np.sum([np.max(scores)
+                       for scores in agent_data["scores"].values()])
         print(total)
         if not np.isclose(total, total_utility, atol=1e-6):
-            print(f"Sum of utilities for {agent_name} is incorrect: {total} != {total_utility}")
+            print(f"Sum of utilities for {agent_name} is incorrect: {
+                  total} != {total_utility}")
             return False
     print("Sum of utilities for all agents is correct.")
     return True
+
 
 def check_iou(agents, target_iou, tolerance=0.01):
     """
@@ -34,9 +38,12 @@ def check_iou(agents, target_iou, tolerance=0.01):
     print(f"Average IoU is within tolerance: {avg_iou} ≈ {target_iou}")
     return True
 
-# It should be noted that this function does not take the agent role into account.
-# That is to say, it is a reasonable outcome of this algorithm that an environment
-# agent could be in favour of building something like a parking lot in the middle of a forest
+
+def softmax(x, temperature=0.5):
+    e_x = np.exp((x - np.max(x)) / temperature)
+    return e_x / e_x.sum(axis=0)
+
+
 def generate_utility_functions(
     num_agents,
     subissues_per_issue,
@@ -44,7 +51,7 @@ def generate_utility_functions(
     target_iou,
     seed_dir=None,
     tol=1e-7,
-    lambda_reg=1e-5,
+    lambda_reg=0
 ):
     """
     Generate utility functions for agents with constraints on:
@@ -60,9 +67,10 @@ def generate_utility_functions(
     # ----------------------------------------------
     if seed_dir:
         # Load scores from seed_dir directory
-        agents, role_to_agents, incentives_to_agents = load_setup(seed_dir, num_agents, len(subissues_per_issue))
+        agents, role_to_agents, incentives_to_agents = load_setup(
+            seed_dir, num_agents, len(subissues_per_issue))
         for agent_name, agent_data in agents.items():
-            
+
             agent_data["threshold"] = agent_data["scores"]["min"]
             del agent_data["scores"]["min"]
     else:
@@ -91,7 +99,8 @@ def generate_utility_functions(
     # This is because we want to preserve sparsity.
     flat_init_scores = []
     index_map = []
-    near_zero_mask = []  # True for variables initially near zero (to be regularized)
+    # True for variables initially near zero (to be regularized)
+    near_zero_mask = []
     for agent_name, agent_data in agents.items():
         for issue_name, scores in agent_data["scores"].items():
             start_idx = len(flat_init_scores)
@@ -117,22 +126,29 @@ def generate_utility_functions(
     #     avg_iou = get_iou(agents, use_numpy=True)
     #     # Our objective is to push avg_iou close to target_iou
     #     return abs(avg_iou - target_iou)
-    
-    def objective(flat_scores):
+
+    def objective(flat_scores, sharpness_weight=1e-3):
         # Reshape scores into agent structure
         for (agent_name, issue_name, sidx, eidx) in index_map:
             agents[agent_name]["scores"][issue_name] = flat_scores[sidx:eidx]
 
-        # 1. Compute IoU term
+        # 1. Compute IoU
         avg_iou = get_iou(agents, use_numpy=True)
         iou_term = abs(avg_iou - target_iou)
 
-        # 2. Regularization term: Penalize deviations for near-zero variables
-        #    (L2 penalty on variables initially below `tol`)
+        # 2. Regularization term (original sparsity term)
         diff = flat_scores - flat_init_scores
         reg_term = lambda_reg * np.sum(np.abs(diff[near_zero_mask]))
-  
-        return iou_term + reg_term
+
+        # 3. Encourage "sharp" distributions to approximate argmax
+        sharpness_penalty = 0
+        for (agent_name, issue_name, sidx, eidx) in index_map:
+            scores = flat_scores[sidx:eidx]
+            max_score = np.max(scores)
+            sharpness_penalty += np.sum((scores - max_score) ** 2)
+        sharpness_term = sharpness_weight * sharpness_penalty
+
+        return iou_term + reg_term + sharpness_term
 
     # ----------------------------------------------
     # 4. Constraints
@@ -153,22 +169,21 @@ def generate_utility_functions(
     #     Here, we interpret your "sum of utilities" constraint
     #     as: sum_of_max_subissue(agent) = total_utility.
     #     Adjust as needed if your constraint differs.
-    def make_sum_of_max_constraint(agent_name):
-        # We'll find all subissues for that agent in index_map
-        # and group them by issue_name, then sum( max(...) ) - total_utility = 0
+    def make_sum_of_max_constraint(agent_name, temperature=0.1):
         indices_by_issue = {}
         for (a_name, issue_name, sidx, eidx) in index_map:
             if a_name == agent_name:
-                indices_by_issue.setdefault(issue_name, []).append((sidx, eidx))
+                indices_by_issue.setdefault(
+                    issue_name, []).append((sidx, eidx))
 
         def _constraint_fun(x):
-            sum_of_max = 0
+            sum_soft = 0
             for issue_name, segs in indices_by_issue.items():
-                # There's exactly 1 segment per issue
-                (sidx, eidx) = segs[0]
+                sidx, eidx = segs[0]
                 issue_vals = x[sidx:eidx]
-                sum_of_max += np.max(issue_vals)
-            return sum_of_max - total_utility
+                weights = softmax(issue_vals, temperature)
+                sum_soft += np.dot(issue_vals, weights)
+            return sum_soft - total_utility
 
         return _constraint_fun
 
@@ -225,7 +240,7 @@ def generate_utility_functions(
     # 5. Perform optimization using SLSQP
     # ----------------------------------------------
     iou_history = []
-    
+
     def callback(xk):
         # Reshape xk into the agent structure
         for (agent_name, issue_name, sidx, eidx) in index_map:
@@ -234,8 +249,7 @@ def generate_utility_functions(
         avg_iou = get_iou(agents, use_numpy=True)
         iou_history.append(avg_iou)
         print(f"Iteration {len(iou_history)}: IoU = {avg_iou:.4f}")
-    
-    
+
     result = minimize(
         objective,
         flat_init_scores,   # Initial guess
@@ -253,16 +267,16 @@ def generate_utility_functions(
     final_scores = result.x
     for (agent_name, issue_name, sidx, eidx) in index_map:
         agents[agent_name]["scores"][issue_name] = final_scores[sidx:eidx]
-        
-    
+
     return agents, iou_history
+
 
 def adjust_agent_scores(agents):
     """
     Floors all utility scores for each agent, calculates the difference between
     the total utility and 100, and adds the difference to the maximum sub-issue of
     random issues.
-    
+
     Note: This function will invariably decrease the average IoU of the agents so
     set the target IoU accordingly.
 
@@ -274,7 +288,7 @@ def adjust_agent_scores(agents):
     """
     adjusted_agents = {}
     for agent_name, agent_data in agents.items():
-       
+
         # Floor all scores
         # max_index = np.argmax([np.max(scores) for scores in agent_data["scores"].values()])
         floored_scores = {
@@ -282,9 +296,9 @@ def adjust_agent_scores(agents):
             for issue, scores in agent_data["scores"].items()
         }
 
-
         # Calculate the total utility
-        total_utility = sum(np.sum(np.max(scores)) for scores in floored_scores.values())
+        total_utility = sum(np.sum(np.max(scores))
+                            for scores in floored_scores.values())
 
         # Calculate the difference to 100
         utility_difference = 100 - total_utility
@@ -299,16 +313,16 @@ def adjust_agent_scores(agents):
             scores[max_index] += 1
             floored_scores[issue] = scores
             utility_difference -= 1
-        
+
         # Update the agent's data
         adjusted_agents[agent_name] = {
             "scores": floored_scores,
-            "threshold": np.floor(agent_data["threshold"]),  # Keep threshold unchanged
+            # Keep threshold unchanged
+            "threshold": np.floor(agent_data["threshold"]),
             "file_name": agent_data["file_name"]
         }
 
     return adjusted_agents
-
 
 
 def write_game(agents, inherited_directory, new_directory):
@@ -317,7 +331,7 @@ def write_game(agents, inherited_directory, new_directory):
     """
     # Create target directory structure
     os.makedirs(new_directory, exist_ok=True)
-    
+
     # Copy directory structure
     dirs_to_copy = ['individual_instructions']
     for dir_name in dirs_to_copy:
@@ -329,7 +343,8 @@ def write_game(agents, inherited_directory, new_directory):
             print(f"Warning: Source directory {src_dir} not found")
 
     # Copy individual files
-    files_to_copy = ['initial_deal.txt', 'global_instructions.txt', 'config.txt']
+    files_to_copy = ['initial_deal.txt',
+                     'global_instructions.txt', 'config.txt']
     for file_name in files_to_copy:
         src_file = os.path.join(inherited_directory, file_name)
         dst_file = os.path.join(new_directory, file_name)
@@ -348,7 +363,8 @@ def write_game(agents, inherited_directory, new_directory):
         with open(agent_file, 'w') as f:
             # Write scores for each issue
             for _, scores in agent_data["scores"].items():
-                scores_str = ', '.join(map(str, map(int, scores)))  # Convert to integers
+                # Convert to integers
+                scores_str = ', '.join(map(str, map(int, scores)))
                 f.write(scores_str + '\n')
             # Write threshold (floor to integer)
             threshold = int(agent_data["threshold"])
@@ -356,15 +372,20 @@ def write_game(agents, inherited_directory, new_directory):
 
 # Update main block to include the write_game call
 
+
 if __name__ == "__main__":
     # Define argument parser
-    parser = argparse.ArgumentParser(description="Generate a game configuration based on IoU constraints.")
-    parser.add_argument("--num_agents", type=int, default=6, help="Number of agents")
+    parser = argparse.ArgumentParser(
+        description="Generate a game configuration based on IoU constraints.")
+    parser.add_argument("--num_agents", type=int,
+                        default=6, help="Number of agents")
     parser.add_argument(
         "--subissues_per_issue", nargs="+", type=int, default=[3, 3, 4, 4, 5], help="List of subissues per issue"
     )
-    parser.add_argument("--total_utility", type=int, default=100, help="Total utility per agent")
-    parser.add_argument("--target_iou", type=float, default=0.5, help="Target IoU for agents' scores")
+    parser.add_argument("--total_utility", type=int,
+                        default=100, help="Total utility per agent")
+    parser.add_argument("--target_iou", type=float,
+                        default=0.5, help="Target IoU for agents' scores")
     parser.add_argument(
         "--inherited_directory",
         type=str,
@@ -383,7 +404,8 @@ if __name__ == "__main__":
     # Dynamically set new_directory if not provided
     game_name = args.inherited_directory.split("/")[-1]
     if args.new_directory is None:
-        args.new_directory = f"our_games_descriptions/{game_name}_iou_{args.target_iou}"
+        args.new_directory = f"our_games_descriptions/{
+            game_name}_iou_{args.target_iou}"
 
     # Generate utility functions for agents
     agents, iou_history = generate_utility_functions(
@@ -409,7 +431,7 @@ if __name__ == "__main__":
             print(f"  {issue}: {scores}")
         print(f"  Threshold: {agent_data['threshold']}")
         print()
-    
+
     write_game(adjusted_agents, args.inherited_directory, args.new_directory)
     plt.plot(iou_history)
     plt.xlabel('Iteration')
