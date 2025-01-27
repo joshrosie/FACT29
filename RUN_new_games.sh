@@ -2,7 +2,7 @@
 
 # Define the command to run
 COMMAND="python main.py --exp_name Qwen2.5-72B-Instruct \
---game_dir our_games_descriptions/base_iou_0.1/ \
+--game_dir our_games_descriptions/base_iou_0.2/ \
 --hf_home hf_models/ \
 --model hf_Qwen/Qwen2.5-72B-Instruct \
 --incentive cooperative \
