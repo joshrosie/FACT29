@@ -541,6 +541,11 @@ def get_iou(agents):
     return total_iou / num_pairs if num_pairs > 0 else 0.0
 
 
+#####################
+# 9) PRE-HOC ANALYSIS
+#####################
+
+
 # def get_iou(agents, use_numpy=False):
 #     """
 #     Get the Intersection over Union (IoU) of the agents' scores.
