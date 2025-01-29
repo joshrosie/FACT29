@@ -20,7 +20,7 @@ To adjust the number of players, you need to edit the **config.txt** file of the
 
 #### Configuration files used
 The configuration files that we used for our experiments are:
-- [3 players](our_games_descriptions/base/output/changing_num_players/gpt4o-mini/3_players/config.txt)
+- [3 players](../our_games_descriptions/base/output/changing_num_players/gpt4o-mini/3_players/config.txt)
 - [4 players](our_games_descriptions/base/output/changing_num_players/gpt4o-mini/5_players/config.txt)
 - [5 players](our_games_descriptions/base/output/changing_num_players/gpt4o-mini/4_players/config.txt)
 
