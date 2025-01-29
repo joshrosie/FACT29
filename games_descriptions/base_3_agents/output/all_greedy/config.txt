@@ -1,0 +1,3 @@
+SportCo,SportCo,p1,cooperative,gpt-4o-mini
+Department of Tourism,DoT,p2,cooperative,gpt-4o-mini
+Environmental League,enviroment,player,cooperative,gpt-4o-mini
