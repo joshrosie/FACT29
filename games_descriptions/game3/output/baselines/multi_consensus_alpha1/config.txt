@@ -1,0 +1,6 @@
+Federal government of Germany,federal,p2,cooperative,gpt-4o-mini
+Private investors,private_investors,p1,cooperative,gpt-4o-mini
+State government of Saarland,state,player,cooperative,gpt-4o-mini
+Environmental activists,activists,player,cooperative,gpt-4o-mini
+France,france,player,cooperative,gpt-4o-mini
+Local community of Neunkirchen,community,player,cooperative,gpt-4o-mini
