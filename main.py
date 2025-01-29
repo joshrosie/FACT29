@@ -39,7 +39,7 @@ parser.add_argument("--rounds_num", type=int, default=24)
 parser.add_argument("--window_size", type=int, default=6)
 
 
-parser.add_argument("--output_dir", type=str, default="./output/")
+parser.add_argument("--output_dir", type=str, default="./output_reproduce/")
 parser.add_argument("--game_dir", type=str, default="./games_descriptions/base")
 parser.add_argument("--exp_name", type=str, default="all_greedy")
 
