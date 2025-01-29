@@ -71,6 +71,7 @@ parser.add_argument(
 )
 parser.add_argument("--model", nargs="*", help="Model(s) to use for the agents")
 parser.add_argument("--incentive", nargs="*", help="Incentive(s) of the agents")
+parser.add_argument("--role", nargs="*", help="Roles of the agents")
 parser.add_argument("--restrict_leakage", action="store_true")
 
 # Do not run actual api call, just get prompt:

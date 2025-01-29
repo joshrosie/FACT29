@@ -122,6 +122,21 @@ def set_config_file(config_path, args):
         else:
             for i, line in enumerate(split_lines):
                 line[-2] = args.incentive[i]
+    if args.role is not None:
+        if 'p1' not in args.role and 'p2' not in args.role:
+            raise ValueError('Roles must contain p1 or p2')
+        # check that p1 and p2 only appear once
+        if args.role.count('p1') > 1 or args.role.count('p2') > 1 or args.role.count('target') > 1:
+            raise ValueError('Roles p1, p2, target can only appear once')
+        if len(args.role) != len(split_lines):
+            raise ValueError('Number of roles does not match number of agents')
+        valid_roles = ['p1', 'p2', 'target', 'player']
+        for role in args.role:
+            if role not in valid_roles:
+                raise ValueError('Role must be one of: p1, p2, target, player')
+        for i, line in enumerate(split_lines):
+            line[-3] = args.role[i]
+        
     
     # rewrite the config file with the new models
     with open(config_path, 'w') as f:
