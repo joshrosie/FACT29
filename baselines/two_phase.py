@@ -2,7 +2,8 @@ import argparse
 import random
 from itertools import product
 import os
-import shutil 
+import shutil
+import sys 
 import numpy as np
 import json
 
@@ -402,6 +403,9 @@ def two_phase_approach(game_dir):
     global ISSUE_NAMES, ISSUE_DIMENSIONS, ALL_DEALS, ROUNDS, N_RUNS, PLAYERS
     # Adjust these paths as needed
     game_dir = 'our_games_descriptions/'+game_dir
+    if not os.path.exists(game_dir):
+        print(f"Game directory {game_dir} not found.")
+        sys.exit(1)
     output_dir = os.path.join(game_dir, "output_reproduce/baselines", "two_phase_approach")
 
     # copy scores_files to output_dir
