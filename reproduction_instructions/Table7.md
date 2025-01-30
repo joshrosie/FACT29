@@ -45,11 +45,11 @@ Each experiment will be executed **20 times** by default, as specified in `repro
 
 After running the script, the new results will be saved separately from the original logs to facilitate easy comparison. The original logs follow this structure:
 ```bash
-our_games_descriptions/<GAME>/output/<EXPERIMENT>/MODEL
+our_games_descriptions/<GAME>/output/changing_behaviour/<MODEL>/<EXPERIMENT>
 ```
 The newly generated results will be stored under:
 ```bash
-our_games_descriptions/<GAME>/output_reproduce/<EXPERIMENT>/MODEL
+our_games_descriptions/<GAME>/output_reproduce/changing_behaviour/<MODEL>/<EXPERIMENT>
 ```
 This ensures that all reproduced results remain distinct from the originally logged outputs.
 
