@@ -1,6 +1,65 @@
 # Reproducing Figure 2
 # (a): Effect of Varying thresholds
-**TODO!!!!**
+
+This document provides instructions on how to reproduce **Figure 2(a)**, which examines how modifying the negotiation acceptance threshold impacts acceptance rates in the **base** game.
+
+## Steps to Reproduce the Experiment
+
+### Step 1: Select a Threshold Variation
+In our experiments, we evaluated the effect of changing the acceptance threshold by applying different variations. The valid threshold variations that can be used for reproduction are:
+- `minus_3`
+- `minus_5`
+- `minus_10`
+- `minus_20`
+- `plus_3`
+- `plus_5`
+- `plus_10`
+
+Each variation adjusts the acceptance criteria used during negotiation, influencing the final agreement rates.
+
+### Step 2: Run the Experiment
+To reproduce the results for a specific threshold variation, execute the following command:
+
+```bash
+python main.py --exp_name gpt-4o-mini --game_dir ./games_descriptions/base_varying_thresholds/<THRESHOLD_VARIATION>/ --output_dir ./output_reproduce/ --model gpt-4o-mini
+```
+
+Replace `<THRESHOLD_VARIATION>` with one of the valid variations listed above. For example, to run the experiment with a threshold variation of **minus_10**, use:
+
+```bash
+python main.py --exp_name gpt-4o-mini --game_dir ./games_descriptions/base_varying_thresholds/minus_10/ --output_dir ./output_reproduce/ --model gpt-4o-mini
+```
+
+### Step 3: Output Structure
+
+#### Original Results:
+```bash
+our_games_descriptions/base_varying_thresholds/<THRESHOLD_VARIATION>/output/<MODEL>
+```
+For example:
+```bash
+our_games_descriptions/base_varying_thresholds/minus_10/output/gpt-4o-mini
+```
+
+#### Reproduced Results:
+```bash
+our_games_descriptions/base_varying_thresholds/<THRESHOLD_VARIATION>/output_reproduce/<MODEL>
+```
+For example:
+```bash
+our_games_descriptions/base_varying_thresholds/minus_10/output_reproduce/gpt-4o-mini
+```
+
+This structure ensures that all reproduced results remain distinct from the originally logged outputs.
+
+### Step 4: Evaluating the Results
+After completing the experiment, process the output data using the evaluation script (`.ipynb`) to extract acceptance rates. Refer to the **Evaluation** section in the original README for detailed instructions.
+
+---
+
+By following these steps, you can systematically reproduce the **Effect of Threshold Variation on Acceptance** experiment and compare the acceptance rates with the original findings.
+
+
 # (b): Effect of Number of Players on Acceptance
 
 This document provides detailed instructions on how to reproduce **Figure 2(b)**, which investigates how varying the number of players in the **base** game affects acceptance rates.
@@ -38,7 +97,7 @@ python main.py --exp_name varying_players/<NUM_PLAYERS>_players/<MODEL_ALIAS> --
 ```
 
 Replace `<NUM_PLAYERS>` with the number of players specified in `config.txt`.
-Replace `<MODEL>` with desired model. See **TODO: REFERENCE MODELS README**
+Replace `<MODEL>` with desired model. See [Detailed instructions](./Models.md) for more details.
 
 For example, to run an experiment with **4 players**, use:
 

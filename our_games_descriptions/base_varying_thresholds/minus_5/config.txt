@@ -1,0 +1,6 @@
+Mayor,mayor,player,cooperative,gpt-4o-mini
+Other cities,other_cities,player,cooperative,gpt-4o-mini
+Local Labour Union,union,player,cooperative,gpt-4o-mini
+SportCo,SportCo,p1,cooperative,gpt-4o-mini
+Department of Tourism,DoT,p2,cooperative,gpt-4o-mini
+Environmental League,enviroment,player,cooperative,gpt-4o-mini

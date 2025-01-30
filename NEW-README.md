@@ -10,6 +10,11 @@ conda install conda-forge::transformers
 pip install google-cloud-aiplatform
 pip install openai
 pip install accelerate
+pip install -U bitsandbytes
+pip install seaborn
+pip install matplotlib
+pip install ipython
+pip install codecarbon
 ```
 
 **TODO: ADD NEW PACKAGES**
@@ -33,7 +38,7 @@ The new version allows full customization of experiments via command-line argume
 - `--exp_name`: Name of the experiment.
 - `--restart`: Flag to restart an experiment from an existing history file.
 - `--output_file`: Name of the history file for continuing previous experiments.
-- `--model`: Specifies the models used for agents (no need to edit `config.txt`).
+- `--model`: Specifies the models used for agents (no need to edit `config.txt`). For more details see: [Detailed instructions](./reproduction_instructions/Models.md)
 - `--incentive`: Defines the incentives of agents (now configurable via command-line).
 - `--role`: Specifies agent roles (eliminating manual edits in `config.txt`).
 - `--quantization`: Enables quantization for Hugging Face models.
