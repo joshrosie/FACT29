@@ -6,7 +6,7 @@ This document provides instructions on how to reproduce the results presented in
 
 The following table maps the **behavioral variants** to their corresponding **experiment names** for each model in Table 6.
 
-| Behavioral Variant           | GPT4o-mini Experiment                        | Qwen2.5-72B Experiment                                |
+| Behavioral Variant           | GPT4o-mini                         | Qwen2.5-72B                                 |
 |------------------------------|---------------------------------------------|-----------------------------------------------------|
 | **All compromising**        | `base_normal_gpt4o-mini`                             | `base_normal_Qwen2.5-72B-Instruct`                                     |
 | **One greedy (p_const)** | `base_behaviour_gpt4o-mini_one-greedy`      | `base_behaviour_Qwen2.5-72B-Instruct_one-greedy`   |
