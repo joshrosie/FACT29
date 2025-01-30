@@ -123,7 +123,7 @@ These figures illustrates the impact of varying thresholds as well as varying th
 ## Evaluation
 
 ### **Evaluating a Specific Experiment**
-To evaluate a single experiment and compute relevant metrics, run the [`evaluation.ipynb`](./evaluation/deals_evolution.ipynb) notebook, specifying the output directory of the experiment. This notebook calculates:
+To evaluate a single experiment and compute relevant metrics, run the [`evaluation.ipynb`](./evaluation/evaluation.ipynb) notebook, specifying the output directory of the experiment. This notebook calculates:
 - **Pre-hoc metrics**
 - **Post-hoc performance metrics**: 5-way, 6-way, Any, Wrong, Leaked
 - **Post-hoc econometrics**
