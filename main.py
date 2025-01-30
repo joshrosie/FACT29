@@ -39,7 +39,7 @@ parser.add_argument("--rounds_num", type=int, default=24)
 parser.add_argument("--window_size", type=int, default=6)
 
 
-parser.add_argument("--output_dir", type=str, default="./output/")
+parser.add_argument("--output_dir", type=str, default="./output_reproduce/")
 parser.add_argument("--game_dir", type=str, default="./games_descriptions/base")
 parser.add_argument("--exp_name", type=str, default="all_greedy")
 
@@ -71,6 +71,7 @@ parser.add_argument(
 )
 parser.add_argument("--model", nargs="*", help="Model(s) to use for the agents")
 parser.add_argument("--incentive", nargs="*", help="Incentive(s) of the agents")
+parser.add_argument("--role", nargs="*", help="Roles of the agents")
 parser.add_argument("--restrict_leakage", action="store_true")
 
 # Do not run actual api call, just get prompt:

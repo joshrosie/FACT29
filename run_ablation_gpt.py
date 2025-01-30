@@ -3,8 +3,10 @@ import time
 
 PYTHON = 'python'
 
-MODEL = "hf_Qwen/Qwen2.5-72B-Instruct"
-log_file = "ablation_opensource.log"
+MODEL = "gpt-4o-mini"
+
+
+log_file = "ablation_gpt.log"
 f = open(log_file, "w")
 
 # Number of iterations
@@ -56,13 +58,11 @@ for _ablation in ablation_list:
     # Command to run
     command = [
         PYTHON, "main.py",
-        "--exp_name", f"ablation/{MODEL.split('/')[1]}/{GAME}",
+        "--exp_name", f"ablation/{MODEL}/{GAME}",
         "--game_dir", "our_games_descriptions/base/",
         "--output_dir", "./output_reproduce/",
-        "--hf_home", "hf_models/",
         "--model", MODEL,
         "--incentive", "cooperative",
-        "--quantization", "int4",
     ]
 
     # Add ablations parameter if any ablations are enabled
