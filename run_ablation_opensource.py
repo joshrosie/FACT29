@@ -1,7 +1,7 @@
 import subprocess
 import time
 
-PYTHON = 'python'
+PYTHON = "python"
 
 MODEL = "hf_Qwen/Qwen2.5-72B-Instruct"
 log_file = "ablation_opensource.log"
@@ -11,7 +11,6 @@ f = open(log_file, "w")
 N = 20
 
 # Base game folder prefix
-BASE_GAME = "ablations_base_"
 ablation_list = [
     [True, True, True, True],
     [True, True, True, False],
@@ -36,8 +35,7 @@ for _ablation in ablation_list:
     ABLATION_PREVIOUS, ABLATION_OTHERS, ABLATION_CANDIDATES, ABLATION_PLAN = _ablation
 
     # Construct the game folder name based on the ablations
-    game_folder_suffix = f"{int(ABLATION_PREVIOUS)}{int(ABLATION_OTHERS)}{int(ABLATION_CANDIDATES)}{int(ABLATION_PLAN)}"
-    GAME = f"{BASE_GAME}{game_folder_suffix}"
+    VARIATION = f"ablation_{int(ABLATION_PREVIOUS)}{int(ABLATION_OTHERS)}{int(ABLATION_CANDIDATES)}{int(ABLATION_PLAN)}"
 
     # Construct the ablations parameter based on selected ablations
     ablations = []
@@ -55,14 +53,22 @@ for _ablation in ablation_list:
 
     # Command to run
     command = [
-        PYTHON, "main.py",
-        "--exp_name", f"ablation/{MODEL.split('/')[1]}/{GAME}",
-        "--game_dir", "our_games_descriptions/base/",
-        "--output_dir", "./output_reproduce/",
-        "--hf_home", "hf_models/",
-        "--model", MODEL,
-        "--incentive", "cooperative",
-        "--quantization", "int4",
+        PYTHON,
+        "main.py",
+        "--exp_name",
+        f"changing_ablation/{MODEL.split('/')[1]}/{VARIATION}",
+        "--game_dir",
+        "our_games_descriptions/base/",
+        "--output_dir",
+        "./output_reproduce/",
+        "--hf_home",
+        "hf_models/",
+        "--model",
+        MODEL,
+        "--incentive",
+        "cooperative",
+        "--quantization",
+        "int4",
     ]
 
     # Add ablations parameter if any ablations are enabled
@@ -71,9 +77,9 @@ for _ablation in ablation_list:
 
     # Print experiment settings
     print(f"Running {N} iterations with ablations: {ablations_param}")
-    print(f"Saving in folder: {GAME}")
+    print(f"Saving in folder: {MODEL.split('/')[1]}/{VARIATION}")
     f.write(f"Running {N} iterations with ablations: {ablations_param}\n")
-    f.write(f"Saving in folder: {GAME}\n")
+    f.write(f"Saving in folder: {MODEL.split('/')[1]}/{VARIATION}\n")
 
     for i in range(1, N + 1):
         print(f"Running iteration {i}/{N} with ablations: {ablations_param}...")
