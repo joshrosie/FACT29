@@ -67,7 +67,7 @@ def load_setup(output_dir, agents_num, num_issues):
 #####################
 # 2) CALCULATOR -> Score calculating function
 #####################
-def calculator(scores, deal, num_issues=5, return_array=False, verbose=True):
+def calculator(scores, deal, num_issues=5, return_array=False, verbose=False):
     """
     Summation of the agent's score for each issue in the deal.
     deal: list of (issue_letter, level) e.g. ('A', 1)
@@ -195,16 +195,37 @@ def format_deal(deal, num_issues=5):
 #####################
 def compute_feasibility_set(agents, all_deals):
     """
-    Feasibility rule in your code:
+    Feasibility rule:
     - A deal is feasible if >=5 agents accept (score >= min)
     - p1 and p2 are definitely among those who accept
     """
     return [deal for deal in all_deals if is_feasible(agents, deal)]
 
 
+def compute_hard_feasibility_set(agents, all_deals):
+    """
+    Hard feasibility rule:
+    - A deal is feasible if all agents accept (score >= min)
+    """
+    return [deal for deal in all_deals if is_hard_feasible(agents, deal)]
+
+
+def is_hard_feasible(agents, deal):
+    """
+    Hard feasibility rule:
+    - A deal is feasible if all agents accept (score >= min)
+    """
+    for agent_name, agent_data in agents.items():
+        scores = agent_data["scores"]
+        agent_score = calculator(scores, deal, num_issues=len(deal))
+        if agent_score < scores["min"]:
+            return False
+    return True
+
+
 def is_feasible(agents, deal):
     """
-    Feasibility rule in your code:
+    Feasibility rule:
     - A deal is feasible if >=5 agents accept (score >= min)
     - p1 and p2 are definitely among those who accept
     """
@@ -549,15 +570,15 @@ def get_comparative_iou(agent_data, agents):
 # 10) LEAKAGE
 #####################
 # should_not_exist = ["<plan>", "<scratchpad>"]
-# should_not_exist = ["plan", "<plan>", "scratchpad", "<scratchpad>"]
-should_not_exist = [
-    "plan",
-    "<plan>",
-    "</plan>",
-    "scratchpad",
-    "<scratchpad>",
-    "</scratchpad>",
-]
+should_not_exist = ["plan", "<plan>", "scratchpad", "<scratchpad>"]
+# should_not_exist = [
+#     "plan",
+#     "<plan>",
+#     "</plan>",
+#     "scratchpad",
+#     "<scratchpad>",
+#     "</scratchpad>",
+# ]
 
 
 def contains_leak(public_answer):
