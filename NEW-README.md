@@ -120,6 +120,33 @@ This table analyzes the effects of different behavioral strategies on negotiatio
 These figures illustrates the impact of varying thresholds as well as varying the number of players in the base game on acceptance rates. The linked document outlines the execution procedure for reproducing all the experiments.
 [Detailed instructions](./reproduction_instructions/Figure2.md)
 
+## Evaluation
+
+### **Evaluating a Specific Experiment**
+To evaluate a single experiment and compute relevant metrics, run the [`evaluation.ipynb`](./evaluation/deals_evolution.ipynb) notebook, specifying the output directory of the experiment. This notebook calculates:
+- **Pre-hoc metrics**
+- **Post-hoc performance metrics**: 5-way, 6-way, Any, Wrong, Leaked
+- **Post-hoc econometrics**
+
+Ensure that the output directory contains the recorded negotiation histories. Running the notebook will generate detailed performance summaries and insights for the given experiment.
+
+### **Evaluating and Recreating the Paper’s Results**
+To evaluate all experiments performed in this study and regenerate the tables and figures presented in the paper, use the dedicated evaluation notebooks corresponding to each table or figure. These notebooks process the results and should reproduce the exact outputs reported in the paper when using the original experiment data.
+
+#### **Recreating the Original Paper Results**
+If you wish to validate our reported results without re-running the experiments, simply execute the corresponding evaluation notebooks as they are. Each notebook is designed to process our logged experimental outputs and will generate the exact figures and tables presented in the paper.
+
+#### **Fully Reproducing and Evaluating New Experiments**
+If you have followed the [**Reproducing Results**](#reproducing-results) section to generate new experimental data, you can use the same evaluation notebooks to assess the reproduced experiments. In this case:
+1. Open the relevant evaluation notebook for the table or figure.
+2. Modify the experiment folder path by replacing `output` with `output_reproduce` at the top of the notebook.
+3. If you have run a subset of models or included additional models, update the model list in the notebook accordingly.
+4. Execute the notebook to compute the results.
+
+By following these steps, you can either validate the original reported results or fully reproduce the paper’s findings using newly generated experimental data.
+
+
+
 
 
 
