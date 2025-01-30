@@ -582,7 +582,7 @@
     "base_behaviour_gpt4o-mini_adversarial-targeted": [
         "--model", "gpt-4o-mini",
         "--exp_name",
-        "changing_behaviour/gpt4o-mini/adversarial_untargeted",
+        "changing_behaviour/gpt4o-mini/adversarial_targeted",
         "--game_dir",
         "our_games_descriptions/base/",
         "--output_dir",
