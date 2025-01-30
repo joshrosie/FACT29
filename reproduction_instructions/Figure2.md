@@ -55,10 +55,6 @@ This structure ensures that all reproduced results remain distinct from the orig
 ### Step 4: Evaluating the Results
 After completing the experiment, process the output data using the evaluation script (`.ipynb`) to extract acceptance rates. Refer to the **Evaluation** section in the original README for detailed instructions.
 
----
-
-By following these steps, you can systematically reproduce the **Effect of Threshold Variation on Acceptance** experiment and compare the acceptance rates with the original findings.
-
 
 # (b): Effect of Number of Players on Acceptance
 
