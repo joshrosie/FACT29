@@ -55,7 +55,7 @@ Below you can find some example commands:
 
 Base game with gpt-4o-mini / All agents cooperative
 ```bash
-python main.py --model "gpt-4o-mini" --exp_name "test/gpt-4o-mini/" --game_dir ./our_games_descriptions/base --incentive "cooperative"
+python main.py --model "gpt-4o-mini" --exp_name "test/gpt4o-mini/" --game_dir ./our_games_descriptions/base --incentive "cooperative"
 ```
 Base game with Qwen2.5-72B / All agents cooperative
 ```bash
