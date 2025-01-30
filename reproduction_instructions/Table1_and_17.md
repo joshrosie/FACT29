@@ -1,4 +1,4 @@
-# Reproducing Table 17
+# Reproducing Tables 1 and 17
 
 This document provides instructions on how to reproduce the results presented in **Table 1** and **Table 17**. These tables compare model leakage and performance, respectively, before and after resolving the leakage issue. The left block (**Original Code**) contains experiments from **Table 2**, while the right block (**Our Code**) contains newly executed experiments.
 
@@ -52,5 +52,5 @@ our_games_descriptions/<GAME>/output_reproduce/<EXPERIMENT>/MODEL
 ```
 This ensures that all reproduced results remain distinct from the originally logged outputs.
 
-To obtain the actual performance scores and leakage statistics for each experiment, you need to run the evaluation script (`.ipynb`) on the experiment’s output folder. For detailed instructions on running the evaluation, refer to the **Evaluation** section in the original README.
+To obtain the actual performance scores and leakage statistics for each experiment, you need to run the evaluation script (`.ipynb`) on the experiment’s output folder. For detailed instructions on running the evaluation, refer to the [**Evaluation**](../NEW-README.md#evaluation) section in the original README.
 
