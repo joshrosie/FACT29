@@ -320,7 +320,6 @@ def utility_player_nash(deal, agents, player, num_issues=5, epsilon=0.001):
     But your code uses: product( max(utility - threshold, epsilon) ).
     """
     utility = calculator(agents[player]["scores"], deal, num_issues, return_array=True)
-    print(f"Utility for deal {deal}: {utility}")
     return np.prod([max(utility[i], epsilon) for i in range(num_issues)])
 
 

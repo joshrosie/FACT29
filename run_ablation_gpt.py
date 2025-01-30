@@ -1,10 +1,9 @@
 import subprocess
 import time
 
-PYTHON = 'python'
+PYTHON = "python"
 
 MODEL = "gpt-4o-mini"
-
 
 log_file = "ablation_gpt.log"
 f = open(log_file, "w")
@@ -13,7 +12,6 @@ f = open(log_file, "w")
 N = 20
 
 # Base game folder prefix
-BASE_GAME = "ablations_base_"
 ablation_list = [
     [True, True, True, True],
     [True, True, True, False],
@@ -33,13 +31,18 @@ ablation_list = [
     [False, False, False, False],
 ]
 
+# Model alias (edge case for gpt-4o-mini)
+if MODEL == "gpt-4o-mini":
+    MODEL_ALIAS = "gpt4o-mini"
+else:
+    MODEL_ALIAS = MODEL
+
 for _ablation in ablation_list:
     # Ablation settings (set to True or False)
     ABLATION_PREVIOUS, ABLATION_OTHERS, ABLATION_CANDIDATES, ABLATION_PLAN = _ablation
 
     # Construct the game folder name based on the ablations
-    game_folder_suffix = f"{int(ABLATION_PREVIOUS)}{int(ABLATION_OTHERS)}{int(ABLATION_CANDIDATES)}{int(ABLATION_PLAN)}"
-    GAME = f"{BASE_GAME}{game_folder_suffix}"
+    VARIATION = f"ablation_{int(ABLATION_PREVIOUS)}{int(ABLATION_OTHERS)}{int(ABLATION_CANDIDATES)}{int(ABLATION_PLAN)}"
 
     # Construct the ablations parameter based on selected ablations
     ablations = []
@@ -57,12 +60,18 @@ for _ablation in ablation_list:
 
     # Command to run
     command = [
-        PYTHON, "main.py",
-        "--exp_name", f"ablation/{MODEL}/{GAME}",
-        "--game_dir", "our_games_descriptions/base/",
-        "--output_dir", "./output_reproduce/",
-        "--model", MODEL,
-        "--incentive", "cooperative",
+        PYTHON,
+        "main.py",
+        "--exp_name",
+        f"changing_ablation/{MODEL_ALIAS}/{VARIATION}",
+        "--game_dir",
+        "our_games_descriptions/base/",
+        "--output_dir",
+        "./output_reproduce/",
+        "--model",
+        MODEL,
+        "--incentive",
+        "cooperative",
     ]
 
     # Add ablations parameter if any ablations are enabled
@@ -71,9 +80,9 @@ for _ablation in ablation_list:
 
     # Print experiment settings
     print(f"Running {N} iterations with ablations: {ablations_param}")
-    print(f"Saving in folder: {GAME}")
+    print(f"Saving in folder: changing_ablation/{MODEL}/{VARIATION}")
     f.write(f"Running {N} iterations with ablations: {ablations_param}\n")
-    f.write(f"Saving in folder: {GAME}\n")
+    f.write(f"Saving in folder: changing_ablation/{MODEL}/{VARIATION}\n")
 
     for i in range(1, N + 1):
         print(f"Running iteration {i}/{N} with ablations: {ablations_param}...")
