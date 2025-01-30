@@ -65,7 +65,7 @@ python main.py --exp_name "changing_behaviour/Qwen2.5-72B-Instruct/adversarial_u
 Additional options include:
 - **TODO: SAY MORE ABOUT OPENAI and HUGGINGFACE keys**
 - If using OpenAI APIs, specify `--api_key`.
-- To run an experiment with environmental tracking, set `--emission_project <PROJECT_NAME>`.
+- In order to distinguish emission tracking between experiments, you can set a project name for each experiment by: `--emission_project <PROJECT_NAME>`.
 - To test without making API calls, use `--dry_run`.
 
 The training script will create an output directory under `./our_games_descriptions/<GAME>/output_reproduce/<exp_name>`, where it will store experiment results, including a copy of `config.txt` for reference.
@@ -79,7 +79,7 @@ To improve performance and configurability, several enhancements have been intro
 - The `--dry_run` mode enables debugging without incurring API costs.
 - The integration of the `codecarbon` EmissionsTracker records the carbon footprint of experiments, supporting sustainable research practices.
 
-These improvements make the framework more efficient, scalable, and environmentally conscious, facilitating robust experimentation in multi-agent negotiation scenarios.
+These improvements make the framework more efficient, scalable, and environmentally conscious, facilitating robust experimentation.
 
 ## Reproducing Results
 
