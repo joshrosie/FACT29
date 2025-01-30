@@ -21,13 +21,13 @@ Each variation adjusts the acceptance criteria used during negotiation, influenc
 To reproduce the results for a specific threshold variation, execute the following command:
 
 ```bash
-python main.py --exp_name gpt4o-mini --game_dir ./games_descriptions/base_varying_thresholds/<THRESHOLD_VARIATION>/ --output_dir ./output_reproduce/ --model gpt-4o-mini
+python main.py --exp_name gpt4o-mini --game_dir ./our_games_descriptions/base_varying_thresholds/<THRESHOLD_VARIATION>/ --output_dir ./output_reproduce/ --model gpt-4o-mini
 ```
 
 Replace `<THRESHOLD_VARIATION>` with one of the valid variations listed above. For example, to run the experiment with a threshold variation of **minus_10**, use:
 
 ```bash
-python main.py --exp_name gpt4o-mini --game_dir ./games_descriptions/base_varying_thresholds/minus_10/ --output_dir ./output_reproduce/ --model gpt-4o-mini
+python main.py --exp_name gpt4o-mini --game_dir ./our_games_descriptions/base_varying_thresholds/minus_10/ --output_dir ./output_reproduce/ --model gpt-4o-mini
 ```
 
 ### Step 3: Output Structure
