@@ -31,16 +31,12 @@ if __name__ == "__main__":
 
     # Run the baseline method
     if method in ['random', 'midline', 'prev_prox']:
-        # os.system(f"python baselines/random_midline_prevproximity.py --game {game_dir} --method {method}")
         random_midline_prevproximity(game_dir, method)
     elif method == 'multi_sample_consensus':
-        # os.system(f"python baselines/multi_sample_consensus.py --game {game_dir}")
         multi_sample_consensus_approach(game_dir)
     elif method == 'freq_restricted':
-        # os.system(f"python baselines/frequency_restricted.py --game {game_dir}")
         freq_restrict_multi_consensus_approach(game_dir)
     elif method == 'two_phase':
-        # os.system(f"python baselines/two_phase.py --game {game_dir}")
         two_phase_approach(game_dir)
     else:
         raise ValueError(f"Invalid method: {method}")
