@@ -24,10 +24,6 @@ from utils import (
 )
 from save_utils import create_outfiles, save_conversation
 
-from huggingface_hub import login
-
-login(token="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")
-
 parser = argparse.ArgumentParser(description="big negotiation!!")
 
 
