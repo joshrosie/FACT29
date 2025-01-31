@@ -133,6 +133,18 @@ Ensure that the output directory contains the recorded negotiation histories. Ru
 ### **Evaluating and Recreating the Paper’s Results**
 To evaluate all experiments performed in this study and regenerate the tables and figures presented in the paper, use the dedicated evaluation notebooks corresponding to each table or figure. These notebooks process the results and should reproduce the exact outputs reported in the paper when using the original experiment data.
 
+The corresponding notebooks for each table/figure are:
+- [Tables 1 and 17](evaluation/table_1_17.ipynb)
+- [Table 2](evaluation/table_2.ipynb)
+- [Table 3](evaluation/table_3.ipynb)
+- [Table 4](evaluation/table_4.ipynb)
+- [Table 5](evaluation/table_5.ipynb)
+- [Table 6](evaluation/table_6.ipynb)
+- [Table 7](evaluation/table_7.ipynb)
+- [Figure 1](evaluation/figure_1.ipynb)
+- [Figure 2](evaluation/figure_2.ipynb)
+- [Figure 3](evaluation/figure_3.ipynb)
+
 #### **Recreating the Original Paper Results**
 If you wish to validate our reported results without re-running the experiments, simply execute the corresponding evaluation notebooks as they are. Each notebook is designed to process our logged experimental outputs and will generate the exact figures and tables presented in the paper.
 
