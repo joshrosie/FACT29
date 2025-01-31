@@ -68,8 +68,6 @@ python main.py --exp_name "changing_behaviour/Qwen2.5-72B-Instruct/adversarial_u
 ```
 
 Additional options include:
-- **TODO: SAY MORE ABOUT OPENAI and HUGGINGFACE keys**
-- If using OpenAI APIs, specify `--api_key`.
 - In order to distinguish emission tracking between experiments, you can set a project name for each experiment by: `--emission_project <PROJECT_NAME>`.
 - To test without making API calls, use `--dry_run`.
 
@@ -85,6 +83,49 @@ To improve performance and configurability, several enhancements have been intro
 - The integration of the `codecarbon` EmissionsTracker records the carbon footprint of experiments, supporting sustainable research practices.
 
 These improvements make the framework more efficient, scalable, and environmentally conscious, facilitating robust experimentation.
+
+
+
+### Access Tokens
+Certain models require authentication via access tokens before they can be used in experiments. Below are the necessary steps to ensure smooth execution.
+
+#### OpenAI Models 
+To use OpenAI models such as `gpt4o-mini`, an **OpenAI API key** is required. Before running an experiment, export your API key as an environment variable:
+
+```bash
+export OPENAI_API_KEY='sk-xxxxxxx'
+```
+
+#### Hugging Face Models
+Some Hugging Face models, such as `Llama-3.3-70B-Instruct`, require a **license agreement** before they can be downloaded. The first time you use such models, you must provide a **Hugging Face authentication token** to allow the model to be downloaded. Export the token as follows:
+
+```bash
+export HF_TOKEN='hf_xxxxxxx'
+```
+
+#### Making the Configuration Permanent
+To ensure that your access tokens persist across sessions, add the export command to your shell’s configuration file:
+
+- **Linux/macOS (Bash shell):** Add the following lines to `~/.bashrc`:
+  ```bash
+  echo "export OPENAI_API_KEY='sk-xxxxxxx'" >> ~/.bashrc
+  echo "export HF_TOKEN='hf_xxxxxxx'" >> ~/.bashrc
+  source ~/.bashrc
+  ```
+
+- **Linux/macOS (Zsh shell):** Modify `~/.zshrc` instead:
+  ```bash
+  echo "export OPENAI_API_KEY='sk-xxxxxxx'" >> ~/.zshrc
+  echo "export HF_TOKEN='hf_xxxxxxx'" >> ~/.zshrc
+  source ~/.zshrc
+  ```
+
+- **Windows (Command Prompt/PowerShell):** Use `set` instead of `export`:
+  ```powershell
+  set OPENAI_API_KEY=sk-xxxxxxx
+  set HF_TOKEN=hf_xxxxxxx
+  ```
+
 
 ## Reproducing Results
 
