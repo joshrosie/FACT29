@@ -6,9 +6,9 @@ def format_history(agent_name, history, window=6):
     for slot in history["rounds"][-window:]: 
         slot_str = ''
         if agent_name == slot['agent']:  
-            slot_str = f'. You ({slot['agent']}): {slot['public_answer']}'                     
+            slot_str = f". You ({slot['agent']}): {slot['public_answer']}"                    
         else:
-            slot_str = f'. {slot['agent']}: {slot['public_answer']}'
+            slot_str = f". {slot['agent']}: {slot['public_answer']}"
         personalized_history.append(slot_str)        
     personalized_history_string = ' \n '.join(personalized_history) 
     
