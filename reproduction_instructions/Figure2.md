@@ -92,8 +92,8 @@ To use an open-source model, run:
 python main.py --exp_name varying_players/<NUM_PLAYERS>_players/<MODEL_ALIAS> --agents_num <NUM_PLAYERS> --game_dir ./our_games_descriptions/base/
 ```
 
-Replace `<NUM_PLAYERS>` with the number of players specified in `config.txt`.
-Replace `<MODEL>` with desired model. See [Detailed instructions](./Models.md) for more details.
+- Replace `<NUM_PLAYERS>` with the number of players specified in `config.txt`.
+- Replace `<MODEL>` with desired model. See [Detailed instructions](./Models.md) for more details.
 
 For example, to run an experiment with **4 players**, use:
 
