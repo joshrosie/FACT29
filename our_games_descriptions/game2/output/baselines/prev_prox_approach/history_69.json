@@ -1,0 +1,137 @@
+{
+    "slot_assignment": [
+        "Project manager",
+        "Local government",
+        "Local NGO",
+        "Foreign aid agency",
+        "Project manager",
+        "Local Activists",
+        "Landowners",
+        "Local government",
+        "Local Activists",
+        "Project manager",
+        "Local NGO",
+        "Foreign aid agency",
+        "Landowners",
+        "Local NGO",
+        "Local government",
+        "Landowners",
+        "Local Activists",
+        "Project manager",
+        "Foreign aid agency",
+        "Local Activists",
+        "Local government",
+        "Project manager",
+        "Landowners",
+        "Foreign aid agency",
+        "Local NGO",
+        "Project manager"
+    ],
+    "rounds": [
+        {
+            "agent": "Project manager",
+            "public_answer": "<DEAL>A3, B1, C1, D2, E1</DEAL>"
+        },
+        {
+            "agent": "Local government",
+            "public_answer": "<DEAL>A5, B1, C3, D2, E3</DEAL>"
+        },
+        {
+            "agent": "Local NGO",
+            "public_answer": "<DEAL>A1, B2, C2, D1, E4</DEAL>"
+        },
+        {
+            "agent": "Foreign aid agency",
+            "public_answer": "<DEAL>A3, B2, C1, D1, E2</DEAL>"
+        },
+        {
+            "agent": "Project manager",
+            "public_answer": "<DEAL>A3, B1, C1, D2, E1</DEAL>"
+        },
+        {
+            "agent": "Local Activists",
+            "public_answer": "<DEAL>A3, B2, C2, D1, E3</DEAL>"
+        },
+        {
+            "agent": "Landowners",
+            "public_answer": "<DEAL>A4, B2, C1, D2, E3</DEAL>"
+        },
+        {
+            "agent": "Local government",
+            "public_answer": "<DEAL>A4, B2, C3, D2, E3</DEAL>"
+        },
+        {
+            "agent": "Local Activists",
+            "public_answer": "<DEAL>A4, B2, C3, D1, E3</DEAL>"
+        },
+        {
+            "agent": "Project manager",
+            "public_answer": "<DEAL>A3, B1, C4, D2, E3</DEAL>"
+        },
+        {
+            "agent": "Local NGO",
+            "public_answer": "<DEAL>A3, B2, C4, D1, E3</DEAL>"
+        },
+        {
+            "agent": "Foreign aid agency",
+            "public_answer": "<DEAL>A3, B2, C4, D1, E2</DEAL>"
+        },
+        {
+            "agent": "Landowners",
+            "public_answer": "<DEAL>A3, B1, C4, D2, E2</DEAL>"
+        },
+        {
+            "agent": "Local NGO",
+            "public_answer": "<DEAL>A2, B2, C4, D2, E2</DEAL>"
+        },
+        {
+            "agent": "Local government",
+            "public_answer": "<DEAL>A2, B2, C4, D2, E3</DEAL>"
+        },
+        {
+            "agent": "Landowners",
+            "public_answer": "<DEAL>A3, B2, C4, D2, E3</DEAL>"
+        },
+        {
+            "agent": "Local Activists",
+            "public_answer": "<DEAL>A3, B2, C3, D2, E3</DEAL>"
+        },
+        {
+            "agent": "Project manager",
+            "public_answer": "<DEAL>A3, B2, C3, D2, E3</DEAL>"
+        },
+        {
+            "agent": "Foreign aid agency",
+            "public_answer": "<DEAL>A3, B2, C3, D2, E2</DEAL>"
+        },
+        {
+            "agent": "Local Activists",
+            "public_answer": "<DEAL>A3, B2, C3, D2, E2</DEAL>"
+        },
+        {
+            "agent": "Local government",
+            "public_answer": "<DEAL>A3, B2, C3, D2, E2</DEAL>"
+        },
+        {
+            "agent": "Project manager",
+            "public_answer": "<DEAL>A3, B2, C3, D2, E2</DEAL>"
+        },
+        {
+            "agent": "Landowners",
+            "public_answer": "<DEAL>A3, B2, C3, D2, E2</DEAL>"
+        },
+        {
+            "agent": "Foreign aid agency",
+            "public_answer": "<DEAL>A3, B2, C3, D2, E2</DEAL>"
+        },
+        {
+            "agent": "Local NGO",
+            "public_answer": "<DEAL>A3, B2, C3, D2, E2</DEAL>"
+        },
+        {
+            "agent": "Project manager",
+            "public_answer": "<DEAL>A3, B2, C3, D2, E2</DEAL>"
+        }
+    ],
+    "finished_rounds": 25
+}

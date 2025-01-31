@@ -1,0 +1,137 @@
+{
+    "slot_assignment": [
+        "Eventix",
+        "governor",
+        "neighbouring cities",
+        "Eventix",
+        "Ministry of Culture and Sport",
+        "The Local Workers' Union",
+        "Green Alliance",
+        "The Local Workers' Union",
+        "Eventix",
+        "Green Alliance",
+        "governor",
+        "Ministry of Culture and Sport",
+        "neighbouring cities",
+        "Eventix",
+        "neighbouring cities",
+        "governor",
+        "The Local Workers' Union",
+        "Ministry of Culture and Sport",
+        "Green Alliance",
+        "governor",
+        "neighbouring cities",
+        "Green Alliance",
+        "Eventix",
+        "The Local Workers' Union",
+        "Ministry of Culture and Sport",
+        "Eventix"
+    ],
+    "rounds": [
+        {
+            "agent": "Eventix",
+            "public_answer": "<DEAL>A1, B1, C1, D5, E4</DEAL>"
+        },
+        {
+            "agent": "governor",
+            "public_answer": "<DEAL>A1, B1, C1, D5, E1</DEAL>"
+        },
+        {
+            "agent": "neighbouring cities",
+            "public_answer": "<DEAL>A3, B3, C1, D1, E1</DEAL>"
+        },
+        {
+            "agent": "Eventix",
+            "public_answer": "<DEAL>A1, B1, C1, D5, E4</DEAL>"
+        },
+        {
+            "agent": "Ministry of Culture and Sport",
+            "public_answer": "<DEAL>A3, B2, C2, D3, E4</DEAL>"
+        },
+        {
+            "agent": "The Local Workers' Union",
+            "public_answer": "<DEAL>A1, B2, C1, D4, E2</DEAL>"
+        },
+        {
+            "agent": "Green Alliance",
+            "public_answer": "<DEAL>A2, B3, C3, D4, E3</DEAL>"
+        },
+        {
+            "agent": "The Local Workers' Union",
+            "public_answer": "<DEAL>A1, B2, C1, D4, E2</DEAL>"
+        },
+        {
+            "agent": "Eventix",
+            "public_answer": "<DEAL>A1, B2, C1, D4, E4</DEAL>"
+        },
+        {
+            "agent": "Green Alliance",
+            "public_answer": "<DEAL>A1, B3, C3, D4, E4</DEAL>"
+        },
+        {
+            "agent": "governor",
+            "public_answer": "<DEAL>A1, B2, C1, D5, E3</DEAL>"
+        },
+        {
+            "agent": "Ministry of Culture and Sport",
+            "public_answer": "<DEAL>A3, B2, C2, D4, E2</DEAL>"
+        },
+        {
+            "agent": "neighbouring cities",
+            "public_answer": "<DEAL>A2, B3, C1, D2, E2</DEAL>"
+        },
+        {
+            "agent": "Eventix",
+            "public_answer": "<DEAL>A1, B2, C1, D4, E4</DEAL>"
+        },
+        {
+            "agent": "neighbouring cities",
+            "public_answer": "<DEAL>A2, B3, C2, D2, E2</DEAL>"
+        },
+        {
+            "agent": "governor",
+            "public_answer": "<DEAL>A2, B2, C1, D4, E2</DEAL>"
+        },
+        {
+            "agent": "The Local Workers' Union",
+            "public_answer": "<DEAL>A2, B2, C1, D4, E2</DEAL>"
+        },
+        {
+            "agent": "Ministry of Culture and Sport",
+            "public_answer": "<DEAL>A2, B2, C2, D4, E4</DEAL>"
+        },
+        {
+            "agent": "Green Alliance",
+            "public_answer": "<DEAL>A2, B3, C2, D4, E2</DEAL>"
+        },
+        {
+            "agent": "governor",
+            "public_answer": "<DEAL>A2, B2, C1, D4, E2</DEAL>"
+        },
+        {
+            "agent": "neighbouring cities",
+            "public_answer": "<DEAL>A2, B2, C2, D3, E2</DEAL>"
+        },
+        {
+            "agent": "Green Alliance",
+            "public_answer": "<DEAL>A2, B3, C2, D4, E2</DEAL>"
+        },
+        {
+            "agent": "Eventix",
+            "public_answer": "<DEAL>A2, B2, C1, D4, E2</DEAL>"
+        },
+        {
+            "agent": "The Local Workers' Union",
+            "public_answer": "<DEAL>A2, B2, C1, D4, E2</DEAL>"
+        },
+        {
+            "agent": "Ministry of Culture and Sport",
+            "public_answer": "<DEAL>A2, B2, C2, D4, E2</DEAL>"
+        },
+        {
+            "agent": "Eventix",
+            "public_answer": "<DEAL>A2, B2, C1, D4, E2</DEAL>"
+        }
+    ],
+    "finished_rounds": 25
+}
