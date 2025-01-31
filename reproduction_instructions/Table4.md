@@ -50,5 +50,5 @@ our_games_descriptions/<GAME>/output_reproduce/<EXPERIMENT>/MODEL
 ```
 This ensures that all reproduced results remain distinct from the originally logged outputs.
 
-To obtain the actual performance scores for each experiment, you need to run the evaluation script (`.ipynb`) on the experiment’s output folder. For detailed instructions on running the evaluation, refer to the [**Evaluation**](../NEW-README.md#evaluation) section in the original README.
+To obtain the actual performance scores for each experiment, you need to run the evaluation script (`.ipynb`) on the experiment’s output folder. For detailed instructions on running the evaluation, refer to the [**Evaluation**](../README.md#evaluation) section in the original README.
 

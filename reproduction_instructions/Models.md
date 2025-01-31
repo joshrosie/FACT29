@@ -41,6 +41,6 @@ python main.py --exp_name new_experiment --model hf_neworg/New-Model-Name --othe
 ## Additional Considerations
 - Ensure that the model names are written exactly as shown above.
 - If running on a system with limited memory, consider using the `--quantization` argument for Hugging Face models to enable lower precision computation.
-- When using GPT models, ensure that the corresponding API keys or endpoints are correctly configured. More details: [Access Tokens](../NEW-README.md#access-tokens)
-- Some Hugging Face models require users to agree to specific terms and provide a Hugging Face token for access. Ensure that the necessary permissions are granted and set up the Hugging Face authentication token before using these models. More details: [Access Tokens](../NEW-README.md#access-tokens)
+- When using GPT models, ensure that the corresponding API keys or endpoints are correctly configured. More details: [Access Tokens](../README.md#access-tokens)
+- Some Hugging Face models require users to agree to specific terms and provide a Hugging Face token for access. Ensure that the necessary permissions are granted and set up the Hugging Face authentication token before using these models. More details: [Access Tokens](../README.md#access-tokens)
 

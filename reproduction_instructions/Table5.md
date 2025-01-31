@@ -63,7 +63,7 @@ This ensures that reproduced results remain distinct from the original logged ou
 
 ## Evaluation of Results
 
-After running the baseline experiments, you need to process the output files to obtain the final performance scores. To do this, execute the evaluation script (`.ipynb`) on the generated output folders. Refer to the [**Evaluation**](../NEW-README.md#evaluation) section in the original README for detailed instructions on computing and comparing the performance metrics.
+After running the baseline experiments, you need to process the output files to obtain the final performance scores. To do this, execute the evaluation script (`.ipynb`) on the generated output folders. Refer to the [**Evaluation**](../README.md#evaluation) section in the original README for detailed instructions on computing and comparing the performance metrics.
 
 ---
 

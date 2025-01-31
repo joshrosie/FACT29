@@ -1,40 +1,16 @@
-## [Cooperation, Competition, and Maliciousness: LLM-Stakeholders Interactive Negotiation](https://arxiv.org/abs/2309.17234)
-- **Authors: Sahar Abdelnabi, Amr Gomaa, Sarath Sivaprasad, Lea Schönherr, Mario Fritz**
+# [RE] Cooperation, Competition, and Maliciousness: LLM-Stakeholders Interactive Negotiation
+- **Authors: Jorge Carrasco Pollo, Ioannis Kapetangeorgis, Joshua Rosenthal, John Yao**
 
-## Abstract 
-There is an growing interest in using Large Language Models (LLMs) in multi-agent systems to tackle interactive real-world tasks that require effective collaboration and assessing complex situations. Yet, we still have a limited understanding of LLMs' communication and decision-making abilities in multi-agent setups. The fundamental task of negotiation spans many key features of communication, such as cooperation, competition, and manipulation potentials. Thus, we propose using scorable negotiation to evaluate LLMs. We create a testbed of complex multi-agent, multi-issue, and semantically rich negotiation games. To reach an agreement, agents must have strong arithmetic, inference, exploration, and planning capabilities while integrating them in a dynamic and multi-turn setup. We propose multiple metrics to rigorously quantify agents' performance and alignment with the assigned role. We provide procedures to create new games and increase games' difficulty to have an evolving benchmark. Importantly, we evaluate critical safety aspects such as the interaction dynamics between agents influenced by greedy and adversarial players. Our benchmark is highly challenging; GPT-3.5 and small models mostly fail, and GPT-4 and SoTA large models (e.g., Llama-3 70b) still underperform in adversarial, noisy, and more competitive games. 
+## Abstract
 
-### Example 
-- You can find [here](https://amrgomaaelhady.github.io/LLM-Deliberation-Demo/) an example of one of our runs with GPT-4 
+Large Language Models (LLMs) show promise in multi-agent negotiation tasks but require robust benchmarks for reliable evaluation. We replicate and extend [Abdelnabi et al.’s](https://neurips.cc/virtual/2024/poster/97850) newly introduced negotiation [benchmark](https://github.com/S-Abdelnabi/LLM-Deliberation), emphasizing fairness, interpretability, and generalizability. By testing both open- and closed-source models and introducing additional metrics, we expose limitations in model comparisons, leakage detection, and ablation transferability. Our findings underscore the need for a refined evaluation framework and highlight the importance of nuanced metrics for assessing LLM negotiation performance, contributing to ongoing discourse on FACT (Fairness, Accountability, Confidentiality, and Transparency) in AI.
 
-<p align="center">
-<img src="https://github.com/S-Abdelnabi/LLM-Deliberation/blob/main/teaser.png" width="750">
-</p>
+## Table of Contents
 
----
-
-## The repo includes:
-
-* All games and game variants developed in the paper 
-* All logs from experiments in the paper
-* Code to run simulations
-* Evaluation code
-* Guide on how to adjust the experiments and extend the setup for other scenarios. 
-
----
-
-## Table of Content 
 - [Setup](#setup)
-- [Games](#Games)
-- [Setting the game and simulation configuration](#Setting-the-game-and-simulation-configuration)
-- [Guide on how the prompts are organized](#Guide-on-how-the-prompts-are-organized)
-- [Running the simulation](#Running-the-simulation)
-- [Evaluation](#Evaluation)
-- [Logs](#Logs)
-- [Citation](#citation)
-
----
-  
+- [Running Experiments](#running-experiments)
+- [Reproducing Results](#reproducing-results)
+- [Evaluation](#evaluation)
 
 ## Setup 
 
@@ -45,180 +21,195 @@ conda install conda-forge::transformers
 pip install google-cloud-aiplatform
 pip install openai
 pip install accelerate
+pip install -U bitsandbytes
+pip install seaborn
+pip install matplotlib
+pip install ipython
+pip install codecarbon
 ```
 
----
 
-## Games 
-- All games can be found under `games_descriptions. Current games are:
-  - `Base` game
-  - `Base rewritten`: base game rewritten by GPT-4
-  - 7-player and 6-issue variant extended from base game
-  - New games created by prompting GPT-4 and manual curation (`game1`, `game2`, `game3`)
-    
-- Games are organized as follows:
-  - `global_instructions.txt`:
-    - These are global instructions about project and issues given to all agents.
-    - Name of agents should be put between quotations `""` and be consistent all along the global instructions (will be parsed when creating initial prompts, more details about that later)
-      
-  - `<GAME>/individual_instructions`:
-    - There should be sub-folders that correspond to the `incentive` of the player (e.g., cooperative). I.e., `<GAME>/individual_instructions/<INCENTIVE>`
-    - Under the sub-folders, there should be files that correspond to players. 
-    - These are the confidential information given to agents about their preferences in addition to any agent-specific instructions about their incentives (e.g., `you need to maximize this option as much as possible`)
-    - The files contain the scores as placeholders that will be populated when forming the initial prompt (more details about that later).
-  - `<GAME>/scores_files`:
-    - These are files that contain the scores of players for each issue 
-    - Each line is a comma-separated line of scores per issue
-    - Line 1 corresponds to issue A, etc.
-    - The last line is the minimum threshold for the agent.
-    - If you just want to change scores or thresholds without affecting the overall game and priorities, just change values in the scores files without changing the other files.
-      
-  - `<GAME>/initial_deal.txt`: This is the most preferred option for `p1` that will be used to start the negotiation.
-    
-- We include `greedy`, `targeted_adv`, `untargeted_adv`, `cooperative` incentives for the `base` game according to the results in the paper. Other games have currently only the `cooperative` variant.
-- **If you would like to support another incentive**, create a new sub-directory and write the individual instructions for agents you would like to combine that incentive with. 
 
----
+## Running Experiments
 
-## Setting the game and simulation configuration 
-- Change `<GAME>/config.txt` to run customized combinations of agents' models, incentives, etc and varying number of agents, etc.
-- Each line in `config.txt` corresponds to one agent.
-- Each line should be organized as `<AGENT NAME>, <FILE NAME>, <ROLE>, <INCENTIVE>, <MODEL>`:
-  - `<AGENT NAME>` this is the agent's game name as written in the `global_instructions.txt` file.
-  - `<FILE NAME>` this is the agent's file name under `<GAME>/individual_instructions` and `<GAME>/scores_files`
-  - `<ROLE>` a specific role for the agent. At the moment this can be `p1`, `p2`, `target` (for the target agent in `targeted_adv` incentive), or `player` (default for all others).
-  - `<INCENTIVE>` the incentive for the agent. This can be `greedy`, `targeted_adv`, `untargeted_adv`, or `cooperative`. A sub-directory of the same name must be included under `<GAME>/individual_instructions`.
-  - <MODEL> the model that will be used for this agent. You can specify different models for different agents. The code now supports *GPT* models via *Azure APIs* or *OpenAI APIs*, *Gemini*, or Hugging Face models. **For Hugging Face models, write `hf_<MODEL>`**.
-- If you would like to run the same game but with fewer agents, remove that agent's line from the config file.
+The codebase is structured into multiple Python scripts, with `main.py` as the entry point for running experiments. Key components include `agent.py` for defining agent behavior, `rounds.py` for managing negotiations, `utils.py` for auxiliary functions, `initial_prompts.py` for predefined prompts, and `save_utils.py` for data handling. These modules work together to initialize agents, configure the negotiation environment, execute rounds, and compile results.
 
----
+### Configuration and Execution
 
-## Guide on how the prompts are organized 
-- The agents have 1) **initial prompts** and 2) **round prompts**. They are formed as follows:
+The new version allows full customization of experiments via command-line arguments, removing the need to modify `config.txt`. Users can now specify key parameters directly:
+- `--temp`: Temperature setting for agent responses.
+- `--agents_num`: Number of agents participating in the negotiation.
+- `--issues_num`: Number of issues in the negotiation.
+- `--rounds_num`: Number of negotiation rounds.
+- `--window_size`: Number of previous rounds considered in decision-making.
+- `--game_dir`: Path to the game description directory.
+- `--output_dir`: Path to the directory for storing experiment results.
+- `--exp_name`: Name of the experiment.
+- `--restart`: Flag to restart an experiment from an existing history file.
+- `--output_file`: Name of the history file for continuing previous experiments.
+- `--model`: Specifies the models used for agents (no need to edit `config.txt`). For more details see: [Detailed instructions](./reproduction_instructions/Models.md)
+- `--incentive`: Defines the incentives of agents (now configurable via command-line).
+- `--role`: Specifies agent roles (eliminating manual edits in `config.txt`).
+- `--quantization`: Enables quantization for Hugging Face models.
+- `--restrict_leakage`: Restricts sensitive information leakage during negotiations.
+- `--dry_run`: Enables a mode where API calls to language models are disabled for debugging.
+- `--emission_project`: Specifies a project name for tracking carbon emissions.
+- `--ablations`: Allows ablation studies on specific negotiation strategies.
 
-1- **initial prompts**
-- `initial_prompts.txt` first reads the *global instructions* and replaces the agent's name with (``<AGENT_NAME> (represented by you``).
-```python
-self.global_instructions = self.load_global_instructions(os.path.join(game_description_dir,'global_instructions.txt'))
+With these options, all modifications previously requiring manual edits in `config.txt` can now be done via command-line parameters, streamlining the experiment setup process.
+
+### Running the Experiment
+
+Below you can find some example commands:
+
+Base game with gpt-4o-mini / All agents cooperative
+```bash
+python main.py --model "gpt-4o-mini" --exp_name "test/gpt4o-mini/" --game_dir ./our_games_descriptions/base --incentive "cooperative"
 ```
-- Next, scores and indiviual instructions are read and combined:
-```python
-individual_scores_file = os.path.join(game_description_dir,'scores_files', agent_file_name+'.txt')
-self.scores = self.load_scores(individual_scores_file)
-        
-individual_instructions_file = os.path.join(game_description_dir,'individual_instructions',incentive, agent_file_name+'.txt')
-self.individual_instructions = self.load_individual_instructions(individual_instructions_file)
+Base game with Qwen2.5-72B / All agents cooperative
+```bash
+python main.py --model "hf_Qwen/Qwen2.5-72B-Instruct" --exp_name "test/Qwen2.5-72B/" --game_dir "./our_games_descriptions/base"  --quantization "int4" --incentive "cooperative" --hf_home "hf_models/"
 ```
-- The initial prompt contains **scoring** and **voting** instructions that are given the same to all agents (E.g., who is `p1`, the round schema, etc.).
-- There also specific **incentive** instructions (e.g., for cooperative, it includes something like `any deal with a score higher than your minimum threshold is preferable to you than no deal. You are very open to any compromise to achieve that`).
-- The final initial prompt is:
-```python
-final_initial_prompt = self.global_instructions + '\n' + self.individual_instructions +  scoring_rules + voting_rules + incentive_rules
+
+Base game with Qwen2.5-72B / Adversarial targeted behavior
+```bash
+python main.py --exp_name "changing_behaviour/Qwen2.5-72B-Instruct/adversarial_untargeted" --game_dir "our_games_descriptions/base/" --hf_home "hf_models/" --output_dir "./output_reproduce/" --model "hf_Qwen/Qwen2.5-72B-Instruct" --quantization "int4" --incentive "cooperative" "cooperative" "cooperative" "cooperative" "cooperative" "targeted_adv" --role "player" "player" "target" "p1" "p2" "player"
 ```
-- `InitialPrompt` class supports changing the number of agents and the number of classes and it takes `p1` and `p2` from `main.py` (more details later). It also call the incentive-specific functions based on the agents' incentives defined in the `config.txt` files. 
 
-2- **round prompts**
-- The rounds' prompts get appended to the initial prompts at each interaction.
-- Round prompts are constructed as:
-```python
-slot_prompt = history_prompt + scratch_pad + unified_instructions + plan_prompt 
+Additional options include:
+- In order to distinguish emission tracking between experiments, you can set a project name for each experiment by: `--emission_project <PROJECT_NAME>`.
+- To test without making API calls, use `--dry_run`.
+
+The training script will create an output directory under `./our_games_descriptions/<GAME>/output_reproduce/<exp_name>`, where it will store experiment results, including a copy of `config.txt` for reference.
+
+### Enhancements and Sustainability Features
+
+To improve performance and configurability, several enhancements have been introduced:
+- The `--model`, `--incentive`, and `--role` parameters eliminate the need to modify `config.txt` manually.
+- The `--quantization` option optimizes Hugging Face models for reduced memory usage and faster execution.
+- The `--restrict_leakage` flag helps mitigate the risk of sensitive information leakage during negotiations.
+- The `--dry_run` mode enables debugging without incurring API costs.
+- The integration of the `codecarbon` EmissionsTracker records the carbon footprint of experiments, supporting sustainable research practices.
+
+These improvements make the framework more efficient, scalable, and environmentally conscious, facilitating robust experimentation.
+
+
+
+### Access Tokens
+Certain models require authentication via access tokens before they can be used in experiments. Below are the necessary steps to ensure smooth execution.
+
+#### OpenAI Models 
+To use OpenAI models such as `gpt4o-mini`, an **OpenAI API key** is required. Before running an experiment, export your API key as an environment variable:
+
+```bash
+export OPENAI_API_KEY='sk-xxxxxxx'
 ```
-- `history_prompt` is the n-window history of the negotiation of **public answers**. They are formatted such that the agent's name is replaced by `You: `.
-- `scratch_pad` is instructions on the individual CoT steps along with incentive-related instructions of the goals. Currently, each `incentive` has a scratch pad function that gets called based on the agent's incentive.
-- `unified_instructions` are instructions on how to format answers.
-- `plan_prompt` are instructions on how to form plans (won't be called for the last time the agent is prompted).
 
-### Supporting new incentives:
-- If you would like to support another incentive, create new functions for that incentive in *initial* and *round* prompts if needed. 
+#### Hugging Face Models
+Some Hugging Face models, such as `Llama-3.3-70B-Instruct`, require a **license agreement** before they can be downloaded. The first time you use such models, you must provide a **Hugging Face authentication token** to allow the model to be downloaded. Export the token as follows:
 
----
-
-## Running the simulation 
-
-- After changing `config.txt`, run the simulation as:
-  
+```bash
+export HF_TOKEN='hf_xxxxxxx'
 ```
-python main.py --exp_name <OUTPUT_DIR> --agents_num <NUM> --issues_num <NUM> --window_size <NUM> --game_dir ./games_descriptions/<GAME> --rounds_num <NUM>
-```
-- If you need to run Azure APIs, run with the flag `--azure``
-- Specify API keys
-- Change the number of agents and issues according to the game.
-- We used `rounds_num` as (`4*agents_num`)
-- The training script will create an output dir with `exp_name` under `./games_descriptions/<GAME>`. It will also copy `config.txt` and `<GAME>/scores_files`
-- The history file will have the following format:
-```python
-history['content']["rounds"].append({'agent':agent_name, 'prompt': prompt, 'full_answer': full_answer, 'public_answer': public_answer})
-```
-  - `rounds` is a list of length (`args.rounds_num` + 2). The first is the initial prompts and the last one is the deal suggestion by `p1`. `prompt` is the prompt given at this round. `full_answer` is the full answer including the CoT. `public_answer` is the extracted public answer given to agents in the history. 
 
----
+#### Making the Configuration Permanent
+To ensure that your access tokens persist across sessions, add the export command to your shell’s configuration file:
 
-## Evaluation 
-1- `evaluation/evaluate_deals.ipynb`:
-- Measures metrics: any success rate, final success rate, and ratio of wrong scores. Change the following according to the game:
-  ```python
-  HOME = '<HOME>'
-  OUTPUT_DIR = os.path.join(HOME,'LLM-Deliberation/games_descriptions/base/output/all_coop')
-  AGENTS_NUM = 6
-  ISSUES_NUM = 5
-  NUM_ROUNDS = 24
+- **Linux/macOS (Bash shell):** Add the following lines to `~/.bashrc`:
+  ```bash
+  echo "export OPENAI_API_KEY='sk-xxxxxxx'" >> ~/.bashrc
+  echo "export HF_TOKEN='hf_xxxxxxx'" >> ~/.bashrc
+  source ~/.bashrc
   ```
-- Use the same notebook to create figures of agents' deals such as the ones in the paper:
-<p align="center">
-<img src="https://github.com/S-Abdelnabi/LLM-Deliberation/blob/main/p1.png" width="350">
-</p>
 
-2- `evaluation/score_leakage.py`:
-- Use GPT-4 as a judge to evaluate whether scores where leaked in the public answers.
-- Specify the following arguments:
-```python
-MAX_THREADS = 60 
+- **Linux/macOS (Zsh shell):** Modify `~/.zshrc` instead:
+  ```bash
+  echo "export OPENAI_API_KEY='sk-xxxxxxx'" >> ~/.zshrc
+  echo "export HF_TOKEN='hf_xxxxxxx'" >> ~/.zshrc
+  source ~/.zshrc
+  ```
 
-parser = argparse.ArgumentParser(
-                    prog='Verifier')
+- **Windows (Command Prompt/PowerShell):** Use `set` instead of `export`:
+  ```powershell
+  set OPENAI_API_KEY=sk-xxxxxxx
+  set HF_TOKEN=hf_xxxxxxx
+  ```
 
-parser.add_argument('--azure_openai_api', default='', help='azure api') 
-parser.add_argument('--azure_openai_endpoint', default='', help='azure endpoint')   
-parser.add_argument('--model_name', default='', help='azure model')  
-parser.add_argument('--exp_dir')
 
-args, _ = parser.parse_known_args()
+## Reproducing Results
 
-os.environ["AZURE_OPENAI_API_KEY"] = args.azure_openai_api
-os.environ["AZURE_OPENAI_ENDPOINT"] = args.azure_openai_endpoint
-```
-- Note that this script creates parallel calls to GPT-4. **Be mindful of cost as it may accumulate quickly**.
+To ensure the reproducibility of the experimental results presented in this study, this section provides references to detailed instructions for replicating each experiment. Each subsection corresponds to a specific table or figure and includes a link to a dedicated document containing the required command-line parameters, configuration modifications, and execution steps.
 
-3- `evaluation/adjust_games.ipynb` 
-- This script can be used to visualize the number of possible deals (and also possible deals per agent) after changing the scores or minimum thresholds of agents.
-- Change the following parameters:
-```python
-HOME = '/HOME/'
-GAME_DIR = os.path.join(HOME,'LLM-Deliberation/games_descriptions/base/')
-AGENTS_NUM = 6
-ISSUES_NUM = 5
-```
+### **Tables 1 and 17: Model Performance Before and After Fixing Leakage Issues**
+These tables present a comparison of model performance and leakage metrics before and after resolving leakage issues. The linked document explains how to reproduce experiments for both the original and corrected model versions.
+[Detailed instructions](./reproduction_instructions/Table1_and_17.md)
 
----
+### **Table 2: Model Performance Comparison**
+This table presents a comparative analysis of multiple models on the base game. The linked document provides instructions on executing experiments for each model.
+[Detailed instructions](./reproduction_instructions/Table2.md)
 
-## Logs 
+### **Table 3: Ablation Study Results**
+This table reports the outcomes of the ablation study, assessing the impact of various components on model performance. The linked document outlines the necessary execution steps for reproducing the ablation experiments on GPT4o-mini and Qwen2.5-72B-Instruct.
+[Detailed instructions](./reproduction_instructions/Table3.md)
 
-- We share logs of most of our experiments under `logs`.
-- Please note that some logs were generated with our previous code base and the logs were saved in a slightly different scheme. Please refer to `old_code` branch (we will add more details TBD).
+### **Table 4: Performance Comparison Across Different Games**
+This table evaluates model performance across multiple game settings. The linked document details the execution procedure for experiments under different game configurations.
+[Detailed instructions](./reproduction_instructions/Table4.md)
 
----
+### **Table 5: Baseline Comparisons**
+This table benchmarks several baseline methods against GPT4o-mini. The linked document contains step-by-step instructions on executing experiments for each baseline approach.
+[Detailed instructions](./reproduction_instructions/Table5.md)
 
-## Citation 
-If you find our paper, dataset, or this repo helpful, please cite our paper:
 
-``` 
-@inproceedings{
-abdelnabi2024negotiation,
-title={Cooperation, Competition, and Maliciousness: {LLM}-Stakeholders Interactive Negotiation},
-author={Sahar Abdelnabi and Amr Gomaa and Sarath Sivaprasad and Lea Schönherr and Mario Fritz},
-booktitle={The Thirty-eight Conference on Neural Information Processing Systems Datasets and Benchmarks Track},
-year={2024},
-}
-```
+### **Table 7: Behavioral Variant Performance**
+This table analyzes the effects of different behavioral strategies on negotiation performance. The linked document provides guidelines on reproducing all the experiments for various every behavioral configuration.
+[Detailed instructions](./reproduction_instructions/Table7.md)
+
+
+### **Figure 2: Effect of Varying Thresholds and Varying Number of Players**
+These figures illustrates the impact of varying thresholds as well as varying the number of players in the base game on acceptance rates. The linked document outlines the execution procedure for reproducing all the experiments.
+[Detailed instructions](./reproduction_instructions/Figure2.md)
+
+## Evaluation
+
+### **Evaluating a Specific Experiment**
+To evaluate a single experiment and compute relevant metrics, run the [`evaluation.ipynb`](./evaluation/evaluation.ipynb) notebook, specifying the output directory of the experiment. This notebook calculates:
+- **Pre-hoc metrics**
+- **Post-hoc performance metrics**: 5-way, 6-way, Any, Wrong, Leaked
+- **Post-hoc econometrics**
+
+Ensure that the output directory contains the recorded negotiation histories. Running the notebook will generate detailed performance summaries and insights for the given experiment.
+
+### **Evaluating and Recreating the Paper’s Results**
+To evaluate all experiments performed in this study and regenerate the tables and figures presented in the paper, use the dedicated evaluation notebooks corresponding to each table or figure. These notebooks process the results and should reproduce the exact outputs reported in the paper when using the original experiment data.
+
+The corresponding notebooks for each table/figure are:
+- [Tables 1 and 17](evaluation/table_1_17.ipynb)
+- [Table 2](evaluation/table_2.ipynb)
+- [Table 3](evaluation/table_3.ipynb)
+- [Table 4](evaluation/table_4.ipynb)
+- [Table 5](evaluation/table_5.ipynb)
+- [Table 6](evaluation/table_6.ipynb)
+- [Table 7](evaluation/table_7.ipynb)
+- [Figure 1](evaluation/figure_1.ipynb)
+- [Figure 2](evaluation/figure_2.ipynb)
+- [Figure 3](evaluation/figure_3.ipynb)
+
+#### **Recreating the Original Paper Results**
+If you wish to validate our reported results without re-running the experiments, simply execute the corresponding evaluation notebooks as they are. Each notebook is designed to process our logged experimental outputs and will generate the exact figures and tables presented in the paper.
+
+#### **Fully Reproducing and Evaluating New Experiments**
+If you have followed the [**Reproducing Results**](#reproducing-results) section to generate new experimental data, you can use the same evaluation notebooks to assess the reproduced experiments. In this case:
+1. Open the relevant evaluation notebook for the table or figure.
+2. Modify the experiment folder path by replacing `output` with `output_reproduce` at the top of the notebook.
+3. If you have run a subset of models or included additional models, update the model list in the notebook accordingly.
+4. Execute the notebook to compute the results.
+
+By following these steps, you can either validate the original reported results or fully reproduce the paper’s findings using newly generated experimental data.
+
+
+
+
+
 
 

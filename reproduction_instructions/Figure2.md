@@ -53,7 +53,7 @@ our_games_descriptions/base_varying_thresholds/minus_10/output_reproduce/gpt4o-m
 This structure ensures that all reproduced results remain distinct from the originally logged outputs.
 
 ### Step 4: Evaluating the Results
-After completing the experiment, process the output data using the evaluation script (`.ipynb`) to extract acceptance rates. Refer to the [**Evaluation**](../NEW-README.md#evaluation) section in the original README for detailed instructions.
+After completing the experiment, process the output data using the evaluation script (`.ipynb`) to extract acceptance rates. Refer to the [**Evaluation**](../README.md#evaluation) section in the original README for detailed instructions.
 
 
 # (b): Effect of Number of Players on Acceptance
@@ -116,6 +116,6 @@ our_games_descriptions/base/output_reproduce/changing_num_players/gpt4o-mini/<NU
 This ensures that all reproduced results remain distinct from the originally logged outputs.
 
 ### Step 4: Evaluating the Results
-After completing the experiment, process the output data using the evaluation script (`.ipynb`) to extract acceptance rates. Refer to the [**Evaluation**](../NEW-README.md#evaluation) section in the original README for detailed instructions.
+After completing the experiment, process the output data using the evaluation script (`.ipynb`) to extract acceptance rates. Refer to the [**Evaluation**](../README.md#evaluation) section in the original README for detailed instructions.
 
 
