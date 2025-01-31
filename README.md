@@ -24,7 +24,7 @@ pip install accelerate
 pip install -U bitsandbytes
 pip install seaborn
 pip install matplotlib
-pip install ipython
+pip install ipython ipykernel
 pip install codecarbon
 ```
 
