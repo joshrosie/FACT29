@@ -1,0 +1,137 @@
+{
+    "slot_assignment": [
+        "government",
+        "international development bank",
+        "environmental NGO",
+        "local tourism association",
+        "indigenous community",
+        "government",
+        "construction company",
+        "international development bank",
+        "local tourism association",
+        "indigenous community",
+        "environmental NGO",
+        "government",
+        "construction company",
+        "government",
+        "environmental NGO",
+        "international development bank",
+        "local tourism association",
+        "construction company",
+        "indigenous community",
+        "government",
+        "local tourism association",
+        "indigenous community",
+        "international development bank",
+        "construction company",
+        "government",
+        "government"
+    ],
+    "rounds": [
+        {
+            "agent": "government",
+            "public_answer": "<DEAL>A1, B4, C2, D1, E3</DEAL>"
+        },
+        {
+            "agent": "international development bank",
+            "public_answer": "<DEAL>A3, B3, C2, D1, E3</DEAL>"
+        },
+        {
+            "agent": "environmental NGO",
+            "public_answer": "<DEAL>A3, B1, C4, D1, E3</DEAL>"
+        },
+        {
+            "agent": "local tourism association",
+            "public_answer": "<DEAL>A3, B4, C4, D1, E3</DEAL>"
+        },
+        {
+            "agent": "indigenous community",
+            "public_answer": "<DEAL>A3, B4, C4, D5, E3</DEAL>"
+        },
+        {
+            "agent": "government",
+            "public_answer": "<DEAL>A3, B4, C4, D5, E3</DEAL>"
+        },
+        {
+            "agent": "construction company",
+            "public_answer": "<DEAL>A3, B4, C4, D5, E3</DEAL>"
+        },
+        {
+            "agent": "international development bank",
+            "public_answer": "<DEAL>A3, B4, C4, D5, E3</DEAL>"
+        },
+        {
+            "agent": "local tourism association",
+            "public_answer": "<DEAL>A3, B4, C4, D5, E3</DEAL>"
+        },
+        {
+            "agent": "indigenous community",
+            "public_answer": "<DEAL>A3, B4, C4, D5, E3</DEAL>"
+        },
+        {
+            "agent": "environmental NGO",
+            "public_answer": "<DEAL>A3, B4, C4, D5, E3</DEAL>"
+        },
+        {
+            "agent": "government",
+            "public_answer": "<DEAL>A3, B4, C4, D5, E3</DEAL>"
+        },
+        {
+            "agent": "construction company",
+            "public_answer": "<DEAL>A3, B4, C4, D5, E3</DEAL>"
+        },
+        {
+            "agent": "government",
+            "public_answer": "<DEAL>A3, B4, C4, D5, E3</DEAL>"
+        },
+        {
+            "agent": "environmental NGO",
+            "public_answer": "<DEAL>A3, B4, C4, D5, E3</DEAL>"
+        },
+        {
+            "agent": "international development bank",
+            "public_answer": "<DEAL>A3, B4, C4, D5, E3</DEAL>"
+        },
+        {
+            "agent": "local tourism association",
+            "public_answer": "<DEAL>A3, B4, C4, D5, E3</DEAL>"
+        },
+        {
+            "agent": "construction company",
+            "public_answer": "<DEAL>A3, B4, C4, D5, E3</DEAL>"
+        },
+        {
+            "agent": "indigenous community",
+            "public_answer": "<DEAL>A3, B4, C4, D5, E3</DEAL>"
+        },
+        {
+            "agent": "government",
+            "public_answer": "<DEAL>A3, B4, C4, D5, E3</DEAL>"
+        },
+        {
+            "agent": "local tourism association",
+            "public_answer": "<DEAL>A3, B4, C4, D5, E3</DEAL>"
+        },
+        {
+            "agent": "indigenous community",
+            "public_answer": "<DEAL>A3, B4, C4, D5, E3</DEAL>"
+        },
+        {
+            "agent": "international development bank",
+            "public_answer": "<DEAL>A3, B4, C4, D5, E3</DEAL>"
+        },
+        {
+            "agent": "construction company",
+            "public_answer": "<DEAL>A3, B4, C4, D5, E3</DEAL>"
+        },
+        {
+            "agent": "government",
+            "public_answer": "<DEAL>A3, B4, C4, D5, E3</DEAL>"
+        },
+        {
+            "agent": "government",
+            "public_answer": "<DEAL>A3, B4, C4, D5, E3</DEAL>"
+        }
+    ],
+    "finished_rounds": 25
+}

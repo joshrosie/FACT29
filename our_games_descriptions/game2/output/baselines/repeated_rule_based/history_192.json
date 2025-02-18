@@ -1,0 +1,137 @@
+{
+    "slot_assignment": [
+        "Project manager",
+        "Local government",
+        "Foreign aid agency",
+        "Landowners",
+        "Project manager",
+        "Local Activists",
+        "Local NGO",
+        "Landowners",
+        "Local government",
+        "Project manager",
+        "Local Activists",
+        "Foreign aid agency",
+        "Local NGO",
+        "Landowners",
+        "Project manager",
+        "Local NGO",
+        "Local Activists",
+        "Local government",
+        "Foreign aid agency",
+        "Local Activists",
+        "Local government",
+        "Local NGO",
+        "Landowners",
+        "Project manager",
+        "Project manager",
+        "Project manager"
+    ],
+    "rounds": [
+        {
+            "agent": "Project manager",
+            "public_answer": "<DEAL>A3, B2, C4, D3, E3</DEAL>"
+        },
+        {
+            "agent": "Local government",
+            "public_answer": "<DEAL>A3, B2, C4, D3, E3</DEAL>"
+        },
+        {
+            "agent": "Foreign aid agency",
+            "public_answer": "<DEAL>A3, B2, C4, D3, E3</DEAL>"
+        },
+        {
+            "agent": "Landowners",
+            "public_answer": "<DEAL>A3, B2, C4, D3, E3</DEAL>"
+        },
+        {
+            "agent": "Project manager",
+            "public_answer": "<DEAL>A3, B2, C4, D3, E3</DEAL>"
+        },
+        {
+            "agent": "Local Activists",
+            "public_answer": "<DEAL>A3, B2, C4, D3, E3</DEAL>"
+        },
+        {
+            "agent": "Local NGO",
+            "public_answer": "<DEAL>A3, B2, C4, D3, E3</DEAL>"
+        },
+        {
+            "agent": "Landowners",
+            "public_answer": "<DEAL>A3, B2, C4, D3, E3</DEAL>"
+        },
+        {
+            "agent": "Local government",
+            "public_answer": "<DEAL>A3, B2, C4, D3, E3</DEAL>"
+        },
+        {
+            "agent": "Project manager",
+            "public_answer": "<DEAL>A3, B2, C4, D3, E3</DEAL>"
+        },
+        {
+            "agent": "Local Activists",
+            "public_answer": "<DEAL>A3, B2, C4, D3, E3</DEAL>"
+        },
+        {
+            "agent": "Foreign aid agency",
+            "public_answer": "<DEAL>A3, B2, C4, D3, E3</DEAL>"
+        },
+        {
+            "agent": "Local NGO",
+            "public_answer": "<DEAL>A3, B2, C4, D3, E3</DEAL>"
+        },
+        {
+            "agent": "Landowners",
+            "public_answer": "<DEAL>A3, B2, C4, D3, E3</DEAL>"
+        },
+        {
+            "agent": "Project manager",
+            "public_answer": "<DEAL>A3, B2, C4, D3, E3</DEAL>"
+        },
+        {
+            "agent": "Local NGO",
+            "public_answer": "<DEAL>A3, B2, C4, D3, E3</DEAL>"
+        },
+        {
+            "agent": "Local Activists",
+            "public_answer": "<DEAL>A3, B2, C4, D3, E3</DEAL>"
+        },
+        {
+            "agent": "Local government",
+            "public_answer": "<DEAL>A3, B2, C4, D3, E3</DEAL>"
+        },
+        {
+            "agent": "Foreign aid agency",
+            "public_answer": "<DEAL>A3, B2, C4, D3, E3</DEAL>"
+        },
+        {
+            "agent": "Local Activists",
+            "public_answer": "<DEAL>A3, B2, C4, D3, E3</DEAL>"
+        },
+        {
+            "agent": "Local government",
+            "public_answer": "<DEAL>A3, B2, C4, D3, E3</DEAL>"
+        },
+        {
+            "agent": "Local NGO",
+            "public_answer": "<DEAL>A3, B2, C4, D3, E3</DEAL>"
+        },
+        {
+            "agent": "Landowners",
+            "public_answer": "<DEAL>A3, B2, C4, D3, E3</DEAL>"
+        },
+        {
+            "agent": "Project manager",
+            "public_answer": "<DEAL>A3, B2, C4, D3, E3</DEAL>"
+        },
+        {
+            "agent": "Project manager",
+            "public_answer": "<DEAL>A3, B2, C4, D3, E3</DEAL>"
+        },
+        {
+            "agent": "Project manager",
+            "public_answer": "<DEAL>A3, B2, C4, D3, E3</DEAL>"
+        }
+    ],
+    "finished_rounds": 25
+}
