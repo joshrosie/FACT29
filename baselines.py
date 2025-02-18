@@ -4,6 +4,7 @@ from baselines.two_phase import two_phase_approach
 from baselines.random_midline_prevproximity import random_midline_prevproximity
 from baselines.multi_sample_consensus import multi_sample_consensus_approach
 from baselines.frequency_restricted import freq_restrict_multi_consensus_approach
+from baselines.repeated_rule_based import repeated_rule_based_approach
 
 if __name__ == "__main__":
     """
@@ -23,7 +24,7 @@ if __name__ == "__main__":
     """
     parser = argparse.ArgumentParser(description='Run baseline methods.')
     parser.add_argument('--game', type=str, required=True, help='The directory of the game configuration')
-    parser.add_argument('--method', type=str, required=True, choices=['random', 'midline', 'prev_prox', 'multi_sample_consensus', 'freq_restricted', 'two_phase'], help='The proposal generation method to use')
+    parser.add_argument('--method', type=str, required=True, choices=['random', 'midline', 'prev_prox', 'multi_sample_consensus', 'freq_restricted', 'two_phase', 'repeated_rule_based'], help='The proposal generation method to use')
     args = parser.parse_args()
 
     game_dir = args.game
@@ -38,5 +39,7 @@ if __name__ == "__main__":
         freq_restrict_multi_consensus_approach(game_dir)
     elif method == 'two_phase':
         two_phase_approach(game_dir)
+    elif method == 'repeated_rule_based':
+        repeated_rule_based_approach(game_dir)
     else:
         raise ValueError(f"Invalid method: {method}")

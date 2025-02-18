@@ -1,0 +1,137 @@
+{
+    "slot_assignment": [
+        "Private investors",
+        "Federal government of Germany",
+        "Environmental activists",
+        "State government of Saarland",
+        "Local community of Neunkirchen",
+        "France",
+        "Private investors",
+        "Local community of Neunkirchen",
+        "Environmental activists",
+        "Private investors",
+        "France",
+        "State government of Saarland",
+        "Federal government of Germany",
+        "State government of Saarland",
+        "Private investors",
+        "Local community of Neunkirchen",
+        "Environmental activists",
+        "Federal government of Germany",
+        "France",
+        "Local community of Neunkirchen",
+        "State government of Saarland",
+        "Private investors",
+        "France",
+        "Environmental activists",
+        "Private investors",
+        "Private investors"
+    ],
+    "rounds": [
+        {
+            "agent": "Private investors",
+            "public_answer": "<DEAL>A2, B1, C1, D2, E3</DEAL>"
+        },
+        {
+            "agent": "Federal government of Germany",
+            "public_answer": "<DEAL>A2, B1, C1, D2, E3</DEAL>"
+        },
+        {
+            "agent": "Environmental activists",
+            "public_answer": "<DEAL>A2, B3, C1, D4, E3</DEAL>"
+        },
+        {
+            "agent": "State government of Saarland",
+            "public_answer": "<DEAL>A2, B3, C1, D4, E3</DEAL>"
+        },
+        {
+            "agent": "Local community of Neunkirchen",
+            "public_answer": "<DEAL>A2, B3, C1, D4, E3</DEAL>"
+        },
+        {
+            "agent": "France",
+            "public_answer": "<DEAL>A2, B3, C1, D4, E3</DEAL>"
+        },
+        {
+            "agent": "Private investors",
+            "public_answer": "<DEAL>A2, B1, C1, D4, E3</DEAL>"
+        },
+        {
+            "agent": "Local community of Neunkirchen",
+            "public_answer": "<DEAL>A2, B1, C1, D4, E3</DEAL>"
+        },
+        {
+            "agent": "Environmental activists",
+            "public_answer": "<DEAL>A2, B3, C1, D4, E3</DEAL>"
+        },
+        {
+            "agent": "Private investors",
+            "public_answer": "<DEAL>A2, B1, C1, D4, E1</DEAL>"
+        },
+        {
+            "agent": "France",
+            "public_answer": "<DEAL>A2, B3, C1, D4, E1</DEAL>"
+        },
+        {
+            "agent": "State government of Saarland",
+            "public_answer": "<DEAL>A2, B3, C1, D4, E1</DEAL>"
+        },
+        {
+            "agent": "Federal government of Germany",
+            "public_answer": "<DEAL>A2, B3, C1, D4, E1</DEAL>"
+        },
+        {
+            "agent": "State government of Saarland",
+            "public_answer": "<DEAL>A2, B3, C1, D4, E1</DEAL>"
+        },
+        {
+            "agent": "Private investors",
+            "public_answer": "<DEAL>A2, B1, C1, D4, E1</DEAL>"
+        },
+        {
+            "agent": "Local community of Neunkirchen",
+            "public_answer": "<DEAL>A2, B1, C1, D4, E1</DEAL>"
+        },
+        {
+            "agent": "Environmental activists",
+            "public_answer": "<DEAL>A2, B3, C1, D4, E1</DEAL>"
+        },
+        {
+            "agent": "Federal government of Germany",
+            "public_answer": "<DEAL>A2, B3, C1, D4, E1</DEAL>"
+        },
+        {
+            "agent": "France",
+            "public_answer": "<DEAL>A2, B3, C1, D4, E1</DEAL>"
+        },
+        {
+            "agent": "Local community of Neunkirchen",
+            "public_answer": "<DEAL>A2, B3, C1, D4, E1</DEAL>"
+        },
+        {
+            "agent": "State government of Saarland",
+            "public_answer": "<DEAL>A2, B3, C1, D4, E1</DEAL>"
+        },
+        {
+            "agent": "Private investors",
+            "public_answer": "<DEAL>A2, B3, C4, D4, E1</DEAL>"
+        },
+        {
+            "agent": "France",
+            "public_answer": "<DEAL>A2, B3, C4, D4, E1</DEAL>"
+        },
+        {
+            "agent": "Environmental activists",
+            "public_answer": "<DEAL>A2, B3, C4, D4, E1</DEAL>"
+        },
+        {
+            "agent": "Private investors",
+            "public_answer": "<DEAL>A2, B3, C4, D4, E1</DEAL>"
+        },
+        {
+            "agent": "Private investors",
+            "public_answer": "<DEAL>A2, B3, C4, D4, E1</DEAL>"
+        }
+    ],
+    "finished_rounds": 25
+}

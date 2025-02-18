@@ -1,0 +1,137 @@
+{
+    "slot_assignment": [
+        "SportCo",
+        "Department of Tourism",
+        "Local Labour Union",
+        "Environmental League",
+        "Other cities",
+        "Mayor",
+        "SportCo",
+        "Mayor",
+        "Other cities",
+        "Local Labour Union",
+        "Environmental League",
+        "SportCo",
+        "Department of Tourism",
+        "Other cities",
+        "Local Labour Union",
+        "Mayor",
+        "Environmental League",
+        "SportCo",
+        "Department of Tourism",
+        "SportCo",
+        "Department of Tourism",
+        "Mayor",
+        "Environmental League",
+        "Other cities",
+        "SportCo",
+        "SportCo"
+    ],
+    "rounds": [
+        {
+            "agent": "SportCo",
+            "public_answer": "<DEAL>A2, B1, C1, D4, E4</DEAL>"
+        },
+        {
+            "agent": "Department of Tourism",
+            "public_answer": "<DEAL>A2, B3, C1, D3, E4</DEAL>"
+        },
+        {
+            "agent": "Local Labour Union",
+            "public_answer": "<DEAL>A2, B3, C1, D3, E4</DEAL>"
+        },
+        {
+            "agent": "Environmental League",
+            "public_answer": "<DEAL>A2, B3, C1, D3, E4</DEAL>"
+        },
+        {
+            "agent": "Other cities",
+            "public_answer": "<DEAL>A2, B3, C1, D3, E4</DEAL>"
+        },
+        {
+            "agent": "Mayor",
+            "public_answer": "<DEAL>A2, B3, C1, D3, E4</DEAL>"
+        },
+        {
+            "agent": "SportCo",
+            "public_answer": "<DEAL>A2, B3, C1, D1, E4</DEAL>"
+        },
+        {
+            "agent": "Mayor",
+            "public_answer": "<DEAL>A2, B3, C1, D1, E4</DEAL>"
+        },
+        {
+            "agent": "Other cities",
+            "public_answer": "<DEAL>A2, B3, C1, D1, E4</DEAL>"
+        },
+        {
+            "agent": "Local Labour Union",
+            "public_answer": "<DEAL>A2, B3, C1, D1, E4</DEAL>"
+        },
+        {
+            "agent": "Environmental League",
+            "public_answer": "<DEAL>A2, B3, C1, D1, E4</DEAL>"
+        },
+        {
+            "agent": "SportCo",
+            "public_answer": "<DEAL>A2, B3, C1, D1, E4</DEAL>"
+        },
+        {
+            "agent": "Department of Tourism",
+            "public_answer": "<DEAL>A2, B3, C1, D3, E4</DEAL>"
+        },
+        {
+            "agent": "Other cities",
+            "public_answer": "<DEAL>A2, B3, C1, D3, E4</DEAL>"
+        },
+        {
+            "agent": "Local Labour Union",
+            "public_answer": "<DEAL>A2, B3, C1, D3, E4</DEAL>"
+        },
+        {
+            "agent": "Mayor",
+            "public_answer": "<DEAL>A2, B3, C1, D3, E4</DEAL>"
+        },
+        {
+            "agent": "Environmental League",
+            "public_answer": "<DEAL>A2, B3, C1, D3, E4</DEAL>"
+        },
+        {
+            "agent": "SportCo",
+            "public_answer": "<DEAL>A1, B3, C1, D1, E4</DEAL>"
+        },
+        {
+            "agent": "Department of Tourism",
+            "public_answer": "<DEAL>A1, B3, C1, D3, E4</DEAL>"
+        },
+        {
+            "agent": "SportCo",
+            "public_answer": "<DEAL>A1, B3, C1, D1, E4</DEAL>"
+        },
+        {
+            "agent": "Department of Tourism",
+            "public_answer": "<DEAL>A2, B3, C4, D1, E3</DEAL>"
+        },
+        {
+            "agent": "Mayor",
+            "public_answer": "<DEAL>A2, B3, C4, D1, E3</DEAL>"
+        },
+        {
+            "agent": "Environmental League",
+            "public_answer": "<DEAL>A2, B3, C4, D1, E3</DEAL>"
+        },
+        {
+            "agent": "Other cities",
+            "public_answer": "<DEAL>A2, B3, C4, D1, E3</DEAL>"
+        },
+        {
+            "agent": "SportCo",
+            "public_answer": "<DEAL>A2, B3, C4, D1, E3</DEAL>"
+        },
+        {
+            "agent": "SportCo",
+            "public_answer": "<DEAL>A2, B3, C4, D1, E3</DEAL>"
+        }
+    ],
+    "finished_rounds": 25
+}

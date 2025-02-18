@@ -1,0 +1,137 @@
+{
+    "slot_assignment": [
+        "Project manager",
+        "Local NGO",
+        "Foreign aid agency",
+        "Local Activists",
+        "Landowners",
+        "Local government",
+        "Project manager",
+        "Local NGO",
+        "Local Activists",
+        "Local government",
+        "Foreign aid agency",
+        "Project manager",
+        "Landowners",
+        "Local NGO",
+        "Landowners",
+        "Local Activists",
+        "Foreign aid agency",
+        "Local government",
+        "Project manager",
+        "Local Activists",
+        "Local government",
+        "Foreign aid agency",
+        "Landowners",
+        "Project manager",
+        "Project manager",
+        "Project manager"
+    ],
+    "rounds": [
+        {
+            "agent": "Project manager",
+            "public_answer": "<DEAL>A4, B2, C1, D3, E1</DEAL>"
+        },
+        {
+            "agent": "Local NGO",
+            "public_answer": "<DEAL>A4, B2, C1, D3, E1</DEAL>"
+        },
+        {
+            "agent": "Foreign aid agency",
+            "public_answer": "<DEAL>A4, B2, C1, D3, E1</DEAL>"
+        },
+        {
+            "agent": "Local Activists",
+            "public_answer": "<DEAL>A4, B2, C1, D3, E4</DEAL>"
+        },
+        {
+            "agent": "Landowners",
+            "public_answer": "<DEAL>A4, B2, C1, D3, E4</DEAL>"
+        },
+        {
+            "agent": "Local government",
+            "public_answer": "<DEAL>A4, B2, C1, D3, E4</DEAL>"
+        },
+        {
+            "agent": "Project manager",
+            "public_answer": "<DEAL>A4, B2, C1, D3, E4</DEAL>"
+        },
+        {
+            "agent": "Local NGO",
+            "public_answer": "<DEAL>A4, B2, C1, D3, E4</DEAL>"
+        },
+        {
+            "agent": "Local Activists",
+            "public_answer": "<DEAL>A4, B2, C1, D3, E4</DEAL>"
+        },
+        {
+            "agent": "Local government",
+            "public_answer": "<DEAL>A4, B2, C1, D3, E4</DEAL>"
+        },
+        {
+            "agent": "Foreign aid agency",
+            "public_answer": "<DEAL>A3, B2, C1, D3, E2</DEAL>"
+        },
+        {
+            "agent": "Project manager",
+            "public_answer": "<DEAL>A3, B2, C1, D3, E2</DEAL>"
+        },
+        {
+            "agent": "Landowners",
+            "public_answer": "<DEAL>A3, B2, C1, D3, E2</DEAL>"
+        },
+        {
+            "agent": "Local NGO",
+            "public_answer": "<DEAL>A3, B2, C1, D3, E2</DEAL>"
+        },
+        {
+            "agent": "Landowners",
+            "public_answer": "<DEAL>A3, B2, C1, D3, E2</DEAL>"
+        },
+        {
+            "agent": "Local Activists",
+            "public_answer": "<DEAL>A3, B2, C1, D3, E4</DEAL>"
+        },
+        {
+            "agent": "Foreign aid agency",
+            "public_answer": "<DEAL>A3, B2, C1, D3, E2</DEAL>"
+        },
+        {
+            "agent": "Local government",
+            "public_answer": "<DEAL>A3, B1, C1, D2, E2</DEAL>"
+        },
+        {
+            "agent": "Project manager",
+            "public_answer": "<DEAL>A3, B1, C1, D2, E2</DEAL>"
+        },
+        {
+            "agent": "Local Activists",
+            "public_answer": "<DEAL>A1, B3, C1, D1, E2</DEAL>"
+        },
+        {
+            "agent": "Local government",
+            "public_answer": "<DEAL>A5, B1, C1, D2, E2</DEAL>"
+        },
+        {
+            "agent": "Foreign aid agency",
+            "public_answer": "<DEAL>A3, B1, C1, D2, E2</DEAL>"
+        },
+        {
+            "agent": "Landowners",
+            "public_answer": "<DEAL>A3, B1, C1, D2, E2</DEAL>"
+        },
+        {
+            "agent": "Project manager",
+            "public_answer": "<DEAL>A3, B1, C1, D2, E2</DEAL>"
+        },
+        {
+            "agent": "Project manager",
+            "public_answer": "<DEAL>A3, B1, C1, D2, E2</DEAL>"
+        },
+        {
+            "agent": "Project manager",
+            "public_answer": "<DEAL>A3, B1, C1, D2, E2</DEAL>"
+        }
+    ],
+    "finished_rounds": 25
+}
