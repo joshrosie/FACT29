@@ -10,10 +10,10 @@ In this approach, the proposing player selects a random deal from its time-based
 
 ### Time-based utility threshold
 The Time-based utility threshold is defined as:
-$$
-T_{p_i}(t) = 100 - (100 - \tau_{p_i}) \cdot \frac{t}{R+1}
-$$
-Where $ \tau_{p_i} $ is the player’s static threshold, $ R $ the number of rounds, and $ t $ is the current round. Agents use this formula to obtain their time-based threshold for each round and use it to obtain their time-based set of feasible options for this round. This pushes proposing players to gradually lower their demands over time, simulating concessions and creating a dynamic where initially non-feasible deals might become feasible for the proposing player in later rounds. Deal distance is measured using discrete Manhattan distance. All the Alternative Baseline Methods presented here, are using the time-based utility threshold instead of the normal one.
+
+$$ T_{p_i}(t) = 100 - (100 - \tau_{p_i}) \cdot \frac{t}{R+1} $$
+
+Where $\tau_{p_i}$ is the player’s static threshold, $R$ the number of rounds, and $t$ is the current round. Agents use this formula to obtain their time-based threshold for each round and use it to obtain their time-based set of feasible options for this round. This pushes proposing players to gradually lower their demands over time, simulating concessions and creating a dynamic where initially non-feasible deals might become feasible for the proposing player in later rounds. Deal distance is measured using discrete Manhattan distance. All the Alternative Baseline Methods presented here, are using the time-based utility threshold instead of the normal one.
 
 
 ## Midline
