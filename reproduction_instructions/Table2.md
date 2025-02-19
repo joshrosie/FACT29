@@ -1,62 +1,66 @@
-# Reproducing Table 2
+# Reproducing Table 2: Ablation Study Results
 
-This document provides instructions on how to reproduce the results presented in **Table 2**. Each row in the table corresponds to an experiment with a specific model configuration.
+This document provides instructions on how to reproduce the results presented in **Table 2**, which contains the results of an ablation study conducted on two models: **GPT4o-mini** and **Qwen2.5-72B-Instruct** for the "base" game.
+
+Each row in the table represents an ablation setting, where different components were selectively disabled (ablated) to analyze their impact on model performance. To reproduce these results, a user needs to execute a dedicated Python script for each model:
+- **For Open-Source Model (Qwen2.5-72B-Instruct):** `run_ablation_opensource.py`
+- **For GPT-based Model (GPT4o-mini):** `run_ablation_gpt.py`
 
 ## Experiment Mapping
 
-| Model in Paper                                   | Experiment Name in Code                     |
-|-------------------------------------------------|--------------------------------------------|
-| gpt4o-mini                                      | `base_normal_gpt4o-mini`                   |
-| **Llama-2-13b (int8)**                          | `base_normal_Llama-2-13b-chat-hf`          |
-| Llama-3-8B                                      | `base_normal_Meta-Llama-3-8B-Instruct`     |
-| **Llama-3.3-70B (int4)**                        | `base_normal_Llama-3.3-70B-Instruct`       |
-| Qwen2.5-7B                                     | `base_normal_Qwen2.5-7B-Instruct`          |
-| Qwen2.5-72B (int4)                             | `base_normal_Qwen2.5-72B-Instruct`         |
-| Phi-3.5-mini                                   | `base_normal_Phi-3.5-mini-instruct`        |
-| Phi-4 (int8)                                   | `base_normal_phi-4`                        |
-| Minstrel-8B                                    | `base_normal_Minstrel-8B-Instruct-2410`    |
-| Mistral-Small (int8)                           | `base_normal_Mistral-Small-Instruct-2409`  |
-| **Mixtral-8x7B (int4)**                        | `base_normal_Mixtral-8x7B-Instruct-v0.1`   |
-| DeepSeek-R1-Distill-Qwen-32B (int8)            | `base_normal_DeepSeek-R1-Distill-Qwen-32B` |
-| DeepSeek-R1-Distill-Llama-70B (int4)           | `base_normal_DeepSeek-R1-Distill-Llama-70B` |
+Each ablation setting corresponds to a specific configuration of four factors:
+1. **Previous Deals**
+2. **Others Preferences**
+3. **Candidates**
+4. **Planning**
 
-## Running an Experiment
+These factors are represented in binary format (`1` = Enabled, `0` = Ablated). Each row in the table corresponds to an experiment where one or more of these factors are ablated.
 
-To reproduce the results for a specific model, run the following command:
+## Running an Ablation Experiment
 
+To reproduce the results for a specific model, run the corresponding script:
+
+### Open-Source Model (Qwen2.5-72B-Instruct):
 ```bash
-python reproduction.py --exp_name <experiment_name>
+python run_ablation_opensource.py
 ```
 
-For example, to reproduce the results for **Llama-2-13b (int8)**, use:
-
+### GPT Model (GPT4o-mini):
 ```bash
-python reproduction.py --exp_name base_normal_Llama-2-13b-chat-hf
+python run_ablation_gpt.py
 ```
 
-Each experiment will be executed **20 times** by default, as specified in `reproduction.py`.
+Each script executes **20 iterations** for every ablation setting, as specified in the script parameters.
+
+## Output Format
+
+### Original Ablation Results:
+The original results are stored under:
+```bash
+our_games_descriptions/base/output/ablation/<MODEL>/<ABLATION_CONFIGURATION>
+```
+For example:
+```bash
+our_games_descriptions/base/output/ablation/Qwen2.5-72B-Instruct/ablations_base_0000
+```
+
+### Reproduced Ablation Results:
+The newly generated results will be saved separately under:
+```bash
+our_games_descriptions/base/output_reproduce/ablation/<MODEL>/<ABLATION_CONFIGURATION>
+```
+This separation ensures that reproduced results remain distinct from the original logged outputs.
 
 ## Customizing Execution
 
-- To change the number of iterations, modify `N` in `reproduction.py`.
-- To use a different Python executable, add the `--python_name` argument:
+- To change the number of iterations, modify `N` in the respective script (`run_ablation_opensource.py` or `run_ablation_gpt.py`).
+- To use a different Python executable, change the `PYTHON` variable inside the script and run the script with a different interpreter:
 
   ```bash
-  python reproduction.py --exp_name base_normal_Mixtral-8x7B-Instruct-v0.1 --python_name python3.12
+  python3.12 run_ablation_opensource.py
   ```
 
-## Experiment Results
+## Evaluation of Results
 
-After running the script, the new results will be saved separately from the original logs to facilitate easy comparison. The original logs follow this structure:
-```bash
-our_games_descriptions/<GAME>/output/<EXPERIMENT>/MODEL
-```
-The newly generated results will be stored under:
-```bash
-our_games_descriptions/<GAME>/output_reproduce/<EXPERIMENT>/MODEL
-```
-This ensures that all reproduced results remain distinct from the originally logged outputs.
-
-To obtain the actual performance scores for each experiment, you need to run the evaluation script (`.ipynb`) on the experiment’s output folder. For detailed instructions on running the evaluation, refer to the [**Evaluation**](../README.md#evaluation) section in the original README.
-
+After running the ablation experiments, you need to process the output files to obtain the final performance scores. To do this, execute the evaluation script (`.ipynb`) on the generated output folders. Refer to the [**Evaluation**](../README.md#evaluation) section in the original README for detailed instructions on how to compute and compare the performance metrics.
 

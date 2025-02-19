@@ -1,54 +1,77 @@
-# Reproducing Table 4
+# Reproducing Table 4: Baseline Comparison
 
-This document provides instructions on how to reproduce the results presented in **Table 4**. Each row in the table corresponds to a different game setting, and each column represents a specific model configuration.
+This document provides instructions on how to reproduce the results presented in **Table 4**, which compares our proposed baseline method against the original authors' baseline across different game variants.
 
-## Experiment Mapping
+## Running the Experiment
 
-The following table maps the **game settings** to their corresponding **experiment names** for each model in Table 4.
-
-| Game Setting         | GPT4o-mini Experiment        | Mistral-Small Experiment                           | Qwen2.5-72B Experiment                         |
-|----------------------|-----------------------------|--------------------------------------------------|-----------------------------------------------|
-| **Base Rewritten**  | `base-rewritten_normal_gpt4o-mini`  | `base-rewritten_normal_Mistral-Small-Instruct-2409`  | `base-rewritten_normal_Qwen2.5-72B-Instruct`  |
-| **Game 1**         | `game1_normal_gpt4o-mini`    | `game1_normal_Mistral-Small-Instruct-2409`      | `game1_normal_Qwen2.5-72B-Instruct`          |
-| **Game 2**         | `game2_normal_gpt4o-mini`    | `game2_normal_Mistral-Small-Instruct-2409`      | `game2_normal_Qwen2.5-72B-Instruct`          |
-| **Game 3**         | `game3_normal_gpt4o-mini`    | `game3_normal_Mistral-Small-Instruct-2409`      | `game3_normal_Qwen2.5-72B-Instruct`          |
-
-## Running an Experiment
-
-To reproduce the results for a specific model and game setting, run the following command:
+To reproduce the results of our baseline method for a specific game setting, run the following command:
 
 ```bash
-python reproduction.py --exp_name <experiment_name>
+python baselines.py --game <game_folder>
 ```
 
-For example, to reproduce the results for **Mistral-Small in Game 2**, use:
+This will execute our proposed baseline method by default.
+
+### Valid Game Arguments
+
+The `--game` argument should be set to one of the following valid game folders:
+
+- `base`
+- `game1`
+- `game2`
+- `game3`
+
+## Alternative Baseline Methods
+
+While our paper focuses solely on comparing our proposed baseline with the original authors' method, other baseline methods from previous versions of our work remain available in the implementation. If you wish to run any of these methods, you can specify them using the optional `--method` argument:
 
 ```bash
-python reproduction.py --exp_name game2_normal_Mistral-Small-Instruct-2409
+python baselines.py --game <game_folder> --method <method_name>
 ```
 
-Each experiment will be executed **20 times** by default, as specified in `reproduction.py`.
+**Note:** These additional methods are **not presented in the paper** but remain available for exploratory purposes.
 
-## Customizing Execution
+### Available Alternative Methods
 
-- To change the number of iterations, modify `N` in `reproduction.py`.
-- To use a different Python executable, add the `--python_name` argument:
+| Method (Not in Paper)           | Argument for `baselines.py` |
+| ------------------------------- | --------------------------- |
+| **Random**                      | `random`                    |
+| **Midline**                     | `midline`                   |
+| **Previous-Proposal Proximity** | `prev_prox`                 |
+| **Multi-Sample Consensus**      | `multi_sample_consensus`    |
+| **Frequency-Restricted**        | `freq_restricted`           |
+| **Two-Phase**                   | `two_phase`                 |
 
-  ```bash
-  python reproduction.py --exp_name game3_normal_Qwen2.5-72B-Instruct --python_name python3.12
-  ```
+For more details on the alternative baseline methods, refer to [this document](./Extra_baselines.md).
 
-## Experiment Results
+## Output Format
 
-After running the script, the new results will be saved separately from the original logs to facilitate easy comparison. The original logs follow this structure:
+### Original Baseline Results:
+
+The results of our experiments using the repeated_rule_based method, as presented in the paper, are stored under:
+
 ```bash
-our_games_descriptions/<GAME>/output/<EXPERIMENT>/MODEL
+our_games_descriptions/<GAME>/output/baselines/repeated_rule_based
 ```
-The newly generated results will be stored under:
-```bash
-our_games_descriptions/<GAME>/output_reproduce/<EXPERIMENT>/MODEL
-```
-This ensures that all reproduced results remain distinct from the originally logged outputs.
 
-To obtain the actual performance scores for each experiment, you need to run the evaluation script (`.ipynb`) on the experiment’s output folder. For detailed instructions on running the evaluation, refer to the [**Evaluation**](../README.md#evaluation) section in the original README.
+
+### Reproduced Baseline Results:
+
+After running `baselines.py` in order to reproduce our results, the newly generated results for our proposed baseline method will be saved under:
+
+```bash
+our_games_descriptions/<GAME>/output_reproduce/baselines/repeated_rule_based
+```
+
+### Alternative Baseline Results:
+
+If running a method other than the proposed baseline, results will be stored under:
+
+```bash
+our_games_descriptions/<GAME>/output_reproduce/baselines/<METHOD>
+```
+
+## Evaluation of Results
+
+After running the baseline experiments, you need to process the output files to obtain the final performance scores. To do this, execute the evaluation script (`.ipynb`) on the generated output folders. Refer to the [**Evaluation**](../README.md#evaluation) section in the original README for detailed instructions on computing and comparing the performance metrics.
 

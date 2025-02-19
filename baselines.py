@@ -24,7 +24,7 @@ if __name__ == "__main__":
     """
     parser = argparse.ArgumentParser(description='Run baseline methods.')
     parser.add_argument('--game', type=str, required=True, help='The directory of the game configuration')
-    parser.add_argument('--method', type=str, required=True, choices=['random', 'midline', 'prev_prox', 'multi_sample_consensus', 'freq_restricted', 'two_phase', 'repeated_rule_based'], help='The proposal generation method to use')
+    parser.add_argument('--method', type=str, default='repeated_rule_based', choices=['random', 'midline', 'prev_prox', 'multi_sample_consensus', 'freq_restricted', 'two_phase', 'repeated_rule_based'], help='The proposal generation method to use')
     args = parser.parse_args()
 
     game_dir = args.game

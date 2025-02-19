@@ -1,6 +1,6 @@
-# Reproducing Tables 1 and 17
+# Reproducing Tables 11 and 12
 
-This document provides instructions on how to reproduce the results presented in **Table 1** and **Table 17**. These tables compare model leakage and performance, respectively, before and after resolving the leakage issue. The left block (**Original Code**) contains experiments from **Table 2**, while the right block (**Our Code**) contains newly executed experiments.
+This document provides instructions on how to reproduce the results presented in **Table 11** and **Table 12**. These tables compare model leakage and performance, respectively, before and after resolving the leakage issue. The left block (**Original Code**) contains experiments from **Table 1**, while the right block (**Our Code**) contains newly executed experiments.
 
 ## Experiment Mapping
 

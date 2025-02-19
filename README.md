@@ -140,35 +140,37 @@ To ensure that your access tokens persist across sessions, add the export comman
 
 To ensure the reproducibility of the experimental results presented in this study, this section provides references to detailed instructions for replicating each experiment. Each subsection corresponds to a specific table or figure and includes a link to a dedicated document containing the required command-line parameters, configuration modifications, and execution steps.
 
-### **Tables 1 and 17: Model Performance Before and After Fixing Leakage Issues**
-These tables present a comparison of model performance and leakage metrics before and after resolving leakage issues. The linked document explains how to reproduce experiments for both the original and corrected model versions.
-[Detailed instructions](./reproduction_instructions/Table1_and_17.md)
 
-### **Table 2: Model Performance Comparison**
+
+### **Table 1: Model Performance Comparison**
 This table presents a comparative analysis of multiple models on the base game. The linked document provides instructions on executing experiments for each model.
+[Detailed instructions](./reproduction_instructions/Table1.md)
+
+### **Table 2: Ablation Study Results**
+This table reports the outcomes of the ablation study, assessing the impact of various components on model performance. The linked document outlines the necessary execution steps for reproducing the ablation experiments on GPT4o-mini and Qwen2.5-72B-Instruct.
 [Detailed instructions](./reproduction_instructions/Table2.md)
 
-### **Table 3: Ablation Study Results**
-This table reports the outcomes of the ablation study, assessing the impact of various components on model performance. The linked document outlines the necessary execution steps for reproducing the ablation experiments on GPT4o-mini and Qwen2.5-72B-Instruct.
+### **Table 3: Performance Comparison Across Different Games**
+This table evaluates model performance across multiple game settings. The linked document details the execution procedure for experiments under different game configurations.
 [Detailed instructions](./reproduction_instructions/Table3.md)
 
-### **Table 4: Performance Comparison Across Different Games**
-This table evaluates model performance across multiple game settings. The linked document details the execution procedure for experiments under different game configurations.
+### **Table 4: Baseline Comparison**  
+This table presents a comparison between our proposed baseline method and the original authors' baseline across different game variants. The linked document provides step-by-step instructions for reproducing our baseline results, along with details on running alternative baseline methods for exploratory purposes.  
 [Detailed instructions](./reproduction_instructions/Table4.md)
 
-### **Table 5: Baseline Comparisons**
-This table benchmarks several baseline methods against GPT4o-mini. The linked document contains step-by-step instructions on executing experiments for each baseline approach.
-[Detailed instructions](./reproduction_instructions/Table5.md)
 
-
-### **Table 7: Behavioral Variant Performance**
+### **Table 6: Behavioral Variant Performance**
 This table analyzes the effects of different behavioral strategies on negotiation performance. The linked document provides guidelines on reproducing all the experiments for various every behavioral configuration.
-[Detailed instructions](./reproduction_instructions/Table7.md)
+[Detailed instructions](./reproduction_instructions/Table6.md)
 
 
 ### **Figure 2: Effect of Varying Thresholds and Varying Number of Players**
 These figures illustrates the impact of varying thresholds as well as varying the number of players in the base game on acceptance rates. The linked document outlines the execution procedure for reproducing all the experiments.
 [Detailed instructions](./reproduction_instructions/Figure2.md)
+
+### **Tables 11 and 12: Model Performance Before and After Fixing Leakage Issues**
+These tables present a comparison of model performance and leakage metrics before and after resolving leakage issues. The linked document explains how to reproduce experiments for both the original and corrected model versions.
+[Detailed instructions](./reproduction_instructions/Table11_and_12.md)
 
 ## Evaluation
 
@@ -184,16 +186,16 @@ Ensure that the output directory contains the recorded negotiation histories. Ru
 To evaluate all experiments performed in this study and regenerate the tables and figures presented in the paper, use the dedicated evaluation notebooks corresponding to each table or figure. These notebooks process the results and should reproduce the exact outputs reported in the paper when using the original experiment data.
 
 The corresponding notebooks for each table/figure are:
-- [Tables 1 and 17](evaluation/table_1_17.ipynb)
+- [Table 1](evaluation/table_1.ipynb)
 - [Table 2](evaluation/table_2.ipynb)
 - [Table 3](evaluation/table_3.ipynb)
 - [Table 4](evaluation/table_4.ipynb)
 - [Table 5](evaluation/table_5.ipynb)
 - [Table 6](evaluation/table_6.ipynb)
-- [Table 7](evaluation/table_7.ipynb)
 - [Figure 1](evaluation/figure_1.ipynb)
 - [Figure 2](evaluation/figure_2.ipynb)
 - [Figure 3](evaluation/figure_3.ipynb)
+- [Tables 11 and 12](evaluation/table_11_12.ipynb)
 
 #### **Recreating the Original Paper Results**
 If you wish to validate our reported results without re-running the experiments, simply execute the corresponding evaluation notebooks as they are. Each notebook is designed to process our logged experimental outputs and will generate the exact figures and tables presented in the paper.
