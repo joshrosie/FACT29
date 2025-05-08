@@ -232,6 +232,7 @@ def is_feasible(agents, deal):
     acceptable_count = 0
     key_players_accepted = set()
     num_players = len(agents)
+    p1_accepted = False  # For relaxation of p1 threshold
 
     for agent_name, agent_data in agents.items():
         scores = agent_data["scores"]
@@ -240,6 +241,18 @@ def is_feasible(agents, deal):
             acceptable_count += 1
             if agent_data["role"] in {"p1", "p2"}:
                 key_players_accepted.add(agent_data["role"])
+                if agent_data["role"] == "p1":
+                    p1_accepted = True
+
+    # If all players accept, except p1 -> Relax p1 threshold by 10 points
+    if acceptable_count >= num_players - 1 and not p1_accepted:
+        for agent_name, agent_data in agents.items():
+            if agent_data["role"] == "p1":
+                scores = agent_data["scores"]
+                agent_score = calculator(scores, deal, num_issues=len(deal))
+                if agent_score >= scores["min"] - 10:
+                    acceptable_count += 1
+                    key_players_accepted.add(agent_data["role"])
 
     # If at least N-1 accept, and p1 + p2 accept, it's feasible
     return acceptable_count >= (num_players - 1) and {"p1", "p2"}.issubset(
